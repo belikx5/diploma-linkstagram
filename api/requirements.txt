@@ -1,6 +1,5 @@
 asgiref==3.4.1
 Django==3.2.11
-django-better-admin-arrayfield==1.4.2
 djangorestframework==3.13.1
 Pillow==9.0.0
 psycopg2==2.9.3

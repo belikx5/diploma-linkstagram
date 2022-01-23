@@ -1,5 +1,3 @@
-# from django.contrib.postgres.fields import ArrayField
-from django_better_admin_arrayfield.models.fields import ArrayField
 from django.db import models
 
 from user_profile.models import UserProfile
@@ -13,6 +11,17 @@ class Post(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    def increment_likes(self):
+        self.likes_count += 1
+        self.save()
+
+    def decrement_likes(self):
+        self.likes_count -= 1
+        self.save()
+
+    def __str__(self):
+        return f'{self.author.user.username} - post_id: {self.id}'
+
 
 class PostImage(models.Model):
     image = models.ImageField(upload_to='images/')
@@ -22,7 +31,16 @@ class PostImage(models.Model):
 
 class PostLike(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE,
-                             blank=True, null=True, related_name='post_like')
+                             blank=True, null=True, related_name='likes')
     user = models.ForeignKey(UserProfile, on_delete=models.CASCADE,
                              blank=True, null=True, related_name='user_like')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+
+class PostComment(models.Model):
+    message = models.TextField()
+    post = models.ForeignKey(Post, on_delete=models.CASCADE,
+                             blank=True, null=True, related_name='comments')
+    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE,
+                             blank=True, null=True, related_name='comments')
     created_at = models.DateTimeField(auto_now_add=True)

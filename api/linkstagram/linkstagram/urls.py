@@ -21,10 +21,13 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework import routers
 
-from post.views import PostListViewSet
+from post.views import PostListViewSet, PostLikeViewSet
+from user_profile.views import UserViewSet
 
 router = routers.DefaultRouter()
 router.register(r'posts', PostListViewSet, basename="postView")
+router.register(r'users', UserViewSet, basename="userView")
+router.register(r'likes', PostLikeViewSet, basename="likeView")
 
 
 urlpatterns = [
