@@ -7,7 +7,7 @@ class UserProfile(models.Model):
     #username = models.CharField(unique=True, max_length=100)
     # first_name = models.CharField(max_length=75)
     # last_name = models.CharField(max_length=100)
-    bio = models.TextField(max_length=350)
+    bio = models.TextField(max_length=350, default='')
     followers = models.PositiveIntegerField(default=0)
     following = models.PositiveIntegerField(default=0)
     profile_photo = models.ImageField(upload_to='avatars/', null=True, blank=True, default=None)

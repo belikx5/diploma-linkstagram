@@ -33,6 +33,13 @@ class PostSerializer(serializers.ModelSerializer):
         return obj
 
 
+class PostCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Post
+        fields = '__all__'
+        read_only_fields = ('id',)
+
+
 class PostLikeSerializer(serializers.ModelSerializer):
     post = PostSerializer(read_only=True)
     user = UserSerializer(read_only=True)

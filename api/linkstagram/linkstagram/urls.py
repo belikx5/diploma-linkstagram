@@ -20,6 +20,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework import routers
+from rest_framework.authtoken.views import obtain_auth_token
 
 from post.views import PostListViewSet, PostLikeViewSet
 from user_profile.views import UserViewSet
@@ -33,6 +34,8 @@ router.register(r'likes', PostLikeViewSet, basename="likeView")
 urlpatterns = [
     path(r'admin/', admin.site.urls),
     path(r'api/', include(router.urls)),
+    path(r'api/token-auth/', obtain_auth_token, name='api_token_auth'),
+    # path(r'users/me', CurrentUserView.as_view()),
 ]
 
 if settings.DEBUG:
