@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from post.models import Post, PostLike, PostImage, PostComment
-from user_profile.serializers import UserSerializer
+from user_profile.serializers import UserSerializer, UserBriefSerializer
 
 
 class PostImageSerializer(serializers.ModelSerializer):
@@ -11,13 +11,15 @@ class PostImageSerializer(serializers.ModelSerializer):
 
 
 class PostCommentSerializer(serializers.ModelSerializer):
+    user = UserBriefSerializer()
+
     class Meta:
         model = PostComment
         fields = '__all__'
 
 
 class PostSerializer(serializers.ModelSerializer):
-    author = UserSerializer()
+    author = UserBriefSerializer()
     images = PostImageSerializer(many=True)
     comments = PostCommentSerializer(many=True)
 

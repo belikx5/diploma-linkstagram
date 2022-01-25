@@ -1,8 +1,9 @@
 from rest_framework import viewsets
 from django.contrib.auth import get_user_model
+from rest_framework.permissions import IsAuthenticated
 
 from user_profile.models import UserProfile
-from user_profile.serializers import UserSerializer
+from user_profile.serializers import UserSerializer, UserBriefSerializer
 
 UserModel = get_user_model()
 
@@ -10,14 +11,19 @@ UserModel = get_user_model()
 class UserViewSet(viewsets.ModelViewSet):
     queryset = UserProfile.objects.all()
     serializer_class = UserSerializer
+    list_serializer_class = UserBriefSerializer
 
-    # def perform_create(self, serializer):
-    #
-    #     user = UserModel.objects.create_user(
-    #         username=serializer.validated_data.get('username'),
-    #         password=serializer.validated_data.get('password')
-    #     )
-    #
-    #     serializer.user = user
-    #     instance = serializer.save()
-    #     instance.save()
+    def get_serializer_class(self):
+        if self.action in ('create', 'update', 'destroy', 'partial_update'):
+            return self.serializer_class
+        elif self.action == 'list':
+            if hasattr(self, 'list_serializer_class'):
+                return self.list_serializer_class
+        return super().get_serializer_class()
+
+    def get_permissions(self):
+        if self.action in ('create', 'update', 'destroy', 'partial_update'):
+            permission_classes = [IsAuthenticated]
+        else:
+            permission_classes = []
+        return [permission() for permission in permission_classes]

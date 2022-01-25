@@ -8,6 +8,13 @@ from user_profile.models import UserProfile
 UserModel = get_user_model()
 
 
+def add_username_to_representation(representation_object, instance):
+    user = instance.user
+    del representation_object['user']
+    representation_object['username'] = user.username
+    return representation_object
+
+
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile
@@ -29,3 +36,18 @@ class UserSerializer(serializers.ModelSerializer):
         data['user'] = user.id
         self.initial_data = OrderedDict(data)
         return super().is_valid(raise_exception)
+
+    def to_representation(self, instance):
+        obj = super().to_representation(instance)
+        return add_username_to_representation(obj, instance)
+
+
+class UserBriefSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserProfile
+        fields = ['id', 'profile_photo', 'user', ]
+        read_only_fields = ('id',)
+
+    def to_representation(self, instance):
+        obj = super().to_representation(instance)
+        return add_username_to_representation(obj, instance)
