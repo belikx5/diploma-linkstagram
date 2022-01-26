@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="e91c4420-78e6-4f8e-bdba-7cad2b242929" name="Changes" comment="add user creation and permissions">
+    <list default="true" id="e91c4420-78e6-4f8e-bdba-7cad2b242929" name="Changes" comment="add new user serializer, manage default permissions classes, change post serializer">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/linkstagram/linkstagram/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/linkstagram/linkstagram/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/linkstagram/post/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/linkstagram/post/admin.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/linkstagram/post/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/linkstagram/post/serializers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/linkstagram/requirements.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/linkstagram/user_profile/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/linkstagram/user_profile/models.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/linkstagram/user_profile/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/linkstagram/user_profile/serializers.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/linkstagram/user_profile/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/linkstagram/user_profile/views.py" afterDir="false" />
     </list>
@@ -130,7 +128,8 @@
       <workItem from="1642942054377" duration="12050000" />
       <workItem from="1642975022694" duration="712000" />
       <workItem from="1643037209356" duration="10893000" />
-      <workItem from="1643124469312" duration="4129000" />
+      <workItem from="1643124469312" duration="5533000" />
+      <workItem from="1643219747041" duration="6077000" />
     </task>
     <task id="LOCAL-00001" summary="add comments, fix views improve serializers">
       <created>1642975313190</created>
@@ -146,7 +145,14 @@
       <option name="project" value="LOCAL" />
       <updated>1643056423011</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="add new user serializer, manage default permissions classes, change post serializer">
+      <created>1643143999476</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1643143999477</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -167,10 +173,18 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="add comments, fix views improve serializers" />
     <MESSAGE value="add user creation and permissions" />
-    <option name="LAST_COMMIT_MESSAGE" value="add user creation and permissions" />
+    <MESSAGE value="add new user serializer, manage default permissions classes, change post serializer" />
+    <option name="LAST_COMMIT_MESSAGE" value="add new user serializer, manage default permissions classes, change post serializer" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/linkstagram/user_profile/serializers.py</url>
+          <line>38</line>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+      </breakpoints>
       <default-breakpoints>
         <breakpoint type="python-exception">
           <properties notifyOnTerminate="true" exception="BaseException">
