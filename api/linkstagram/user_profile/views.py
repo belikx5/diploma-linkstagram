@@ -3,7 +3,7 @@ from django.contrib.auth import get_user_model
 from rest_framework.permissions import IsAuthenticated
 
 from user_profile.models import UserProfile
-from user_profile.serializers import UserSerializer, UserBriefSerializer
+from user_profile.serializers import UserSerializer, UserBriefSerializer, UserCreateUpdateSerializer
 
 UserModel = get_user_model()
 
@@ -12,10 +12,11 @@ class UserViewSet(viewsets.ModelViewSet):
     queryset = UserProfile.objects.all()
     serializer_class = UserSerializer
     list_serializer_class = UserBriefSerializer
+    create_update_serializer_class = UserCreateUpdateSerializer
 
     def get_serializer_class(self):
         if self.action in ('create', 'update', 'destroy', 'partial_update'):
-            return self.serializer_class
+            return self.create_update_serializer_class
         elif self.action == 'list':
             if hasattr(self, 'list_serializer_class'):
                 return self.list_serializer_class
