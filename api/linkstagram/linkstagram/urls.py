@@ -23,11 +23,12 @@ from rest_framework import routers
 from rest_framework.authtoken.views import obtain_auth_token
 
 from post.views import PostListViewSet, PostLikeViewSet
-from user_profile.views import UserViewSet
+from user_profile.views import UserViewSet, UserFollowingViewSet
 
 router = routers.DefaultRouter()
 router.register(r'posts', PostListViewSet, basename="postView")
 router.register(r'users', UserViewSet, basename="userView")
+router.register(r'user-following', UserFollowingViewSet, basename="userFollowingView")
 router.register(r'likes', PostLikeViewSet, basename="likeView")
 
 
