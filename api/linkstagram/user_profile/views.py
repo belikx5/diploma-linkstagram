@@ -44,15 +44,6 @@ class UserFollowingViewSet(viewsets.ModelViewSet):
             return self.serializer_class
         return super().get_serializer_class()
 
-    # def get_permissions(self):
-    #     if self.action in ('create', 'destroy'):
-    #         permission_classes = [permissions.IsAuthenticated]
-    #     elif self.action in ('update', 'partial_update'):
-    #         permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-    #     else:
-    #         permission_classes = []
-    #     return [permission() for permission in permission_classes]
-
     def perform_create(self, serializer):
         curr_user_data = serializer.validated_data['user']
         user_to_follow_data = serializer.validated_data['following_user']

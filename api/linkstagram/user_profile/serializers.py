@@ -15,30 +15,30 @@ def add_username_to_representation(representation_object, instance):
     return representation_object
 
 
-# default user serializer just to get username from user field in to_representation
 class DefaultUserSerializer(serializers.ModelSerializer):
+    """default user serializer just to get username from user field in to_representation"""
     def to_representation(self, instance):
         obj = super().to_representation(instance)
         return add_username_to_representation(obj, instance)
 
 
-# User info - short version
 class UserBriefSerializer(DefaultUserSerializer):
+    """User info - short version"""
     class Meta:
         model = UserProfile
         fields = ['id', 'profile_photo', 'user', ]
         read_only_fields = ('id',)
 
 
-# default user followers-following serializer
 class DefaultUserFollowingSerializer(serializers.ModelSerializer):
+    """default user followers-following serializer"""
     class Meta:
         model = UserFollowing
         fields = '__all__'
 
 
-# serializer for curr user followers + remove 'following_user' field as it references to curr user
 class UserFollowingMeSerializer(DefaultUserFollowingSerializer):
+    """serializer for curr user followers + remove 'following_user' field as it references to curr user"""
     user = UserBriefSerializer()
 
     def to_representation(self, instance):
@@ -47,8 +47,8 @@ class UserFollowingMeSerializer(DefaultUserFollowingSerializer):
         return obj
 
 
-# serializer for followed by curr user users + rewrite 'user' field as it references to curr user
 class UserFollowedByMeSerializer(DefaultUserFollowingSerializer):
+    """serializer for followed by curr user users + rewrite 'user' field as it references to curr user"""
     following_user = UserBriefSerializer()
 
     def to_representation(self, instance):
@@ -63,8 +63,8 @@ class UserFollowingListSerializer(DefaultUserFollowingSerializer):
     user = UserBriefSerializer()
 
 
-# 'create' action serializer for user following-followers
 class UserFollowingCreateSerializer(serializers.ModelSerializer):
+    """'create' action serializer for user following-followers"""
     class Meta:
         model = UserFollowing
         fields = '__all__'
@@ -82,8 +82,8 @@ class UserFollowingCreateSerializer(serializers.ModelSerializer):
         return super().is_valid(raise_exception)
 
 
-# User profile serializer
 class UserSerializer(DefaultUserSerializer):
+    """User profile serializer"""
     followers = UserFollowingMeSerializer(many=True)
     following = UserFollowedByMeSerializer(many=True)
 
