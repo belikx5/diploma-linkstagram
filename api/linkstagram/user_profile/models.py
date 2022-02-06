@@ -12,6 +12,7 @@ class UserProfile(models.Model):
     followers_count = models.PositiveIntegerField(default=0)
     following_count = models.PositiveIntegerField(default=0)
     profile_photo = models.ImageField(upload_to='avatars/', null=True, blank=True, default=None)
+    is_dead_profile = models.BooleanField(default=False)
     is_group_of_interest = models.BooleanField(default=False)
     tags = ArrayField(models.CharField(max_length=100), null=True, blank=True, default=None)
 

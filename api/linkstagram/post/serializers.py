@@ -31,7 +31,9 @@ class PostSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         likes = instance.likes
         obj = super().to_representation(instance)
-        obj['is_liked'] = True if likes.filter(user_id=self.context.get('request').user.id).first() else False
+        obj['is_liked'] = True if self.context.get('request') and likes.filter(
+            user_id=self.context.get('request').user.id
+        ).first() else False
         return obj
 
 

@@ -6,6 +6,8 @@ from user_profile.models import UserProfile
 class Post(models.Model):
     author = models.ForeignKey(UserProfile, on_delete=models.CASCADE,
                                blank=True, null=True, related_name='posts')
+    memory_created_by_user = models.ForeignKey(UserProfile, on_delete=models.CASCADE,
+                                               blank=True, null=True, related_name='memories')
     description = models.TextField()
     likes_count = models.PositiveIntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)

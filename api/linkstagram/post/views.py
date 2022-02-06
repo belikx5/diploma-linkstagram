@@ -1,6 +1,6 @@
 from rest_framework import viewsets, views
-from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.views import APIView
 
 from post.models import Post, PostLike, PostImage
 from post.serializers import PostSerializer, PostLikeSerializer, PostLikeCreateSerializer, PostCreateSerializer

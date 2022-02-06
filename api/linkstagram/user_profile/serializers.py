@@ -3,6 +3,7 @@ from rest_framework import serializers
 
 from collections import OrderedDict
 
+# from post.serializers import PostSerializer
 from user_profile.models import UserProfile, UserFollowing
 
 UserModel = get_user_model()
@@ -15,8 +16,16 @@ def add_username_to_representation(representation_object, instance):
     return representation_object
 
 
+class UserBriefMeta:
+    class Meta:
+        model = UserProfile
+        fields = ['id', 'profile_photo', 'user', ]
+        read_only_fields = ('id',)
+
+
 class DefaultUserSerializer(serializers.ModelSerializer):
     """default user serializer just to get username from user field in to_representation"""
+
     def to_representation(self, instance):
         obj = super().to_representation(instance)
         return add_username_to_representation(obj, instance)
@@ -24,6 +33,7 @@ class DefaultUserSerializer(serializers.ModelSerializer):
 
 class UserBriefSerializer(DefaultUserSerializer):
     """User info - short version"""
+
     class Meta:
         model = UserProfile
         fields = ['id', 'profile_photo', 'user', ]
@@ -32,6 +42,7 @@ class UserBriefSerializer(DefaultUserSerializer):
 
 class DefaultUserFollowingSerializer(serializers.ModelSerializer):
     """default user followers-following serializer"""
+
     class Meta:
         model = UserFollowing
         fields = '__all__'
@@ -65,6 +76,7 @@ class UserFollowingListSerializer(DefaultUserFollowingSerializer):
 
 class UserFollowingCreateSerializer(serializers.ModelSerializer):
     """'create' action serializer for user following-followers"""
+
     class Meta:
         model = UserFollowing
         fields = '__all__'
@@ -82,10 +94,21 @@ class UserFollowingCreateSerializer(serializers.ModelSerializer):
         return super().is_valid(raise_exception)
 
 
+class TrustedUserSerializer(serializers.ModelSerializer, UserBriefMeta):
+    """User info - short version"""
+    user = UserBriefSerializer()
+
+    class Meta:
+        model = UserProfile
+        fields = ['id', 'user', ]
+        read_only_fields = ('id',)
+
+
 class UserSerializer(DefaultUserSerializer):
     """User profile serializer"""
     followers = UserFollowingMeSerializer(many=True)
     following = UserFollowedByMeSerializer(many=True)
+    trusted_user_access = TrustedUserSerializer(many=True)
 
     class Meta:
         model = UserProfile
@@ -97,7 +120,7 @@ class UserCreateUpdateSerializer(DefaultUserSerializer):
     class Meta:
         model = UserProfile
         fields = '__all__'
-        read_only_fields = ('id', 'followers', 'following', 'username', )
+        read_only_fields = ('id', 'followers', 'following', 'username',)
 
     def is_valid(self, raise_exception=False):
         user_to_interact = self.instance
@@ -116,3 +139,13 @@ class UserCreateUpdateSerializer(DefaultUserSerializer):
             data['user'] = user.id
             self.initial_data = OrderedDict(data)
         return super().is_valid(raise_exception)
+
+
+# class UserWithPostsSerializer(DefaultUserSerializer):
+#     posts = PostSerializer(many=True)
+#     user = UserBriefSerializer()
+#
+#     class Meta:
+#         model = UserProfile
+#         fields = ['id', 'user', 'profile_photo', 'posts']
+#         read_only_fields = ('id',)

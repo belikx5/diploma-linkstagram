@@ -23,6 +23,7 @@ class UserViewSet(viewsets.ModelViewSet):
         return super().get_serializer_class()
 
     def get_permissions(self):
+        # TODO: change to ReadOnlyOrIsAuthenticated
         if self.action in ('create', 'update', 'destroy', 'partial_update'):
             permission_classes = [permissions.IsAuthenticated]
         else:

@@ -23,6 +23,7 @@ from rest_framework import routers
 from rest_framework.authtoken.views import obtain_auth_token
 
 from chat.views import ChatViewSet, MessageViewSet
+from dead_profile.views import DeadProfileViewSet
 from post.views import PostListViewSet, PostLikeViewSet
 from user_profile.views import UserViewSet, UserFollowingViewSet
 
@@ -33,6 +34,7 @@ router.register(r'user-following', UserFollowingViewSet, basename="userFollowing
 router.register(r'likes', PostLikeViewSet, basename="likeView")
 router.register(r'chats', ChatViewSet, basename="chatView")
 router.register(r'messages', MessageViewSet, basename="messageView")
+router.register(r'dead-profiles', DeadProfileViewSet, basename="deadProfileView")
 
 
 urlpatterns = [
