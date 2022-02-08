@@ -1,4 +1,5 @@
-from rest_framework import viewsets, permissions
+from rest_framework import viewsets, permissions, generics
+import django_filters
 from django.contrib.auth import get_user_model
 
 from user_profile.models import UserProfile, UserFollowing
@@ -29,6 +30,17 @@ class UserViewSet(viewsets.ModelViewSet):
         else:
             permission_classes = []
         return [permission() for permission in permission_classes]
+
+
+class CurrentUserView(generics.RetrieveAPIView):
+    serializer_class = UserSerializer
+    filter_backends = [django_filters.rest_framework.DjangoFilterBackend]
+    permission_classes = [permissions.IsAuthenticated]
+    queryset = UserProfile.objects.all()
+
+    def get_object(self):
+        print(self)
+        return self.get_queryset().filter(user_id=self.request.user.pk).first()
 
 
 class UserFollowingViewSet(viewsets.ModelViewSet):

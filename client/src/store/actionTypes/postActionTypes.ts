@@ -55,12 +55,10 @@ export type PostToCreate = {
 
 export type Comment = {
 	id: number;
-	commenter: {
+	user: {
+		id: number;
 		username: string;
-		description: string;
-		followers: number;
-		following: number;
-		profile_photo_url: string;
+		profile_photo: string;
 	};
 	created_at: string;
 	message: string;

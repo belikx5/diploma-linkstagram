@@ -1,5 +1,6 @@
 import { Dispatch } from 'redux';
 import api from '../../services/api';
+import http from '../../services/http';
 import history from '../../services/history';
 import {
 	ADD_COMMENT,
@@ -37,9 +38,7 @@ const getAuthHeaders = () => {
 export const fetchAllPosts =
 	() => async (dispatch: Dispatch<PostDispatchTypes>) => {
 		try {
-			const config = getAuthHeaders();
-			const response = await api.get<Post[]>('/posts', config);
-			console.log(response);
+			const response = await http.get<Post[]>(api.POSTS);
 			dispatch({ type: FETCH_ALL_POSTS, payload: response.data });
 		} catch ({ response: { data } }) {
 			dispatch({
@@ -54,16 +53,11 @@ export const fetchAllPosts =
 export const fetchPostById =
 	(postId: number) => async (dispatch: Dispatch<PostDispatchTypes>) => {
 		try {
-			const config = getAuthHeaders();
-			const response = await api.get<Post>(`/posts/${postId}`, config);
-			const commentResponse = await api.get<Comment[]>(
-				`/posts/${postId}/comments`
-			);
+			const response = await http.get<Post>(`${api.POSTS}/${postId}/`);
 			dispatch({
 				type: FETCH_POST_BY_ID,
 				payload: {
 					...response.data,
-					comments: commentResponse.data,
 				},
 			});
 		} catch ({ response: { data } }) {
@@ -80,7 +74,7 @@ export const fetchPostByUser =
 	(username: string) => async (dispatch: Dispatch<PostDispatchTypes>) => {
 		try {
 			const config = getAuthHeaders();
-			const response = await api.get<Post[]>(
+			const response = await http.get<Post[]>(
 				`/profiles/${username}/posts`,
 				config
 			);
@@ -100,13 +94,9 @@ export const setPostActionError =
 export const createPost =
 	(post: PostToCreate) => async (dispatch: Dispatch<PostDispatchTypes>) => {
 		try {
-			const response = await api.post<Post>(
-				'/posts',
-				{
-					...post,
-				},
-				getAuthHeaders()
-			);
+			const response = await http.post<Post>(api.POSTS, {
+				...post,
+			});
 			dispatch({
 				type: CREATE_POST,
 				payload: { ...response.data, comments: [] },
@@ -141,7 +131,7 @@ export const openPostDetailsModal =
 export const deletePost =
 	(postId: number) => async (dispatch: Dispatch<PostDispatchTypes>) => {
 		try {
-			await api.delete(`/posts/${postId}`, getAuthHeaders());
+			await http.delete(`${api.POSTS}/${postId}/`);
 			dispatch({ type: DELETE_POST, payload: { postId } });
 		} catch ({ response: { data } }) {
 			dispatch({
@@ -156,7 +146,7 @@ export const deletePost =
 export const setLike =
 	(postId: number) => async (dispatch: Dispatch<PostDispatchTypes>) => {
 		try {
-			await api.post(`/posts/${postId}/like`, {}, getAuthHeaders());
+			await http.post(`${api.POSTS}/${postId}/like`);
 			dispatch({
 				type: SET_LIKE,
 				payload: {
@@ -176,7 +166,7 @@ export const setLike =
 export const removeLike =
 	(postId: number) => async (dispatch: Dispatch<PostDispatchTypes>) => {
 		try {
-			await api.delete(`/posts/${postId}/like`, getAuthHeaders());
+			await http.delete(`/posts/${postId}/like`);
 			dispatch({
 				type: REMOVE_LIKE,
 				payload: {
@@ -196,7 +186,7 @@ export const removeLike =
 export const fetchComments =
 	(postId: number) => async (dispatch: Dispatch<PostDispatchTypes>) => {
 		try {
-			const response = await api.get<Comment[]>(`/posts/${postId}/comments`);
+			const response = await http.get<Comment[]>(`/posts/${postId}/comments`);
 			dispatch({
 				type: FETCH_COMMENTS,
 				payload: {
@@ -218,7 +208,7 @@ export const addComment =
 	(postId: number, message: string) =>
 	async (dispatch: Dispatch<PostDispatchTypes>) => {
 		try {
-			const response = await api.post<Comment>(
+			const response = await http.post<Comment>(
 				`/posts/${postId}/comments`,
 				{
 					message,

@@ -52,7 +52,7 @@ const PostDetails = ({ postData, openModal }: PostDetailsProps) => {
 				<div className='post-details-header'>
 					<div>
 						<UserIcon
-							icon={postData.author.profile_photo_url}
+							icon={postData.author.profile_photo}
 							size={UserIconSize.Small}
 						/>
 						<p>{postData.author.username}</p>

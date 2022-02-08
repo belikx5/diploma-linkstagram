@@ -75,12 +75,12 @@ const Post = ({ postData }: PostProps) => {
 					<div>
 						{postData.author.username === currentUser?.username ? (
 							<UserIcon
-								icon={currentUser?.profile_photo_url}
+								icon={currentUser?.profile_photo}
 								size={UserIconSize.Small}
 							/>
 						) : (
 							<UserIcon
-								icon={postData.author.profile_photo_url}
+								icon={postData.author.profile_photo}
 								size={UserIconSize.Small}
 							/>
 						)}
