@@ -11,6 +11,47 @@ import {
 import { useTypedSelector } from '../../hooks/useTypedSelector';
 import { useTranslation } from 'react-i18next';
 
+type InputProps = {
+	fieldName: string;
+	value: string;
+	onChange: (val: string) => void;
+	onBlur: (fieldName: string, val: string) => void;
+	label: string;
+	validationError: string | null;
+	type?: string;
+};
+
+const InputField = (props: InputProps) => {
+	const { fieldName, value, onChange, onBlur, label, validationError, type } =
+		props;
+	return (
+		<div className='auth-form-item'>
+			<label htmlFor={fieldName} className='auth-form-item-label'>
+				{label}
+			</label>
+			<div className='auth-form-item-with-validation'>
+				<input
+					id={fieldName}
+					type={type ?? 'text'}
+					className='form-item-text-input'
+					value={value}
+					onChange={e => onChange(e.target.value)}
+					onBlur={() => onBlur(fieldName, value)}
+				/>
+				{validationError !== null && (
+					<img
+						className={`form-item-validation-image `}
+						src={`../../assets/validation-${
+							validationError ? 'error' : 'success'
+						}.svg`}
+						alt='validation'
+					/>
+				)}
+			</div>
+		</div>
+	);
+};
+
 type AuthFormprops = {
 	action: string;
 	isSignup: boolean;
@@ -24,28 +65,32 @@ const AuthForm = (props: AuthFormprops) => {
 	const { action, isSignup = false, linkTo, linkHeader, linkName } = props;
 	const authError = useTypedSelector(state => state.userState.authError);
 	const dispatch = useDispatch();
-	const [email, setEmail] = useState('');
+	const [username, setUsername] = useState('');
 	const [password, setPassword] = useState('');
-	const [nickname, setNickname] = useState('');
+	const [name, setName] = useState('');
+	const [surname, setSurname] = useState('');
 	const [validationErrors, setValidationErrors] = useState({
-		email: null,
+		username: null,
 		password: null,
-		nickname: null,
+		name: null,
+		surname: null,
 	});
 
 	const handleSubmit = () => {
 		isSignup
-			? dispatch(signup(nickname, email, password))
-			: dispatch(signin(email, password));
+			? dispatch(signup(username, name, surname, password))
+			: dispatch(signin(username, password));
 	};
 	const showValidationError = (field: string) => {
 		switch (field) {
-			case 'email':
-				return validationErrors.email ? validationErrors.email : null;
+			case 'username':
+				return validationErrors.username ? validationErrors.username : null;
 			case 'password':
 				return validationErrors.password ? validationErrors.password : null;
-			case 'nickname':
-				return validationErrors.nickname ? validationErrors.nickname : null;
+			case 'name':
+				return validationErrors.name ? validationErrors.name : null;
+			case 'surname':
+				return validationErrors.surname ? validationErrors.surname : null;
 			default:
 				return null;
 		}
@@ -64,81 +109,42 @@ const AuthForm = (props: AuthFormprops) => {
 		<>
 			<form className='auth-form' onSubmit={e => e.preventDefault()}>
 				<h1>{action}</h1>
-				<div className='auth-form-item'>
-					<label htmlFor='email' className='auth-form-item-label'>
-						{t('auth.email')}
-					</label>
-					<div className='auth-form-item-with-validation'>
-						<input
-							id='email'
-							type='text'
-							className='form-item-text-input'
-							value={email}
-							onChange={e => setEmail(e.target.value)}
-							onBlur={() => onBlur('nickname', email)}
-						/>
-						{validationErrors.email !== null && (
-							<img
-								className={`form-item-validation-image `}
-								src={`../../assets/validation-${
-									validationErrors.email ? 'error' : 'success'
-								}.svg`}
-								alt='validation'
-							/>
-						)}
-					</div>
-				</div>
 				{isSignup && (
-					<div className='auth-form-item'>
-						<label htmlFor='nickname' className='auth-form-item-label'>
-							{t('auth.username')}
-						</label>
-						<div className='auth-form-item-with-validation'>
-							<input
-								id='nickname'
-								type='text'
-								className='form-item-text-input'
-								value={nickname}
-								onChange={e => setNickname(e.target.value)}
-								onBlur={() => onBlur('nickname', nickname)}
-							/>
-							{validationErrors.nickname !== null && (
-								<img
-									className={`form-item-validation-image `}
-									src={`../../assets/validation-${
-										validationErrors.nickname ? 'error' : 'success'
-									}.svg`}
-									alt='validation'
-								/>
-							)}
-						</div>
-					</div>
-				)}
-				<div className='auth-form-item'>
-					<label htmlFor='pass' className='auth-form-item-label'>
-						{t('auth.password')}
-					</label>
-					<div className='auth-form-item-with-validation'>
-						<input
-							id='pass'
-							type='password'
-							className='form-item-text-input'
-							value={password}
-							onChange={e => setPassword(e.target.value)}
-							onBlur={() => onBlur('password', password)}
+					<>
+						<InputField
+							value={name}
+							fieldName='name'
+							validationError={validationErrors.name}
+							label={t('auth.name')}
+							onChange={setName}
+							onBlur={onBlur}
 						/>
-						{validationErrors.password !== null && (
-							<img
-								className={`form-item-validation-image `}
-								src={`../../assets/validation-${
-									validationErrors.password ? 'error' : 'success'
-								}.svg`}
-								alt='validation'
-							/>
-						)}
-					</div>
-				</div>
-
+						<InputField
+							value={surname}
+							fieldName='surname'
+							validationError={validationErrors.surname}
+							label={t('auth.surname')}
+							onChange={setSurname}
+							onBlur={onBlur}
+						/>
+					</>
+				)}
+				<InputField
+					value={username}
+					fieldName='username'
+					validationError={validationErrors.username}
+					label={t('auth.username')}
+					onChange={setUsername}
+					onBlur={onBlur}
+				/>
+				<InputField
+					value={password}
+					fieldName='password'
+					validationError={validationErrors.password}
+					label={t('auth.password')}
+					onChange={setPassword}
+					onBlur={onBlur}
+				/>
 				<div className='auth-form-actions'>
 					{authError.error && (
 						<p className='auth-form-actions-error-message'>
@@ -153,14 +159,17 @@ const AuthForm = (props: AuthFormprops) => {
 						{showValidationError('password')}
 					</p>
 					<p className='auth-form-actions-error-message'>
-						{showValidationError('nickname')}
+						{validationErrors.name
+							? showValidationError('name')
+							: showValidationError('surname')}
 					</p>
 					<button
 						onClick={handleSubmit}
 						disabled={
-							!!validationErrors.email ||
+							!!validationErrors.username ||
 							!!validationErrors.password ||
-							!!validationErrors.nickname
+							!!validationErrors.name ||
+							!!validationErrors.surname
 						}>
 						{action}
 					</button>
