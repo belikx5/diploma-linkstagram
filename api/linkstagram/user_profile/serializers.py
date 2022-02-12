@@ -13,6 +13,9 @@ def add_username_to_representation(representation_object, instance):
     user = instance.user
     del representation_object['user']
     representation_object['username'] = user.username
+    representation_object['full_name'] = f'{user.first_name} {user.last_name}' \
+        if user.first_name and user.last_name \
+        else ''
     return representation_object
 
 
@@ -126,14 +129,21 @@ class UserCreateUpdateSerializer(DefaultUserSerializer):
         user_to_interact = self.instance
         data = dict(self.initial_data)
         if not user_to_interact:
-            username = data.get('username')[0]
+            username = data.get('username')
+            first_name = data.get('first_name')
+            last_name = data.get('last_name')
+            if not first_name or not last_name:
+                raise serializers.ValidationError("Please specify user name and surname")
+
             user_exists = UserModel.objects.filter(username=username).first()
             if user_exists:
                 raise serializers.ValidationError("User with a provided username already exists")
 
             user = UserModel.objects.create_user(
                 username=username,
-                password=data.get('password')[0]
+                first_name=first_name,
+                last_name=last_name,
+                password=data.get('password')
             )
 
             data['user'] = user.id

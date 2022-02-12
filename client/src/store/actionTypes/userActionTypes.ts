@@ -11,16 +11,33 @@ export const EDIT_USER = 'EDIT_USER';
 export const USER_ACTION_ERROR = 'USER_ACTION_ERROR';
 export const CLEAR_USER_ACTION_ERROR = 'CLEAR_USER_ACTION_ERROR';
 
+export type ProfileBrief = {
+	id: number;
+	profile_photo: string;
+	username: string;
+};
+
+export type Follower = {
+	id: number;
+	created_at: string;
+	user: ProfileBrief;
+};
+
 export type Profile = {
 	username: string;
-	description: string;
+	bio: string;
 	first_name: string;
 	followers_count: number;
 	following_count: number;
-	job_title: string;
 	last_name: string;
 	profile_photo: string;
+	is_dead_profile: boolean;
+	is_group_of_interest: boolean;
+	tags: string[];
+	followers: Follower[];
+	following: Follower[];
 };
+
 export type ProfileToEdit = {
 	account: {
 		username?: string;
@@ -41,7 +58,7 @@ export type ProfileToEdit = {
 };
 export type Account = {
 	username: string;
-	login: string;
+	email: string;
 	password: string;
 };
 

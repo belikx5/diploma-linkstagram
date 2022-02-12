@@ -101,8 +101,7 @@ const EditForm = ({ openModal }: EditFormProps) => {
 	}, []);
 	useEffect(() => {
 		if (currentUser) {
-			setDescription(currentUser.description || '');
-			setJob(currentUser.job_title || '');
+			setDescription(currentUser.bio || '');
 			setName(currentUser.first_name || '');
 			setSurname(currentUser.last_name || '');
 			//   setNick(user.nickname);

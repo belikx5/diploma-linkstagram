@@ -79,11 +79,8 @@ const UserCard = ({ isProfilePage }: UserCardProps) => {
 				</div>
 				<p className='user-card-author-main'>
 					{currentUser?.first_name} {currentUser?.last_name} -{' '}
-					{currentUser?.job_title}
 				</p>
-				<p className='user-card-author-description'>
-					{currentUser?.description}
-				</p>
+				<p className='user-card-author-description'>{currentUser?.bio}</p>
 				<div className='user-card-actions'>
 					<button onClick={onEditClick} className={isProfilePage ? 'wide' : ''}>
 						{t('userCard.edit')}

@@ -17,6 +17,8 @@ import {
 	CLEAR_USER_ACTION_ERROR,
 	USER_ACTION_ERROR,
 } from '../actionTypes/userActionTypes';
+import { UIDispatchTypes } from '../actionTypes/uiActionTypes';
+import { enqueueSnackbar } from './uiActions';
 
 export const logout = () => (dispatch: Dispatch<UserDispatchTypes>) => {
 	localStorage.removeItem('token');
@@ -77,30 +79,46 @@ export const signin =
 		}
 	};
 export const signup =
-	(username: string, login: string, password: string) =>
-	async (dispatch: Dispatch<UserDispatchTypes>) => {
+	(username: string, name: string, surname: string, password: string) =>
+	async (dispatch: Dispatch<any>) => {
 		try {
-			const response = await http.post('/create-account', {
+			const response = await http.post(api.USERS, {
 				username,
-				login,
+				first_name: name,
+				last_name: surname,
 				password,
 			});
-			const token = response.headers.authorization;
-			localStorage.setItem('token', token);
-			dispatch({
-				type: SIGN_UP,
-				payload: {
-					token,
-				},
-			});
-			const userResponse = await getCurrentUser();
-			if (userResponse?.data) {
-				dispatch({
-					type: FETCH_CURRENT_USER,
-					payload: { ...userResponse.data },
-				});
-				history.push('/');
-			}
+			dispatch(
+				enqueueSnackbar({
+					text: `User ${response.data.username} has been created successfully`,
+					key: '',
+				})
+			);
+
+			// dispatch({
+			// 	type: APPEND_ALERT,
+			// 	payload: {
+			// 		id: Date.now().toString(),
+			// 		text: `User ${response.data.username} has been created successfully`,
+			// 	},
+			// });
+			history.push('/signin');
+			// const token = response.data.token;
+			// localStorage.setItem('token', token);
+			// dispatch({
+			// 	type: SIGN_UP,
+			// 	payload: {
+			// 		token,
+			// 	},
+			// });
+			// const userResponse = await getCurrentUser();
+			// if (userResponse?.data) {
+			// 	dispatch({
+			// 		type: FETCH_CURRENT_USER,
+			// 		payload: { ...userResponse.data },
+			// 	});
+			// 	history.push('/');
+			// }
 		} catch ({ response: { data } }) {
 			dispatch({
 				type: AUTH_ERROR,

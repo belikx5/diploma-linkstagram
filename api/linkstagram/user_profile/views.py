@@ -25,7 +25,7 @@ class UserViewSet(viewsets.ModelViewSet):
 
     def get_permissions(self):
         # TODO: change to ReadOnlyOrIsAuthenticated
-        if self.action in ('create', 'update', 'destroy', 'partial_update'):
+        if self.action in ('update', 'destroy', 'partial_update'):
             permission_classes = [permissions.IsAuthenticated]
         else:
             permission_classes = []

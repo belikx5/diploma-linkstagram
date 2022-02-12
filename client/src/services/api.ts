@@ -13,6 +13,7 @@ const SERVER_URL = 'http://127.0.0.1:8000';
 const api = {
 	AUTH_TOKEN: `${SERVER_URL}/api/token-auth/`,
 	AUTH_ME: `${SERVER_URL}/users/me/`,
+	USERS: `${SERVER_URL}/api/users/`,
 	POSTS: `${SERVER_URL}/api/posts/`,
 };
 

@@ -35,10 +35,7 @@ const UserCard = ({ isProfilePage }: UserCardProps) => {
 						<h3>
 							{currentUser?.first_name} {currentUser?.last_name}
 						</h3>
-						<p className='user-card-left-data-job'>{currentUser?.job_title}</p>
-						<p className='user-card-left-data-descr'>
-							{currentUser?.description}
-						</p>
+						<p className='user-card-left-data-descr'>{currentUser?.bio}</p>
 					</div>
 				</div>
 				<div className='user-card-right'>
