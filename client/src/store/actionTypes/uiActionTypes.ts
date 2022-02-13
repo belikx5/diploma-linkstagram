@@ -2,13 +2,22 @@ export const ENQUEUE_SNACKBAR = 'ENQUEUE_SNACKBAR';
 export const CLOSE_SNACKBAR = 'CLOSE_SNACKBAR';
 export const REMOVE_SNACKBAR = 'REMOVE_SNACKBAR';
 
-export type Notification = {
+export interface Notification {
 	text: string;
-	key: string;
 	dismissed?: boolean;
 	options?: any; // object with different proeprties
-};
+}
 
+export interface EnqueueNotification extends Notification {
+	key: string;
+}
+
+export enum SnackbarVariant {
+	SUCCESS = 'sucess',
+	ERROR = 'error',
+	WARNING = 'warning',
+	INFO = 'info',
+}
 export interface CloseSnackbar {
 	type: typeof CLOSE_SNACKBAR;
 	payload: {
@@ -19,7 +28,7 @@ export interface CloseSnackbar {
 
 export interface EnqueueSnackbar {
 	type: typeof ENQUEUE_SNACKBAR;
-	payload: Notification;
+	payload: EnqueueNotification;
 }
 
 export interface RemoveSnackbar {

@@ -18,7 +18,7 @@ import {
 	USER_ACTION_ERROR,
 } from '../actionTypes/userActionTypes';
 import { UIDispatchTypes } from '../actionTypes/uiActionTypes';
-import { enqueueSnackbar } from './uiActions';
+import { enqueueSnackbar, successSnackbarConfig } from './uiActions';
 
 export const logout = () => (dispatch: Dispatch<UserDispatchTypes>) => {
 	localStorage.removeItem('token');
@@ -34,6 +34,8 @@ export const clearUserActionError =
 	};
 export const tryLocalSignIn =
 	() => async (dispatch: Dispatch<UserDispatchTypes>) => {
+		const token = localStorage.getItem('token');
+		if (!token) return;
 		const userResponse = await getCurrentUser();
 		if (userResponse?.data) {
 			console.log('userResponse?.data', userResponse?.data);
@@ -91,34 +93,10 @@ export const signup =
 			dispatch(
 				enqueueSnackbar({
 					text: `User ${response.data.username} has been created successfully`,
-					key: '',
+					...successSnackbarConfig,
 				})
 			);
-
-			// dispatch({
-			// 	type: APPEND_ALERT,
-			// 	payload: {
-			// 		id: Date.now().toString(),
-			// 		text: `User ${response.data.username} has been created successfully`,
-			// 	},
-			// });
 			history.push('/signin');
-			// const token = response.data.token;
-			// localStorage.setItem('token', token);
-			// dispatch({
-			// 	type: SIGN_UP,
-			// 	payload: {
-			// 		token,
-			// 	},
-			// });
-			// const userResponse = await getCurrentUser();
-			// if (userResponse?.data) {
-			// 	dispatch({
-			// 		type: FETCH_CURRENT_USER,
-			// 		payload: { ...userResponse.data },
-			// 	});
-			// 	history.push('/');
-			// }
 		} catch ({ response: { data } }) {
 			dispatch({
 				type: AUTH_ERROR,

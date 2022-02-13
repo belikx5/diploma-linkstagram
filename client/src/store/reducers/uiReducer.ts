@@ -1,5 +1,6 @@
 import {
 	Notification,
+	EnqueueNotification,
 	ENQUEUE_SNACKBAR,
 	CLOSE_SNACKBAR,
 	REMOVE_SNACKBAR,
@@ -7,7 +8,7 @@ import {
 } from '../actionTypes/uiActionTypes';
 
 interface IDefaultState {
-	notifications: Notification[];
+	notifications: EnqueueNotification[];
 }
 
 const initialState: IDefaultState = {
