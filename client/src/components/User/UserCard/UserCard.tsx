@@ -78,7 +78,7 @@ const UserCard = ({ isProfilePage }: UserCardProps) => {
 					</div>
 				</div>
 				<p className='user-card-author-main'>
-					{currentUser?.first_name} {currentUser?.last_name} -{' '}
+					{currentUser?.first_name} {currentUser?.last_name}
 				</p>
 				<p className='user-card-author-description'>{currentUser?.bio}</p>
 				<div className='user-card-actions'>

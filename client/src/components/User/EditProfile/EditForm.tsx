@@ -22,47 +22,37 @@ const EditForm = ({ openModal }: EditFormProps) => {
 	const dispatch = useDispatch();
 	const { pathname } = useLocation();
 	const currentUser = useTypedSelector(state => state.userState.currentUser);
-	const [isNickValid, setIsNickValid] = useState<boolean | null>(null);
 	const [name, setName] = useState('');
 	const [file, setFile] = useState<any>(null);
 	const [previewFile, setPreviewFile] = useState('');
 	const [surname, setSurname] = useState('');
-	const [job, setJob] = useState('');
 	const [description, setDescription] = useState('');
 	const [fileLoading, setFileLoading] = useState(false);
 	const onSaveClicked = async () => {
 		setFileLoading(true);
 		let images;
 		if (file) {
-			uppy.addFile({
-				name: file.name,
-				type: file.type,
-				data: file,
-				source: 'cache',
-			});
-			const { successful }: any = await uppy.upload();
-			uppy.cancelAll();
-			images = createObjectsForApi(successful);
+			// uppy.addFile({
+			// 	name: file.name,
+			// 	type: file.type,
+			// 	data: file,
+			// 	source: 'cache',
+			// });
+			// const { successful }: any = await uppy.upload();
+			// uppy.cancelAll();
+			// images = createObjectsForApi(successful);
 		}
 		const editedAcc = {
-			account: {
-				username: currentUser?.username || '',
-				first_name: name,
-				description: description,
-				last_name: surname,
-				job_title: job,
-			},
+			first_name: name,
+			description: description,
+			last_name: surname,
+			profile_photo: file,
 		};
-		dispatch(
-			editUser(
-				images
-					? {
-							...editedAcc,
-							account: { ...editedAcc.account, profile_photo: images[0].image },
-					  }
-					: editedAcc
-			)
-		);
+		const formData = new FormData();
+		Object.entries(editedAcc).forEach(([key, value]) => {
+			formData.append(key, value);
+		});
+		dispatch(editUser(formData));
 		setFileLoading(false);
 		if (openModal) {
 			openModal(false);
@@ -86,13 +76,7 @@ const EditForm = ({ openModal }: EditFormProps) => {
 		setFileLoading(false);
 	};
 
-	const isDisabled = () => {
-		if (fileLoading) {
-			return true;
-		} else {
-			return isNickValid === null ? false : !isNickValid;
-		}
-	};
+	const isDisabled = () => fileLoading;
 
 	useEffect(() => {
 		if (!currentUser) {
@@ -104,7 +88,6 @@ const EditForm = ({ openModal }: EditFormProps) => {
 			setDescription(currentUser.bio || '');
 			setName(currentUser.first_name || '');
 			setSurname(currentUser.last_name || '');
-			//   setNick(user.nickname);
 		}
 	}, [currentUser]);
 
@@ -181,18 +164,6 @@ const EditForm = ({ openModal }: EditFormProps) => {
 				</div>
 			</div>
 
-			<div className='edit-form-item job'>
-				<label htmlFor='job' className='edit-form-label'>
-					{t('editProfile.job')}
-				</label>
-				<input
-					id='job'
-					className='edit-form-text-input'
-					type='text'
-					value={job}
-					onChange={e => setJob(e.target.value)}
-				/>
-			</div>
 			<div className='edit-form-item description'>
 				<label htmlFor='description' className='edit-form-label'>
 					{t('editProfile.description')}

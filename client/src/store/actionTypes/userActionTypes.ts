@@ -24,6 +24,7 @@ export type Follower = {
 };
 
 export type Profile = {
+	id: number;
 	username: string;
 	bio: string;
 	first_name: string;
@@ -39,23 +40,12 @@ export type Profile = {
 };
 
 export type ProfileToEdit = {
-	account: {
-		username?: string;
-		description?: string;
-		first_name?: string;
-		job_title?: string;
-		last_name?: string;
-		profile_photo?: {
-			id: string;
-			storage: string;
-			metadata: {
-				size: number;
-				mime_type: string;
-				filename: string;
-			};
-		};
-	};
+	description?: string;
+	first_name?: string;
+	last_name?: string;
+	profile_photo?: any;
 };
+
 export type Account = {
 	username: string;
 	email: string;
