@@ -16,11 +16,10 @@ class UserViewSet(viewsets.ModelViewSet):
     create_update_serializer_class = UserCreateUpdateSerializer
 
     def get_serializer_class(self):
-        if self.action in ('create', 'update', 'destroy', 'partial_update'):
+        if self.action in ('create', 'destroy', 'update', 'partial_update'):
             return self.create_update_serializer_class
         elif self.action == 'list':
-            if hasattr(self, 'list_serializer_class'):
-                return self.list_serializer_class
+            return self.list_serializer_class
         return super().get_serializer_class()
 
     def get_permissions(self):
@@ -30,6 +29,21 @@ class UserViewSet(viewsets.ModelViewSet):
         else:
             permission_classes = []
         return [permission() for permission in permission_classes]
+
+    def perform_update(self, serializer):
+        instance = serializer.save()
+        first_name = serializer.context['request'].data.get('first_name')
+        last_name = serializer.context['request'].data.get('last_name')
+        username = serializer.context['request'].user.username
+        user = UserModel.objects.get(username=username)
+        if first_name:
+            instance.user.first_name = first_name
+            user.first_name = first_name
+        if last_name:
+            instance.user.last_name = last_name
+            user.last_name = last_name
+        user.save()
+        instance.save()
 
 
 class CurrentUserView(generics.RetrieveAPIView):

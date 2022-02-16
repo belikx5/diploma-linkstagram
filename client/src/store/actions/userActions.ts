@@ -19,6 +19,7 @@ import {
 } from '../actionTypes/userActionTypes';
 import { UIDispatchTypes } from '../actionTypes/uiActionTypes';
 import { enqueueSnackbar, successSnackbarConfig } from './uiActions';
+import { RootStore } from '..';
 
 export const logout = () => (dispatch: Dispatch<UserDispatchTypes>) => {
 	localStorage.removeItem('token');
@@ -149,11 +150,14 @@ export const fetchAllUsers =
 	};
 
 export const editUser =
-	(user: ProfileToEdit) => async (dispatch: Dispatch<UserDispatchTypes>) => {
+	(data: FormData) =>
+	async (dispatch: Dispatch<UserDispatchTypes>, getState: () => RootStore) => {
 		try {
-			const response = await http.patch<Profile>('/account', {
-				...user,
-			});
+			const user_id = getState().userState.currentUser?.id;
+			const response = await http.patch<Profile>(
+				`${api.USERS}${user_id}/`,
+				data
+			);
 			dispatch({ type: EDIT_USER, payload: response?.data });
 		} catch ({ response: { data } }) {
 			dispatch({

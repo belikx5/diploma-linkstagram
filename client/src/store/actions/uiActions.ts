@@ -30,7 +30,7 @@ export const closeSnackbar =
 		dispatch({
 			type: CLOSE_SNACKBAR,
 			payload: {
-				dismissAll: !!key,
+				dismissAll: !key,
 				key: key,
 			},
 		});

@@ -42,7 +42,7 @@ function AppWrapper({ children }: AppWrapperProps) {
 			});
 	}, [userActionError]);
 
-	return <SnackbarProvider maxSnack={3}>{children}</SnackbarProvider>;
+	return <SnackbarProvider maxSnack={10}>{children}</SnackbarProvider>;
 }
 
 export default AppWrapper;

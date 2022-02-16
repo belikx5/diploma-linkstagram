@@ -13,9 +13,8 @@ def add_username_to_representation(representation_object, instance):
     user = instance.user
     del representation_object['user']
     representation_object['username'] = user.username
-    representation_object['full_name'] = f'{user.first_name} {user.last_name}' \
-        if user.first_name and user.last_name \
-        else ''
+    representation_object['first_name'] = user.first_name
+    representation_object['last_name'] = user.last_name
     return representation_object
 
 
