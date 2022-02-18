@@ -27,8 +27,7 @@ class PostListViewSet(viewsets.ModelViewSet):
             permission_classes = []
         return [permission() for permission in permission_classes]
 
-    @staticmethod
-    def _perform_create_update(serializer):
+    def _perform_create_update(self, serializer):
         instance = serializer.save()
         instance.save()
         images = serializer.context['request'].FILES.getlist('images')

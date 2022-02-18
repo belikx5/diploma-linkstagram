@@ -22,6 +22,7 @@ import {
 	SET_IS_POSTS_FETCHED,
 	SET_LIKE,
 } from '../actionTypes/postActionTypes';
+import { AppThunkAction } from '..';
 
 const getAuthHeaders = () => {
 	const token = localStorage.getItem('token');
@@ -92,24 +93,30 @@ export const setPostActionError =
 		dispatch({ type: POST_ACTION_ERROR, payload: { error: message } });
 	};
 export const createPost =
-	(post: PostToCreate) => async (dispatch: Dispatch<PostDispatchTypes>) => {
+	(post: FormData): AppThunkAction<void> =>
+	async (dispatch, getState) => {
 		try {
-			const response = await http.post<Post>(api.POSTS, {
-				...post,
-			});
+			const response = await http.post<Post>(api.POSTS, post);
+			const newPost = {
+				...response.data,
+				author: getState().userState.currentUser,
+				comments: [],
+			};
 			dispatch({
 				type: CREATE_POST,
-				payload: { ...response.data, comments: [] },
+				payload: newPost,
 			});
 			dispatch({ type: CREATE_POST_MODAL_OPENED, payload: false });
-			history.location.pathname !== '/' && history.goBack();
-		} catch ({ response: { data } }) {
-			dispatch({
-				type: POST_ACTION_ERROR,
-				payload: {
-					error: data.error,
-				},
-			});
+			return Promise.resolve();
+		} catch (err) {
+			// const { response: { data } } = err;
+			// dispatch({
+			// 	type: POST_ACTION_ERROR,
+			// 	payload: {
+			// 		error: data.error,
+			// 	},
+			// });
+			return Promise.reject();
 		}
 	};
 

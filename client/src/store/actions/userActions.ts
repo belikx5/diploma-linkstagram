@@ -1,4 +1,5 @@
 import { Dispatch } from 'redux';
+import { ThunkAction } from 'redux-thunk';
 import api from '../../services/api';
 import http from '../../services/http';
 import history from '../../services/history';
@@ -19,7 +20,7 @@ import {
 } from '../actionTypes/userActionTypes';
 import { UIDispatchTypes } from '../actionTypes/uiActionTypes';
 import { enqueueSnackbar, successSnackbarConfig } from './uiActions';
-import { RootStore } from '..';
+import { AppThunkAction, RootStore } from '..';
 
 export const logout = () => (dispatch: Dispatch<UserDispatchTypes>) => {
 	localStorage.removeItem('token');
@@ -150,15 +151,16 @@ export const fetchAllUsers =
 	};
 
 export const editUser =
-	(data: FormData) =>
-	async (dispatch: Dispatch<UserDispatchTypes>, getState: () => RootStore) => {
+	(data: FormData): AppThunkAction<string> =>
+	async (dispatch, getState) => {
+		const user_id = getState().userState.currentUser?.id;
 		try {
-			const user_id = getState().userState.currentUser?.id;
 			const response = await http.patch<Profile>(
 				`${api.USERS}${user_id}/`,
 				data
 			);
 			dispatch({ type: EDIT_USER, payload: response?.data });
+			return await Promise.resolve("Profile've been updated successfully");
 		} catch ({ response: { data } }) {
 			dispatch({
 				type: USER_ACTION_ERROR,
@@ -166,7 +168,25 @@ export const editUser =
 					error: data.error,
 				},
 			});
+			return await Promise.resolve(data.error);
 		}
+		// try {
+		// 	const user_id = getState().userState.currentUser?.id;
+		// 	const response = await http.patch<Profile>(
+		// 		`${api.USERS}${user_id}/`,
+		// 		data
+		// 	);
+		// 	dispatch({ type: EDIT_USER, payload: response?.data });
+		// 	return Promise.resolve(true);
+		// } catch ({ response: { data } }) {
+		// 	dispatch({
+		// 		type: USER_ACTION_ERROR,
+		// 		payload: {
+		// 			error: data.error,
+		// 		},
+		// 	});
+		// 	return Promise.reject(false);
+		// }
 	};
 
 const getCurrentUser = async () => {

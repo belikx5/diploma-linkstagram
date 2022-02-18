@@ -1,6 +1,5 @@
 import './editForm.scss';
 import React, { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
 import history from '../../../services/history';
 import Loading from '../../ui/Loading/Loading';
 import { useTypedSelector } from '../../../hooks/useTypedSelector';
@@ -9,9 +8,9 @@ import {
 	editUser,
 	logout,
 } from '../../../store/actions/userActions';
-import uppy, { createObjectsForApi } from '../../../services/uppy';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router';
+import { useTypedDispatch } from '../../../hooks/useTypedDispatch';
 
 type EditFormProps = {
 	openModal?: Function;
@@ -19,7 +18,7 @@ type EditFormProps = {
 
 const EditForm = ({ openModal }: EditFormProps) => {
 	const [t] = useTranslation('common');
-	const dispatch = useDispatch();
+	const dispatch = useTypedDispatch();
 	const { pathname } = useLocation();
 	const currentUser = useTypedSelector(state => state.userState.currentUser);
 	const [name, setName] = useState('');
@@ -30,35 +29,29 @@ const EditForm = ({ openModal }: EditFormProps) => {
 	const [fileLoading, setFileLoading] = useState(false);
 	const onSaveClicked = async () => {
 		setFileLoading(true);
-		let images;
-		if (file) {
-			// uppy.addFile({
-			// 	name: file.name,
-			// 	type: file.type,
-			// 	data: file,
-			// 	source: 'cache',
-			// });
-			// const { successful }: any = await uppy.upload();
-			// uppy.cancelAll();
-			// images = createObjectsForApi(successful);
-		}
 		const editedAcc = {
 			first_name: name,
-			description: description,
+			bio: description,
 			last_name: surname,
-			profile_photo: file,
+			profile_photo: null,
 		};
+		if (file) editedAcc.profile_photo = file;
+
 		const formData = new FormData();
 		Object.entries(editedAcc).forEach(([key, value]) => {
-			formData.append(key, value);
+			if (value !== null) formData.append(key, value);
 		});
-		dispatch(editUser(formData));
-		setFileLoading(false);
-		if (openModal) {
-			openModal(false);
-		} else {
-			history.push('/profile');
-		}
+		dispatch(editUser(formData))
+			.then(() => {
+				if (openModal) {
+					openModal(false);
+				} else {
+					history.push('/profile');
+				}
+			})
+			.finally(() => {
+				setFileLoading(false);
+			});
 	};
 
 	const onCancelClicked = () => {
@@ -68,6 +61,7 @@ const EditForm = ({ openModal }: EditFormProps) => {
 			history.push('/profile');
 		}
 	};
+
 	const onFileChange = (event: any) => {
 		setFileLoading(true);
 		const file = event.currentTarget.files[0];

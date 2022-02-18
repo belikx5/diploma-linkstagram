@@ -4,8 +4,7 @@ from user_profile.models import UserProfile
 
 
 class Post(models.Model):
-    author = models.ForeignKey(UserProfile, on_delete=models.CASCADE,
-                               blank=True, null=True, related_name='posts')
+    author = models.ForeignKey(UserProfile, on_delete=models.CASCADE, null=False, related_name='posts')
     memory_created_by_user = models.ForeignKey(UserProfile, on_delete=models.CASCADE,
                                                blank=True, null=True, related_name='memories')
     description = models.TextField()
