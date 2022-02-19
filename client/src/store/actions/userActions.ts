@@ -20,7 +20,7 @@ import {
 } from '../actionTypes/userActionTypes';
 import { UIDispatchTypes } from '../actionTypes/uiActionTypes';
 import { enqueueSnackbar, successSnackbarConfig } from './uiActions';
-import { AppThunkAction, RootStore } from '..';
+import { ThunkActionWithPromise, RootStore } from '..';
 
 export const logout = () => (dispatch: Dispatch<UserDispatchTypes>) => {
 	localStorage.removeItem('token');
@@ -151,7 +151,7 @@ export const fetchAllUsers =
 	};
 
 export const editUser =
-	(data: FormData): AppThunkAction<string> =>
+	(data: FormData): ThunkActionWithPromise<string> =>
 	async (dispatch, getState) => {
 		const user_id = getState().userState.currentUser?.id;
 		try {
@@ -170,23 +170,6 @@ export const editUser =
 			});
 			return await Promise.resolve(data.error);
 		}
-		// try {
-		// 	const user_id = getState().userState.currentUser?.id;
-		// 	const response = await http.patch<Profile>(
-		// 		`${api.USERS}${user_id}/`,
-		// 		data
-		// 	);
-		// 	dispatch({ type: EDIT_USER, payload: response?.data });
-		// 	return Promise.resolve(true);
-		// } catch ({ response: { data } }) {
-		// 	dispatch({
-		// 		type: USER_ACTION_ERROR,
-		// 		payload: {
-		// 			error: data.error,
-		// 		},
-		// 	});
-		// 	return Promise.reject(false);
-		// }
 	};
 
 const getCurrentUser = async () => {

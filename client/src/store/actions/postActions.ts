@@ -22,7 +22,7 @@ import {
 	SET_IS_POSTS_FETCHED,
 	SET_LIKE,
 } from '../actionTypes/postActionTypes';
-import { AppThunkAction } from '..';
+import { ThunkActionVoid, ThunkActionWithPromise } from '..';
 
 const getAuthHeaders = () => {
 	const token = localStorage.getItem('token');
@@ -93,7 +93,7 @@ export const setPostActionError =
 		dispatch({ type: POST_ACTION_ERROR, payload: { error: message } });
 	};
 export const createPost =
-	(post: FormData): AppThunkAction<void> =>
+	(post: FormData): ThunkActionWithPromise<void> =>
 	async (dispatch, getState) => {
 		try {
 			const response = await http.post<Post>(api.POSTS, post);
@@ -138,7 +138,7 @@ export const openPostDetailsModal =
 export const deletePost =
 	(postId: number) => async (dispatch: Dispatch<PostDispatchTypes>) => {
 		try {
-			await http.delete(`${api.POSTS}/${postId}/`);
+			await http.delete(`${api.POSTS}${postId}/`);
 			dispatch({ type: DELETE_POST, payload: { postId } });
 		} catch ({ response: { data } }) {
 			dispatch({
@@ -151,9 +151,14 @@ export const deletePost =
 	};
 
 export const setLike =
-	(postId: number) => async (dispatch: Dispatch<PostDispatchTypes>) => {
+	(postId: number): ThunkActionVoid =>
+	async (dispatch, getState) => {
+		const author = getState().userState.currentUser;
 		try {
-			await http.post(`${api.POSTS}/${postId}/like`);
+			await http.post(api.LIKES, {
+				post: postId,
+				user: author?.id,
+			});
 			dispatch({
 				type: SET_LIKE,
 				payload: {
@@ -171,13 +176,15 @@ export const setLike =
 	};
 
 export const removeLike =
-	(postId: number) => async (dispatch: Dispatch<PostDispatchTypes>) => {
+	(post: Post): ThunkActionVoid =>
+	async (dispatch, getState) => {
+		const author = getState().userState.currentUser;
 		try {
-			await http.delete(`/posts/${postId}/like`);
+			await http.delete(`${api.LIKES_DELETE}${post.id}/${author?.id}/`);
 			dispatch({
 				type: REMOVE_LIKE,
 				payload: {
-					postId,
+					postId: post.id,
 				},
 			});
 		} catch ({ response: { data } }) {
@@ -193,14 +200,14 @@ export const removeLike =
 export const fetchComments =
 	(postId: number) => async (dispatch: Dispatch<PostDispatchTypes>) => {
 		try {
-			const response = await http.get<Comment[]>(`/posts/${postId}/comments`);
-			dispatch({
-				type: FETCH_COMMENTS,
-				payload: {
-					comments: response.data,
-					postId: postId,
-				},
-			});
+			// const response = await http.get<Comment[]>(`/posts/${postId}/comments`);
+			// dispatch({
+			// 	type: FETCH_COMMENTS,
+			// 	payload: {
+			// 		comments: response.data,
+			// 		postId: postId,
+			// 	},
+			// });
 		} catch ({ response: { data } }) {
 			dispatch({
 				type: POST_ACTION_ERROR,
@@ -212,21 +219,23 @@ export const fetchComments =
 	};
 
 export const addComment =
-	(postId: number, message: string) =>
-	async (dispatch: Dispatch<PostDispatchTypes>) => {
+	(postId: number, message: string): ThunkActionVoid =>
+	async (dispatch, getState) => {
+		const currentUser = getState().userState.currentUser;
 		try {
-			const response = await http.post<Comment>(
-				`/posts/${postId}/comments`,
-				{
-					message,
-				},
-				getAuthHeaders()
-			);
+			const response = await http.post<Comment>(api.COMMENTS, {
+				message,
+				user: currentUser?.id,
+				post: postId,
+			});
 			dispatch({
 				type: ADD_COMMENT,
 				payload: {
 					postId,
-					comment: response.data,
+					comment: {
+						...response.data,
+						user: currentUser,
+					},
 				},
 			});
 		} catch ({ response }) {

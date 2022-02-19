@@ -15,6 +15,9 @@ const api = {
 	AUTH_ME: `${SERVER_URL}/users/me/`,
 	USERS: `${SERVER_URL}/api/users/`,
 	POSTS: `${SERVER_URL}/api/posts/`,
+	COMMENTS: `${SERVER_URL}/api/comments/`,
+	LIKES: `${SERVER_URL}/api/likes/`,
+	LIKES_DELETE: `${SERVER_URL}/api/likes-delete/`,
 };
 
 export default api;

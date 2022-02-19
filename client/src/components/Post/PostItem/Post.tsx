@@ -36,7 +36,7 @@ const Post = ({ postData }: PostProps) => {
 	);
 	const handleLikeClick = () => {
 		postData.is_liked
-			? dispatch(removeLike(postData.id))
+			? dispatch(removeLike(postData))
 			: dispatch(setLike(postData.id));
 	};
 	const isModalOpened = (value: boolean) => {

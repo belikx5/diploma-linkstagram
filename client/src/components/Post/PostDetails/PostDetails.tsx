@@ -35,7 +35,7 @@ const PostDetails = ({ postData, openModal }: PostDetailsProps) => {
 	};
 	const onLikeClick = () => {
 		postData.is_liked
-			? dispatch(removeLike(postData.id))
+			? dispatch(removeLike(postData))
 			: dispatch(setLike(postData.id));
 	};
 

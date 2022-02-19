@@ -22,10 +22,15 @@ class PostCommentSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-def add_is_liked_to_representation(self, representation_obj, likes):
-    representation_obj['is_liked'] = True if self.context.get('request') and likes.filter(
-        user_id=self.context.get('request').user.id
-    ).first() else False
+class PostCommentCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PostComment
+        fields = '__all__'
+        read_only_fields = ('id', 'created_at')
+
+
+def add_is_liked_to_representation(curr_user_id, representation_obj, likes):
+    representation_obj['is_liked'] = True if likes.filter(user_id=curr_user_id).first() else False
     return representation_obj
 
 
@@ -41,8 +46,12 @@ class PostSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         likes = instance.likes
+        curr_user = self.context['request'].user
         obj = super().to_representation(instance)
-        return add_is_liked_to_representation(self, obj, likes)
+        if hasattr(curr_user, 'userprofile'):
+            return add_is_liked_to_representation(curr_user.userprofile.id, obj, likes)
+        obj['is_liked'] = False
+        return obj
 
 
 class PostCreateSerializer(serializers.ModelSerializer):
@@ -52,22 +61,15 @@ class PostCreateSerializer(serializers.ModelSerializer):
         read_only_fields = ('id',)
 
     def to_representation(self, instance):
-        # likes = instance.likes
-        # obj = super().to_representation(instance)
-        # obj['is_liked'] = True if self.context.get('request') and likes.filter(
-        #     user_id=self.context.get('request').user.id
-        # ).first() else False
-        # return obj
         context = {"request": self.context['request']}
-        likes = instance.likes
         images = instance.images
         author = instance.author
         obj = super().to_representation(instance)
-        new_obj = add_is_liked_to_representation(self, obj, likes)
-        new_obj['comments'] = []
-        new_obj['author'] = UserBriefSerializer(author, context=context).data
-        new_obj['images'] = PostImageSerializer(instance=images, many=True, context=context).data
-        return new_obj
+        obj['is_liked'] = False
+        obj['comments'] = []
+        obj['author'] = UserBriefSerializer(author, context=context).data
+        obj['images'] = PostImageSerializer(instance=images, many=True, context=context).data
+        return obj
 
     def is_valid(self, raise_exception=False):
         user_id = self.context['request'].auth.user.id
@@ -93,3 +95,12 @@ class PostLikeCreateSerializer(serializers.ModelSerializer):
         model = PostLike
         fields = ['id', 'post', 'user']
         read_only_fields = ('id',)
+
+    def is_valid(self, raise_exception=False):
+        data = dict(self.initial_data)
+        user_id = data.get('user')
+        post_id = data.get('post')
+        like_exists = PostLike.objects.filter(user_id=user_id, post_id=post_id).first()
+        if like_exists:
+            raise serializers.ValidationError("You can't like the same post twice")
+        return super().is_valid(raise_exception)

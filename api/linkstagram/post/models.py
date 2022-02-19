@@ -31,17 +31,13 @@ class PostImage(models.Model):
 
 
 class PostLike(models.Model):
-    post = models.ForeignKey(Post, on_delete=models.CASCADE,
-                             blank=True, null=True, related_name='likes')
-    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE,
-                             blank=True, null=True, related_name='user_like')
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, null=False, related_name='likes')
+    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE, null=False, related_name='user_like')
     created_at = models.DateTimeField(auto_now_add=True)
 
 
 class PostComment(models.Model):
     message = models.TextField()
-    post = models.ForeignKey(Post, on_delete=models.CASCADE,
-                             blank=True, null=True, related_name='comments')
-    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE,
-                             blank=True, null=True, related_name='comments')
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, null=False, related_name='comments')
+    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE, null=False, related_name='comments')
     created_at = models.DateTimeField(auto_now_add=True)

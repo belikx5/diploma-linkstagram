@@ -1,9 +1,11 @@
-from rest_framework import viewsets, views
+from rest_framework import viewsets, views, permissions
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from post.models import Post, PostLike, PostImage
-from post.serializers import PostSerializer, PostLikeSerializer, PostLikeCreateSerializer, PostCreateSerializer
+from post.models import Post, PostLike, PostImage, PostComment
+from post.serializers import PostSerializer, PostLikeSerializer, PostLikeCreateSerializer, PostCreateSerializer, \
+    PostCommentSerializer, PostCommentCreateSerializer
 
 
 class PostListViewSet(viewsets.ModelViewSet):
@@ -76,3 +78,31 @@ class PostLikeViewSet(viewsets.ModelViewSet):
         required_post.decrement_likes()
 
         instance.delete()
+
+
+class PostLikeDeleteAPIView(APIView):
+
+    def delete(self, request, post_id, user_id):
+        like = PostLike.objects.filter(post_id=post_id, user_id=user_id).first()
+        if not like:
+            return Response(status=400, data='Like not found')
+
+        like.delete()
+        required_post = Post.objects.get(id=post_id)
+        required_post.decrement_likes()
+        return Response(status=204)
+
+
+class PostCommentViewSet(viewsets.ModelViewSet):
+    queryset = PostComment.objects.all()
+    serializer_class = PostCommentSerializer
+    create_serializer_class = PostCommentCreateSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    def get_serializer_class(self):
+        if self.action in ('create', 'update', 'destroy', 'partial_update'):
+            if hasattr(self, 'create_serializer_class'):
+                return self.create_serializer_class
+        elif self.action == 'list':
+            return self.serializer_class
+        return super().get_serializer_class()

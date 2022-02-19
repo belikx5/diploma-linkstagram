@@ -14,11 +14,13 @@ const store = createStore(
 export type RootStore = ReturnType<typeof rootReducer>;
 export type AppDispatch = typeof store.dispatch;
 
-export type AppThunkAction<T> = ThunkAction<
+export type ThunkActionWithPromise<T> = ThunkAction<
 	Promise<T>,
 	RootStore,
 	undefined,
 	any
 >;
+
+export type ThunkActionVoid = ThunkAction<void, RootStore, undefined, any>;
 
 export default store;
