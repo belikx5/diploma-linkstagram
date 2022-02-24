@@ -11,6 +11,10 @@ export const EDIT_USER = 'EDIT_USER';
 export const USER_ACTION_ERROR = 'USER_ACTION_ERROR';
 export const CLEAR_USER_ACTION_ERROR = 'CLEAR_USER_ACTION_ERROR';
 
+export const FOLLOWING_MODAL_OPENED = 'FOLLOWING_MODAL_OPENED';
+export const FETCH_FOLLOWERS = 'FETCH_FOLLOWERS';
+export const FETCH_FOLLOWING = 'FETCH_FOLLOWING';
+
 export type ProfileBrief = {
 	id: number;
 	profile_photo: string;
@@ -108,6 +112,21 @@ export interface ClearUserActionError {
 	type: typeof CLEAR_USER_ACTION_ERROR;
 }
 
+export interface UserFollowingModalOpened {
+	type: typeof FOLLOWING_MODAL_OPENED;
+	payload: boolean;
+}
+
+export interface FetchUserFollowers {
+	type: typeof FETCH_FOLLOWERS;
+	payload: ProfileBrief[];
+}
+
+export interface FetchUserFollowing {
+	type: typeof FETCH_FOLLOWING;
+	payload: ProfileBrief[];
+}
+
 export type UserDispatchTypes =
 	| ClearData
 	| SignIn
@@ -118,4 +137,7 @@ export type UserDispatchTypes =
 	| FetchCurrentUser
 	| EditUser
 	| UserActionError
-	| ClearUserActionError;
+	| ClearUserActionError
+	| UserFollowingModalOpened
+	| FetchUserFollowers
+	| FetchUserFollowing;

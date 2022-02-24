@@ -17,10 +17,12 @@ import {
 	CLEAR_AUTH_ERROR,
 	CLEAR_USER_ACTION_ERROR,
 	USER_ACTION_ERROR,
+	FOLLOWING_MODAL_OPENED,
+	FETCH_FOLLOWING,
+	ProfileBrief,
 } from '../actionTypes/userActionTypes';
-import { UIDispatchTypes } from '../actionTypes/uiActionTypes';
 import { enqueueSnackbar, successSnackbarConfig } from './uiActions';
-import { ThunkActionWithPromise, RootStore } from '..';
+import { ThunkActionWithPromise, RootStore, ThunkActionVoid } from '..';
 
 export const logout = () => (dispatch: Dispatch<UserDispatchTypes>) => {
 	localStorage.removeItem('token');
@@ -160,7 +162,7 @@ export const editUser =
 				data
 			);
 			dispatch({ type: EDIT_USER, payload: response?.data });
-			return await Promise.resolve("Profile've been updated successfully");
+			return Promise.resolve("Profile've been updated successfully");
 		} catch ({ response: { data } }) {
 			dispatch({
 				type: USER_ACTION_ERROR,
@@ -168,7 +170,64 @@ export const editUser =
 					error: data.error,
 				},
 			});
-			return await Promise.resolve(data.error);
+			return Promise.reject(data.error);
+		}
+	};
+
+export const openUserFollowingModal =
+	(val: boolean): ThunkActionVoid =>
+	dispatch => {
+		dispatch({
+			type: FOLLOWING_MODAL_OPENED,
+			payload: val,
+		});
+	};
+
+export const fetchUserFollowing =
+	(userId: number, isCurrentUser = false): ThunkActionWithPromise<void> =>
+	async dispatch => {
+		try {
+			const response = await http.get<ProfileBrief[]>(
+				`${api.USERS}following/${userId}`
+			);
+			//add check for isCurrentUser and change dispatch type for current or some another selected user
+			dispatch({
+				type: FETCH_FOLLOWING,
+				payload: response.data,
+			});
+			return Promise.resolve();
+		} catch ({ response: { data } }) {
+			dispatch({
+				type: USER_ACTION_ERROR,
+				payload: {
+					error: data.error,
+				},
+			});
+			return Promise.reject(data.error);
+		}
+	};
+
+export const fetchUserFollowers =
+	(userId: number, isCurrentUser = false): ThunkActionWithPromise<void> =>
+	async dispatch => {
+		try {
+			const response = await http.get<ProfileBrief[]>(
+				`${api.USERS}followers/${userId}`
+			);
+			//add check for isCurrentUser and change dispatch type for current or some another selected user
+			dispatch({
+				type: FETCH_FOLLOWING,
+				payload: response.data,
+			});
+			return Promise.resolve();
+		} catch ({ response: { data } }) {
+			dispatch({
+				type: USER_ACTION_ERROR,
+				payload: {
+					error: data.error,
+				},
+			});
+			return Promise.reject(data.error);
 		}
 	};
 

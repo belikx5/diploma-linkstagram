@@ -11,6 +11,8 @@ import { useTypedSelector } from '../../../hooks/useTypedSelector';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { openCreatePostModal } from '../../../store/actions/postActions';
+import { openUserFollowingModal } from '../../../store/actions/userActions';
+import UserBriefList from '../UserBriefList';
 
 type UserCardProps = {
 	isProfilePage: boolean;
@@ -20,12 +22,18 @@ const UserCard = ({ isProfilePage }: UserCardProps) => {
 	const dispatch = useDispatch();
 	const [t] = useTranslation('common');
 	const currentUser = useTypedSelector(state => state.userState.currentUser);
+	const followingModalOpened = useTypedSelector(
+		state => state.userState.followingModalOpened
+	);
 	const createModalOpened = useTypedSelector(
 		state => state.postsState.createModalOpened
 	);
 	const [modalEditOpen, setModalEditOpen] = useState(false);
 	const toggleCreateModal = (value: boolean) => {
 		dispatch(openCreatePostModal(value));
+	};
+	const toggleUserFollowingModal = (value: boolean) => {
+		dispatch(openUserFollowingModal(value));
 	};
 	const onEditClick = () => {
 		if (history.location.pathname === '/') {
@@ -51,6 +59,11 @@ const UserCard = ({ isProfilePage }: UserCardProps) => {
 			{createModalOpened && (
 				<Modal modalMarginTop={15} openModal={toggleCreateModal}>
 					<CreatePostForm setModalOpen={toggleCreateModal} />
+				</Modal>
+			)}
+			{followingModalOpened && (
+				<Modal modalMarginTop={15} openModal={toggleUserFollowingModal}>
+					<UserBriefList users={[]} />
 				</Modal>
 			)}
 			<div className='user-card'>

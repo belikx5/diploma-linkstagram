@@ -1,6 +1,8 @@
 from rest_framework import viewsets, permissions, generics
 import django_filters
 from django.contrib.auth import get_user_model
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from user_profile.models import UserProfile, UserFollowing
 from user_profile.serializers import UserSerializer, UserBriefSerializer, UserCreateUpdateSerializer, \
@@ -93,3 +95,20 @@ class UserFollowingViewSet(viewsets.ModelViewSet):
         user_to_follow_profile.decrement_followers()
 
         instance.delete()
+
+
+class UserFollowingAPIView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, user_id):
+        users = UserProfile.objects.filter(following__following_user__id=user_id)
+        return Response(status=200, data=UserBriefSerializer(users, many=True).data)
+
+
+class UserFollowersAPIView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, user_id):
+        users = UserProfile.objects.filter(followers__user_id=user_id)
+        return Response(status=200, data=UserBriefSerializer(users, many=True).data)
+
