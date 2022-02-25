@@ -24,7 +24,10 @@ interface IDefaultState {
 	users: Profile[];
 	authError: ApiAuthError;
 	actionError: string;
-	followingModalOpened: boolean;
+	followingModalOpened: {
+		isFollowersModal: boolean;
+		value: boolean;
+	};
 	followers: ProfileBrief[];
 	following: ProfileBrief[];
 }
@@ -38,7 +41,10 @@ const initialState: IDefaultState = {
 		fieldError: [],
 	},
 	actionError: '',
-	followingModalOpened: false,
+	followingModalOpened: {
+		isFollowersModal: false,
+		value: false,
+	},
 	followers: [],
 	following: [],
 };

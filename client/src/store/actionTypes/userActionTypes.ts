@@ -19,6 +19,8 @@ export type ProfileBrief = {
 	id: number;
 	profile_photo: string;
 	username: string;
+	first_name: string;
+	last_name: string;
 };
 
 export type Follower = {
@@ -114,7 +116,10 @@ export interface ClearUserActionError {
 
 export interface UserFollowingModalOpened {
 	type: typeof FOLLOWING_MODAL_OPENED;
-	payload: boolean;
+	payload: {
+		isFollowersModal: boolean;
+		value: boolean;
+	};
 }
 
 export interface FetchUserFollowers {

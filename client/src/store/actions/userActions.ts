@@ -19,6 +19,7 @@ import {
 	USER_ACTION_ERROR,
 	FOLLOWING_MODAL_OPENED,
 	FETCH_FOLLOWING,
+	FETCH_FOLLOWERS,
 	ProfileBrief,
 } from '../actionTypes/userActionTypes';
 import { enqueueSnackbar, successSnackbarConfig } from './uiActions';
@@ -175,11 +176,14 @@ export const editUser =
 	};
 
 export const openUserFollowingModal =
-	(val: boolean): ThunkActionVoid =>
+	(isFollowersModal: boolean, value: boolean): ThunkActionVoid =>
 	dispatch => {
 		dispatch({
 			type: FOLLOWING_MODAL_OPENED,
-			payload: val,
+			payload: {
+				isFollowersModal,
+				value,
+			},
 		});
 	};
 
@@ -216,7 +220,7 @@ export const fetchUserFollowers =
 			);
 			//add check for isCurrentUser and change dispatch type for current or some another selected user
 			dispatch({
-				type: FETCH_FOLLOWING,
+				type: FETCH_FOLLOWERS,
 				payload: response.data,
 			});
 			return Promise.resolve();
