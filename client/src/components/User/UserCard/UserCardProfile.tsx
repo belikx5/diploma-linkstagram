@@ -6,6 +6,7 @@ import { UserIconSize } from '../../../ts/enums';
 import history from '../../../services/history';
 import { useTypedSelector } from '../../../hooks/useTypedSelector';
 import { useTranslation } from 'react-i18next';
+import UserFollowing from './UserFollowing';
 
 type UserCardProps = {
 	isProfilePage: boolean;
@@ -40,14 +41,24 @@ const UserCard = ({ isProfilePage }: UserCardProps) => {
 				</div>
 				<div className='user-card-right'>
 					<div className='user-card-right-stats'>
-						<div className='user-card-header-followers'>
+						<UserFollowing
+							isCurrentUserList
+							isFollowersList
+							usersCount={currentUser?.followers_count}
+						/>
+						<UserFollowing
+							isCurrentUserList
+							isFollowersList={false}
+							usersCount={currentUser?.following_count}
+						/>
+						{/* <div className='user-card-header-followers'>
 							<p>{currentUser?.followers_count}</p>
 							<p>{t('userCard.followers')}</p>
 						</div>
 						<div className='user-card-header-following'>
 							<p>{currentUser?.following_count}</p>
 							<p>{t('userCard.following')}</p>
-						</div>
+						</div> */}
 					</div>
 					<div className='user-card-right-actions'>
 						<button

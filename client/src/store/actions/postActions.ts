@@ -72,12 +72,10 @@ export const fetchPostById =
 	};
 
 export const fetchPostByUser =
-	(username: string) => async (dispatch: Dispatch<PostDispatchTypes>) => {
+	(userId: number) => async (dispatch: Dispatch<PostDispatchTypes>) => {
 		try {
-			const config = getAuthHeaders();
 			const response = await http.get<Post[]>(
-				`/profiles/${username}/posts`,
-				config
+				`${api.POSTS}?ordering=-created_at&search=${userId}`
 			);
 			dispatch({ type: FETCH_POSTS_BY_USER, payload: response.data });
 		} catch ({ response: { data } }) {

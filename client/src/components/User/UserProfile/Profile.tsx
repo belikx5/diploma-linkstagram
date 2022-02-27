@@ -8,29 +8,39 @@ import UserCardProfile from '../UserCard/UserCardProfile';
 import { useTypedSelector } from '../../../hooks/useTypedSelector';
 import { fetchCurrentUser } from '../../../store/actions/userActions';
 import { fetchPostByUser } from '../../../store/actions/postActions';
+import { useParams } from 'react-router-dom';
 
-type ProfileProps = {};
+type ProfileProps = {
+	isCurrentUser: boolean;
+};
 
-const Profile = (props: ProfileProps) => {
+type ProfilePageParams = {
+	id: string | undefined;
+};
+
+const userCardProps = {
+	isProfilePage: true,
+};
+
+const Profile = ({ isCurrentUser }: ProfileProps) => {
+	const dispatch = useDispatch();
+	const { id: otherUserId } = useParams<ProfilePageParams>();
 	const currentUser = useTypedSelector(state => state.userState.currentUser);
 	const postsByUser = useTypedSelector(state => state.postsState.postsByUser);
-	const dispatch = useDispatch();
+
 	useEffect(() => {
 		if (!currentUser) {
 			// dispatch(fetchCurrentUser());
 		}
 	}, []);
+
 	useEffect(() => {
-		if (currentUser) {
-			dispatch(fetchPostByUser(currentUser.username));
-		}
-	}, [currentUser]);
+		if (isCurrentUser && currentUser) {
+			dispatch(fetchPostByUser(currentUser.id));
+		} else if (otherUserId) dispatch(fetchPostByUser(+otherUserId));
+	}, [currentUser, isCurrentUser, otherUserId]);
 
-	const userCardProps = {
-		isProfilePage: true,
-	};
-
-	if (!currentUser && !postsByUser.length) {
+	if (isCurrentUser && !currentUser && !postsByUser.length) {
 		return <Loading />;
 	}
 

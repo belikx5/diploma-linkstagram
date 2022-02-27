@@ -1,7 +1,9 @@
-from rest_framework import viewsets, views, permissions
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import viewsets, permissions
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.filters import OrderingFilter, SearchFilter
 
 from post.models import Post, PostLike, PostImage, PostComment
 from post.serializers import PostSerializer, PostLikeSerializer, PostLikeCreateSerializer, PostCreateSerializer, \
@@ -13,6 +15,9 @@ class PostListViewSet(viewsets.ModelViewSet):
     serializer_class = PostSerializer
     create_serializer_class = PostCreateSerializer
     list_serializer_class = PostSerializer
+    filter_backends = [DjangoFilterBackend, OrderingFilter, SearchFilter]
+    search_fields = ['$author__id']
+    ordering_fields = ['created_at']
 
     def get_serializer_class(self):
         if self.action in ('create', 'update', 'destroy', 'partial_update'):
