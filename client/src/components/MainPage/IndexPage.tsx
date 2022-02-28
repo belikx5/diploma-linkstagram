@@ -35,7 +35,7 @@ const IndexPage = () => {
 				<Posts feed={posts} isPostsFetched={isPostsFetched} />
 			</div>
 			<div className='aside-user-card'>
-				<UserCard isProfilePage={false} />
+				<UserCard isProfilePage={false} isCurrentUser={true} />
 			</div>
 		</div>
 	) : (

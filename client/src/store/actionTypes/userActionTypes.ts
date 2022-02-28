@@ -6,6 +6,7 @@ export const CLEAR_AUTH_ERROR = 'CLEAR_AUTH_ERROR';
 
 export const FETCH_ALL_USERS = 'FETCH_ALL_USERS';
 export const FETCH_CURRENT_USER = 'FETCH_CURRENT_USER';
+export const FETCH_ANOTHER_USER = 'FETCH_ANOTHER_USER';
 export const EDIT_USER = 'EDIT_USER';
 
 export const USER_ACTION_ERROR = 'USER_ACTION_ERROR';
@@ -43,6 +44,11 @@ export type Profile = {
 	tags: string[];
 	followers: Follower[];
 	following: Follower[];
+};
+
+export type AnotherUserProfile = Profile & {
+	followers: ProfileBrief[];
+	following: ProfileBrief[];
 };
 
 export type ProfileToEdit = {
@@ -98,6 +104,11 @@ export interface FetchCurrentUser {
 	payload: Profile | null;
 }
 
+export interface FetchAnotherUser {
+	type: typeof FETCH_ANOTHER_USER;
+	payload: AnotherUserProfile | null;
+}
+
 export interface FetchAllUsers {
 	type: typeof FETCH_ALL_USERS;
 	payload: Profile[];
@@ -140,6 +151,7 @@ export type UserDispatchTypes =
 	| ClearAuthError
 	| FetchAllUsers
 	| FetchCurrentUser
+	| FetchAnotherUser
 	| EditUser
 	| UserActionError
 	| ClearUserActionError

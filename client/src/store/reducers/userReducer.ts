@@ -16,10 +16,13 @@ import {
 	ProfileBrief,
 	FETCH_FOLLOWING,
 	FETCH_FOLLOWERS,
+	AnotherUserProfile,
+	FETCH_ANOTHER_USER,
 } from '../actionTypes/userActionTypes';
 
 interface IDefaultState {
 	currentUser: Profile | null;
+	anotherUserProfile: AnotherUserProfile | null;
 	token: string;
 	users: Profile[];
 	authError: ApiAuthError;
@@ -34,6 +37,7 @@ interface IDefaultState {
 
 const initialState: IDefaultState = {
 	currentUser: null,
+	anotherUserProfile: null,
 	token: '',
 	users: [],
 	authError: {
@@ -70,6 +74,8 @@ const reducer = (
 			return { ...state, authError: action.payload };
 		case FETCH_CURRENT_USER:
 			return { ...state, currentUser: action.payload, actionError: '' };
+		case FETCH_ANOTHER_USER:
+			return { ...state, anotherUserProfile: action.payload };
 		case EDIT_USER:
 			return {
 				...state,

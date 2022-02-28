@@ -9,6 +9,21 @@ from user_profile.models import UserProfile, UserFollowing
 UserModel = get_user_model()
 
 
+def add_user_following_to_representation(representation_object, instance, curr_user):
+    if not hasattr(curr_user, 'userprofile'):
+        representation_object['is_follower'] = False
+        representation_object['is_following'] = False
+    followers = instance.followers
+    found_in_followers = followers.filter(
+        user__id=curr_user.userprofile.id) if instance.id != curr_user.userprofile.id else False
+    representation_object['is_following'] = True if found_in_followers and found_in_followers.first() else False
+    following = instance.following
+    found_in_following = following.filter(
+        following_user__id=curr_user.userprofile.id) if instance.id != curr_user.userprofile.id else False
+    representation_object['is_follower'] = True if found_in_following and found_in_following.first() else False
+    return representation_object
+
+
 def add_username_to_representation(representation_object, instance):
     user = instance.user
     del representation_object['user']
@@ -116,6 +131,12 @@ class UserSerializer(DefaultUserSerializer):
         model = UserProfile
         fields = '__all__'
         read_only_fields = ('id',)
+
+    def to_representation(self, instance):
+        print(self)
+        curr_user = self.context.get('request').user
+        obj = super().to_representation(instance)
+        return add_user_following_to_representation(obj, instance, curr_user)
 
 
 class UserCreateUpdateSerializer(DefaultUserSerializer):

@@ -10,11 +10,18 @@ import UserFollowing from './UserFollowing';
 
 type UserCardProps = {
 	isProfilePage: boolean;
+	isCurrentUser: boolean;
 };
 
-const UserCard = ({ isProfilePage }: UserCardProps) => {
-	const currentUser = useTypedSelector(state => state.userState.currentUser);
+const UserCard = ({ isProfilePage, isCurrentUser }: UserCardProps) => {
 	const [t] = useTranslation('common');
+	const currentUser = useTypedSelector(state => state.userState.currentUser);
+
+	const anotherUserProfile = useTypedSelector(
+		state => state.userState.anotherUserProfile
+	);
+	const user = isCurrentUser ? currentUser : anotherUserProfile;
+
 	const onEditClick = () => {
 		history.push('/edit');
 	};
@@ -27,16 +34,12 @@ const UserCard = ({ isProfilePage }: UserCardProps) => {
 			<div className='user-card-profile'>
 				<div className='user-card-left'>
 					<div className='user-card-header-image'>
-						<UserIcon
-							icon={currentUser?.profile_photo}
-							size={UserIconSize.Large}
-						/>
+						<UserIcon icon={user?.profile_photo} size={UserIconSize.Large} />
 					</div>
 					<div className='user-card-left-data'>
-						<h3>
-							{currentUser?.first_name} {currentUser?.last_name}
-						</h3>
-						<p className='user-card-left-data-descr'>{currentUser?.bio}</p>
+						<h3>{user?.username}</h3>
+						{user?.first_name} {user?.last_name}
+						<p className='user-card-left-data-descr'>{user?.bio}</p>
 					</div>
 				</div>
 				<div className='user-card-right'>
@@ -44,12 +47,12 @@ const UserCard = ({ isProfilePage }: UserCardProps) => {
 						<UserFollowing
 							isCurrentUserList
 							isFollowersList
-							usersCount={currentUser?.followers_count}
+							usersCount={user?.followers_count}
 						/>
 						<UserFollowing
 							isCurrentUserList
 							isFollowersList={false}
-							usersCount={currentUser?.following_count}
+							usersCount={user?.following_count}
 						/>
 						{/* <div className='user-card-header-followers'>
 							<p>{currentUser?.followers_count}</p>

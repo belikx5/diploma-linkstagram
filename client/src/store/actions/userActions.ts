@@ -10,6 +10,7 @@ import {
 	SIGN_UP,
 	UserDispatchTypes,
 	FETCH_CURRENT_USER,
+	FETCH_ANOTHER_USER,
 	Profile,
 	EDIT_USER,
 	ProfileToEdit,
@@ -21,6 +22,7 @@ import {
 	FETCH_FOLLOWING,
 	FETCH_FOLLOWERS,
 	ProfileBrief,
+	AnotherUserProfile,
 } from '../actionTypes/userActionTypes';
 import { enqueueSnackbar, successSnackbarConfig } from './uiActions';
 import { ThunkActionWithPromise, RootStore, ThunkActionVoid } from '..';
@@ -141,6 +143,32 @@ export const fetchAllUsers =
 				dispatch({
 					type: FETCH_ALL_USERS,
 					payload: response.data,
+				});
+			}
+		} catch ({ response: { data } }) {
+			dispatch({
+				type: USER_ACTION_ERROR,
+				payload: {
+					error: data.error,
+				},
+			});
+		}
+	};
+
+export const fetchUserById =
+	(userId: number): ThunkActionWithPromise<void> =>
+	async dispatch => {
+		try {
+			const response = await http.get<AnotherUserProfile>(
+				`${api.USERS}${userId}/`
+			);
+			if (response?.data) {
+				const user = response?.data;
+				user.followers = [];
+				user.following = [];
+				dispatch({
+					type: FETCH_ANOTHER_USER,
+					payload: user,
 				});
 			}
 		} catch ({ response: { data } }) {

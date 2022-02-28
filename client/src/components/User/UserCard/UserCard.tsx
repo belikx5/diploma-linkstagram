@@ -15,12 +15,17 @@ import UserFollowing from './UserFollowing';
 
 type UserCardProps = {
 	isProfilePage: boolean;
+	isCurrentUser: boolean;
 };
 
-const UserCard = ({ isProfilePage }: UserCardProps) => {
+const UserCard = ({ isProfilePage, isCurrentUser }: UserCardProps) => {
 	const dispatch = useDispatch();
 	const [t] = useTranslation('common');
 	const currentUser = useTypedSelector(state => state.userState.currentUser);
+	const anotherUserProfile = useTypedSelector(
+		state => state.userState.anotherUserProfile
+	);
+	const user = isCurrentUser ? currentUser : anotherUserProfile;
 	const createModalOpened = useTypedSelector(
 		state => state.postsState.createModalOpened
 	);
@@ -60,13 +65,10 @@ const UserCard = ({ isProfilePage }: UserCardProps) => {
 					<UserFollowing
 						isCurrentUserList
 						isFollowersList
-						usersCount={currentUser?.followers_count}
+						usersCount={user?.followers_count}
 					/>
 					<div className='user-card-header-image'>
-						<UserIcon
-							icon={currentUser?.profile_photo}
-							size={UserIconSize.Large}
-						/>
+						<UserIcon icon={user?.profile_photo} size={UserIconSize.Large} />
 						{!isProfilePage && (
 							<img
 								className='user-card-header-image-plus'
@@ -78,13 +80,13 @@ const UserCard = ({ isProfilePage }: UserCardProps) => {
 					<UserFollowing
 						isCurrentUserList
 						isFollowersList={false}
-						usersCount={currentUser?.following_count}
+						usersCount={user?.following_count}
 					/>
 				</div>
 				<p className='user-card-author-main'>
-					{currentUser?.first_name} {currentUser?.last_name}
+					{user?.first_name} {user?.last_name}
 				</p>
-				<p className='user-card-author-description'>{currentUser?.bio}</p>
+				<p className='user-card-author-description'>{user?.bio}</p>
 				<div className='user-card-actions'>
 					<button onClick={onEditClick} className={isProfilePage ? 'wide' : ''}>
 						{t('userCard.edit')}
