@@ -48,6 +48,11 @@ const UserCard = ({ isProfilePage, isCurrentUser }: UserCardProps) => {
 			history.push('/create');
 		}
 	};
+	const onSendMessageClick = () => {
+		history.push('/messages');
+	};
+	const onFollowClick = () => {};
+	const onUnfollowClick = () => {};
 	return (
 		<>
 			{modalEditOpen && (
@@ -87,16 +92,33 @@ const UserCard = ({ isProfilePage, isCurrentUser }: UserCardProps) => {
 					{user?.first_name} {user?.last_name}
 				</p>
 				<p className='user-card-author-description'>{user?.bio}</p>
-				<div className='user-card-actions'>
-					<button onClick={onEditClick} className={isProfilePage ? 'wide' : ''}>
-						{t('userCard.edit')}
-					</button>
-					<button
-						onClick={onCreateClick}
-						className={isProfilePage ? 'wide' : ''}>
-						{t('userCard.new')}
-					</button>
-				</div>
+				{isCurrentUser ? (
+					<div className='user-card-actions'>
+						<button
+							onClick={onEditClick}
+							className={isProfilePage ? 'wide' : ''}>
+							{t('userCard.edit')}
+						</button>
+						<button
+							onClick={onCreateClick}
+							className={isProfilePage ? 'wide' : ''}>
+							{t('userCard.new')}
+						</button>
+					</div>
+				) : (
+					<div className='user-card-actions'>
+						<button
+							onClick={onSendMessageClick}
+							className={isProfilePage ? 'wide' : ''}>
+							{t('userCard.sendMessage')}
+						</button>
+						<button
+							onClick={user?.is_following ? onUnfollowClick : onFollowClick}
+							className={isProfilePage ? 'wide' : ''}>
+							{t(`userCard.${user?.is_following ? 'unfollow' : 'follow'}`)}
+						</button>
+					</div>
+				)}
 				{!isProfilePage && (
 					<div className='user-card-terms'>
 						<p>{t('userCard.smallText')}</p>

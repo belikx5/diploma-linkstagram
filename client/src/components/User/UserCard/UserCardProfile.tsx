@@ -28,6 +28,11 @@ const UserCard = ({ isProfilePage, isCurrentUser }: UserCardProps) => {
 	const onCreateClick = () => {
 		history.push('/create');
 	};
+	const onSendMessageClick = () => {
+		history.push('/messages');
+	};
+	const onFollowClick = () => {};
+	const onUnfollowClick = () => {};
 
 	return (
 		<>
@@ -63,18 +68,33 @@ const UserCard = ({ isProfilePage, isCurrentUser }: UserCardProps) => {
 							<p>{t('userCard.following')}</p>
 						</div> */}
 					</div>
-					<div className='user-card-right-actions'>
-						<button
-							onClick={onEditClick}
-							className={isProfilePage ? 'wide' : ''}>
-							{t('userCard.edit')}
-						</button>
-						<button
-							onClick={onCreateClick}
-							className={isProfilePage ? 'wide' : ''}>
-							{t('userCard.new')}
-						</button>
-					</div>
+					{isCurrentUser ? (
+						<div className='user-card-right-actions'>
+							<button
+								onClick={onEditClick}
+								className={isProfilePage ? 'wide' : ''}>
+								{t('userCard.edit')}
+							</button>
+							<button
+								onClick={onCreateClick}
+								className={isProfilePage ? 'wide' : ''}>
+								{t('userCard.new')}
+							</button>
+						</div>
+					) : (
+						<div className='user-card-right-actions'>
+							<button
+								onClick={onSendMessageClick}
+								className={isProfilePage ? 'wide' : ''}>
+								{t('userCard.sendMessage')}
+							</button>
+							<button
+								onClick={user?.is_following ? onUnfollowClick : onFollowClick}
+								className={isProfilePage ? 'wide' : ''}>
+								{t(`userCard.${user?.is_following ? 'unfollow' : 'follow'}`)}
+							</button>
+						</div>
+					)}
 				</div>
 			</div>
 		</>

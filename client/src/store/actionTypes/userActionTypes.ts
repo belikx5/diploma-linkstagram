@@ -44,6 +44,8 @@ export type Profile = {
 	tags: string[];
 	followers: Follower[];
 	following: Follower[];
+	is_following: boolean;
+	is_follower: boolean;
 };
 
 export type AnotherUserProfile = Profile & {

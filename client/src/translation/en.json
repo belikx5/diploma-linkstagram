@@ -10,6 +10,9 @@
 		"following": "Following",
 		"edit": "Edit profile",
 		"new": "New post",
+		"sendMessage": "Send message",
+		"follow": "Follow",
+		"unfollow": "Unfollow",
 		"smallText": "About Help Privacy Terms Locations Language"
 	},
 	"navbar": {
