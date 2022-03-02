@@ -101,14 +101,31 @@ class UserFollowingAPIView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request, user_id):
-        users = UserProfile.objects.filter(following__following_user__id=user_id)
+        # users = UserProfile.objects.filter(following__following_user__id=user_id)
+        users = UserProfile.objects.filter(followers__user_id=user_id)
         return Response(status=200, data=UserBriefSerializer(users, many=True).data)
+
+
+class UserFollowingDeleteAPIView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def delete(self, request, user_id, user_following_id):
+        uf = UserFollowing.objects.filter(user_id=user_id, following_user__id=user_following_id).first()
+        if not uf:
+            return Response(status=400, data='Invalid data passed')
+
+        uf.user.decrement_following()
+        uf.following_user.decrement_followers()
+        uf.delete()
+
+        return Response(status=204)
 
 
 class UserFollowersAPIView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request, user_id):
-        users = UserProfile.objects.filter(followers__user_id=user_id)
+        # users = UserProfile.objects.filter(followers__user_id=user_id)
+        users = UserProfile.objects.filter(following__following_user__id=user_id)
         return Response(status=200, data=UserBriefSerializer(users, many=True).data)
 

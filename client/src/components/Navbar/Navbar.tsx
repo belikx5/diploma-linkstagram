@@ -46,46 +46,42 @@ const Navbar = () => {
 	const location = useLocation();
 	const { pathname } = location;
 	const renderNavOptions = () => {
-		switch (pathname) {
-			case '/edit':
-			case '/create':
-				return (
+		if (pathname === '/edit' || pathname === '/create')
+			return (
+				<button
+					onClick={() => dispatch(logout())}
+					className='some-button white red'>
+					{t('common.logout')}
+				</button>
+			);
+		if (pathname === '/')
+			return (
+				<>
+					<LanguagesMenu i18n={i18n} />
+					<Link to='/profile' className='header-title-user-profile-pic'>
+						<UserIcon
+							icon={currentUser?.profile_photo}
+							size={UserIconSize.Small}
+						/>
+					</Link>
+				</>
+			);
+		if (pathname.includes('/profile'))
+			return (
+				<>
+					<button onClick={() => history.push('/')} className='home-button'>
+						{t('navbar.home')}
+					</button>
+					<LanguagesMenu i18n={i18n} />
 					<button
 						onClick={() => dispatch(logout())}
 						className='some-button white red'>
 						{t('common.logout')}
 					</button>
-				);
-			case '/':
-				return (
-					<>
-						<LanguagesMenu i18n={i18n} />
-						<Link to='/profile' className='header-title-user-profile-pic'>
-							<UserIcon
-								icon={currentUser?.profile_photo}
-								size={UserIconSize.Small}
-							/>
-						</Link>
-					</>
-				);
-			case '/profile':
-				return (
-					<>
-						<button onClick={() => history.push('/')} className='home-button'>
-							{t('navbar.home')}
-						</button>
-						<LanguagesMenu i18n={i18n} />
-						<button
-							onClick={() => dispatch(logout())}
-							className='some-button white red'>
-							{t('common.logout')}
-						</button>
-					</>
-				);
-			case '/signup':
-			case '/signin':
-				return <LanguagesMenu i18n={i18n} />;
-		}
+				</>
+			);
+		if (pathname === '/signup' || pathname === '/signin')
+			return <LanguagesMenu i18n={i18n} />;
 	};
 	return (
 		<div className='header'>

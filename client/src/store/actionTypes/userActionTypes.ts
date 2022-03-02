@@ -15,6 +15,8 @@ export const CLEAR_USER_ACTION_ERROR = 'CLEAR_USER_ACTION_ERROR';
 export const FOLLOWING_MODAL_OPENED = 'FOLLOWING_MODAL_OPENED';
 export const FETCH_FOLLOWERS = 'FETCH_FOLLOWERS';
 export const FETCH_FOLLOWING = 'FETCH_FOLLOWING';
+export const FOLLOW = 'FOLLOW';
+export const UNFOLLOW = 'UNFOLLOW';
 
 export type ProfileBrief = {
 	id: number;
@@ -51,6 +53,11 @@ export type Profile = {
 export type AnotherUserProfile = Profile & {
 	followers: ProfileBrief[];
 	following: ProfileBrief[];
+};
+
+export type UserFollowingResponse = {
+	following_user: ProfileBrief;
+	user: ProfileBrief;
 };
 
 export type ProfileToEdit = {
@@ -145,6 +152,22 @@ export interface FetchUserFollowing {
 	payload: ProfileBrief[];
 }
 
+export interface Follow {
+	type: typeof FOLLOW;
+	payload: {
+		user: ProfileBrief;
+		following_user: ProfileBrief;
+	};
+}
+
+export interface Unfollow {
+	type: typeof UNFOLLOW;
+	payload: {
+		userId: number;
+		userToFollowId: number;
+	};
+}
+
 export type UserDispatchTypes =
 	| ClearData
 	| SignIn
@@ -159,4 +182,6 @@ export type UserDispatchTypes =
 	| ClearUserActionError
 	| UserFollowingModalOpened
 	| FetchUserFollowers
-	| FetchUserFollowing;
+	| FetchUserFollowing
+	| Follow
+	| Unfollow;

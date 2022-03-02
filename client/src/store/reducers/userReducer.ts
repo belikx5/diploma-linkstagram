@@ -18,6 +18,8 @@ import {
 	FETCH_FOLLOWERS,
 	AnotherUserProfile,
 	FETCH_ANOTHER_USER,
+	FOLLOW,
+	UNFOLLOW,
 } from '../actionTypes/userActionTypes';
 
 interface IDefaultState {
@@ -93,6 +95,44 @@ const reducer = (
 			return { ...state, following: action.payload };
 		case FETCH_FOLLOWERS:
 			return { ...state, followers: action.payload };
+		// TODO: check if it's better to make 2 different arrays with followers and following for currUser and anotherUser
+		// if so, then add logic for following array too
+		case FOLLOW:
+			return {
+				...state,
+				currentUser: state.currentUser
+					? {
+							...state.currentUser,
+							following_count: ++state.currentUser.following_count,
+					  }
+					: null,
+				anotherUserProfile: state.anotherUserProfile
+					? {
+							...state.anotherUserProfile,
+							is_following: true,
+							followers_count: ++state.anotherUserProfile.followers_count,
+					  }
+					: null,
+				followers: [...state.followers, action.payload.user],
+			};
+		case UNFOLLOW:
+			return {
+				...state,
+				currentUser: state.currentUser
+					? {
+							...state.currentUser,
+							following_count: --state.currentUser.following_count,
+					  }
+					: null,
+				anotherUserProfile: state.anotherUserProfile
+					? {
+							...state.anotherUserProfile,
+							is_following: false,
+							followers_count: --state.anotherUserProfile.followers_count,
+					  }
+					: null,
+				followers: state.followers.filter(f => f.id !== action.payload.userId),
+			};
 		case CLEAR_AUTH_ERROR:
 			return { ...state, authError: initialState.authError };
 		case CLEAR_DATA:

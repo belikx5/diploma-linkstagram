@@ -1,5 +1,6 @@
 import './userCard.scss';
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import UserIcon from '../UserIcon/UserIcon';
 import { UserIconSize } from '../../../ts/enums';
 
@@ -8,10 +9,10 @@ import Modal from '../../ui/Modal/Modal';
 import EditForm from '../EditProfile/EditForm';
 import CreatePostForm from '../../Post/CreatePost/CreatePostForm';
 import { useTypedSelector } from '../../../hooks/useTypedSelector';
-import { useTranslation } from 'react-i18next';
-import { useDispatch } from 'react-redux';
 import { openCreatePostModal } from '../../../store/actions/postActions';
 import UserFollowing from './UserFollowing';
+import { useTypedDispatch } from '../../../hooks/useTypedDispatch';
+import { follow, unfollow } from '../../../store/actions/userActions';
 
 type UserCardProps = {
 	isProfilePage: boolean;
@@ -19,7 +20,7 @@ type UserCardProps = {
 };
 
 const UserCard = ({ isProfilePage, isCurrentUser }: UserCardProps) => {
-	const dispatch = useDispatch();
+	const dispatch = useTypedDispatch();
 	const [t] = useTranslation('common');
 	const currentUser = useTypedSelector(state => state.userState.currentUser);
 	const anotherUserProfile = useTypedSelector(
@@ -51,8 +52,10 @@ const UserCard = ({ isProfilePage, isCurrentUser }: UserCardProps) => {
 	const onSendMessageClick = () => {
 		history.push('/messages');
 	};
-	const onFollowClick = () => {};
-	const onUnfollowClick = () => {};
+	const onFollowClick = (uid: number) => dispatch(follow(uid));
+
+	const onUnfollowClick = (uid: number) => dispatch(unfollow(uid));
+
 	return (
 		<>
 			{modalEditOpen && (
@@ -68,7 +71,7 @@ const UserCard = ({ isProfilePage, isCurrentUser }: UserCardProps) => {
 			<div className='user-card'>
 				<div className='user-card-header'>
 					<UserFollowing
-						isCurrentUserList
+						isCurrentUserList={isCurrentUser}
 						isFollowersList
 						usersCount={user?.followers_count}
 					/>
@@ -83,7 +86,7 @@ const UserCard = ({ isProfilePage, isCurrentUser }: UserCardProps) => {
 						)}
 					</div>
 					<UserFollowing
-						isCurrentUserList
+						isCurrentUserList={isCurrentUser}
 						isFollowersList={false}
 						usersCount={user?.following_count}
 					/>
@@ -106,18 +109,24 @@ const UserCard = ({ isProfilePage, isCurrentUser }: UserCardProps) => {
 						</button>
 					</div>
 				) : (
-					<div className='user-card-actions'>
-						<button
-							onClick={onSendMessageClick}
-							className={isProfilePage ? 'wide' : ''}>
-							{t('userCard.sendMessage')}
-						</button>
-						<button
-							onClick={user?.is_following ? onUnfollowClick : onFollowClick}
-							className={isProfilePage ? 'wide' : ''}>
-							{t(`userCard.${user?.is_following ? 'unfollow' : 'follow'}`)}
-						</button>
-					</div>
+					user && (
+						<div className='user-card-actions'>
+							<button
+								onClick={onSendMessageClick}
+								className={isProfilePage ? 'wide' : ''}>
+								{t('userCard.sendMessage')}
+							</button>
+							<button
+								onClick={
+									user.is_following
+										? () => onUnfollowClick(user.id)
+										: () => onFollowClick(user.id)
+								}
+								className={isProfilePage ? 'wide' : ''}>
+								{t(`userCard.${user.is_following ? 'unfollow' : 'follow'}`)}
+							</button>
+						</div>
+					)
 				)}
 				{!isProfilePage && (
 					<div className='user-card-terms'>

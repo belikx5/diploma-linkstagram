@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useTypedDispatch } from '../../../hooks/useTypedDispatch';
 import { useTypedSelector } from '../../../hooks/useTypedSelector';
@@ -26,29 +26,21 @@ const UserFollowing = ({
 	const users = useTypedSelector(
 		state => state.userState[isFollowersList ? 'followers' : 'following']
 	);
-	const currUser = useTypedSelector(state => state.userState.currentUser);
+	const user = useTypedSelector(
+		state =>
+			state.userState[isCurrentUserList ? 'currentUser' : 'anotherUserProfile']
+	);
 	const followingModalOpened = useTypedSelector(
 		state => state.userState.followingModalOpened
 	);
 
-	const [currentListOpened, setCurrentListOpened] = useState(false);
-
 	const toggleUserFollowingModal = (value: boolean) => {
 		dispatch(openUserFollowingModal(isFollowersList, value));
-		console.log('toggle triggered');
 	};
 
 	const openModal = () => {
-		const fetchConfig =
-			isCurrentUserList && currUser
-				? {
-						userId: currUser.id,
-						isCurrentUser: true,
-				  }
-				: {
-						userId: 1,
-						isCurrentUser: false,
-				  };
+		if (!user) return;
+		const fetchConfig = { userId: user.id, isCurrentUser: isCurrentUserList };
 		isFollowersList
 			? dispatch(
 					fetchUserFollowers(fetchConfig.userId, fetchConfig.isCurrentUser)
@@ -57,10 +49,7 @@ const UserFollowing = ({
 					fetchUserFollowing(fetchConfig.userId, fetchConfig.isCurrentUser)
 			  );
 		toggleUserFollowingModal(true);
-		setCurrentListOpened(true);
 	};
-
-	console.log({ users });
 
 	return (
 		<>

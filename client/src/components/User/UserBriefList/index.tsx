@@ -9,28 +9,9 @@ type UserBriefListProps = {
 };
 
 const UserBriefList = ({ users }: UserBriefListProps) => {
-	// useTypedDispatch
-	// useEffect(()  => {
-
-	// }, [])
-	const uasers = [
-		{ id: 1, username: '1', profile_photo: '', first_name: '', last_name: '' },
-		{
-			id: 2,
-			username:
-				'2asadadadsssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss',
-			profile_photo: '',
-			first_name: '',
-			last_name: '',
-		},
-		{ id: 3, username: '3', profile_photo: '', first_name: '', last_name: '' },
-		{ id: 4, username: '4', profile_photo: '', first_name: '', last_name: '' },
-		{ id: 5, username: '5', profile_photo: '', first_name: '', last_name: '' },
-	];
-
 	return (
 		<div className='user-brief-list'>
-			{uasers.map(user => (
+			{users.map(user => (
 				<div key={user.id} className='user-card'>
 					<UserIcon icon={user.profile_photo} size={UserIconSize.Small} />
 					<span>{user.username}</span>
@@ -41,6 +22,7 @@ const UserBriefList = ({ users }: UserBriefListProps) => {
 					)}
 				</div>
 			))}
+			{!users.length && <p>Users not found...</p>}
 		</div>
 	);
 };

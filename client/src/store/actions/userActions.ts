@@ -23,6 +23,9 @@ import {
 	FETCH_FOLLOWERS,
 	ProfileBrief,
 	AnotherUserProfile,
+	FOLLOW,
+	UNFOLLOW,
+	UserFollowingResponse,
 } from '../actionTypes/userActionTypes';
 import { enqueueSnackbar, successSnackbarConfig } from './uiActions';
 import { ThunkActionWithPromise, RootStore, ThunkActionVoid } from '..';
@@ -220,7 +223,7 @@ export const fetchUserFollowing =
 	async dispatch => {
 		try {
 			const response = await http.get<ProfileBrief[]>(
-				`${api.USERS}following/${userId}`
+				`${api.FOLLOWING}${userId}`
 			);
 			//add check for isCurrentUser and change dispatch type for current or some another selected user
 			dispatch({
@@ -244,7 +247,7 @@ export const fetchUserFollowers =
 	async dispatch => {
 		try {
 			const response = await http.get<ProfileBrief[]>(
-				`${api.USERS}followers/${userId}`
+				`${api.FOLLOWERS}${userId}`
 			);
 			//add check for isCurrentUser and change dispatch type for current or some another selected user
 			dispatch({
@@ -267,3 +270,64 @@ const getCurrentUser = async () => {
 	const response = await http.get<Profile>(api.AUTH_ME);
 	return response;
 };
+
+export const follow =
+	(userToFollowId: number): ThunkActionWithPromise<void> =>
+	async (dispatch, getState) => {
+		const currUser = getState().userState.currentUser;
+		if (!currUser) return Promise.reject();
+
+		try {
+			const response = await http.post<UserFollowingResponse>(
+				api.USER_FOLLOWING,
+				{
+					user: currUser.id,
+					following_user: userToFollowId,
+				}
+			);
+			dispatch({
+				type: FOLLOW,
+				payload: {
+					user: response.data.user,
+					following_user: response.data.user,
+				},
+			});
+			return Promise.resolve();
+		} catch ({ response: { data } }) {
+			dispatch({
+				type: USER_ACTION_ERROR,
+				payload: {
+					error: data.error,
+				},
+			});
+			return Promise.reject();
+		}
+	};
+
+export const unfollow =
+	(userToFollowId: number): ThunkActionWithPromise<void> =>
+	async (dispatch, getState) => {
+		const currUser = getState().userState.currentUser;
+		if (!currUser) return Promise.reject();
+		try {
+			await http.delete(
+				`${api.FOLLOWING_DELETE}${currUser.id}/${userToFollowId}`
+			);
+			dispatch({
+				type: UNFOLLOW,
+				payload: {
+					userId: currUser.id,
+					userToFollowId,
+				},
+			});
+			return Promise.resolve();
+		} catch ({ response: { data } }) {
+			dispatch({
+				type: USER_ACTION_ERROR,
+				payload: {
+					error: data.error,
+				},
+			});
+			return Promise.reject();
+		}
+	};

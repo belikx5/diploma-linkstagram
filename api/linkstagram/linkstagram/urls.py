@@ -26,7 +26,7 @@ from chat.views import ChatViewSet, MessageViewSet
 from dead_profile.views import DeadProfileViewSet
 from post.views import PostListViewSet, PostLikeViewSet, PostCommentViewSet, PostLikeDeleteAPIView
 from user_profile.views import UserViewSet, UserFollowingViewSet, CurrentUserView, UserFollowingAPIView, \
-    UserFollowersAPIView
+    UserFollowersAPIView, UserFollowingDeleteAPIView
 
 router = routers.DefaultRouter()
 router.register(r'posts', PostListViewSet, basename="postView")
@@ -43,10 +43,14 @@ urlpatterns = [
     path(r'admin/', admin.site.urls),
     path(r'users/me/', CurrentUserView.as_view()),
     path(r'api/', include(router.urls)),
-    path(r'api/users/following/<int:user_id>', UserFollowingAPIView.as_view()),
-    path(r'api/users/followers/<int:user_id>', UserFollowersAPIView.as_view()),
-    path(r'api/likes-delete/<str:post_id>/<str:user_id>/', PostLikeDeleteAPIView.as_view(), name="likeDeleteView"),
     path(r'api/token-auth/', obtain_auth_token, name='api_token_auth'),
+
+    path(r'api/users/following/<int:user_id>', UserFollowingAPIView.as_view()),
+    path(r'api/users/following-delete/<int:user_id>/<int:user_following_id>', UserFollowingDeleteAPIView.as_view()),
+    path(r'api/users/followers/<int:user_id>', UserFollowersAPIView.as_view()),
+
+    path(r'api/likes-delete/<str:post_id>/<str:user_id>/', PostLikeDeleteAPIView.as_view(), name="likeDeleteView"),
+
 ]
 
 if settings.DEBUG:

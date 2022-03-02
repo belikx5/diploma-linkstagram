@@ -103,8 +103,8 @@ class UserFollowingCreateSerializer(serializers.ModelSerializer):
         data = dict(self.initial_data)
         if not instance:
             already_following = UserFollowing.objects.filter(
-                user_id=data.get('user')[0],
-                following_user__id=data.get('following_user')[0]
+                user_id=data.get('user'),
+                following_user__id=data.get('following_user')
             ).first()
             if already_following:
                 raise serializers.ValidationError("You are already following this user")
