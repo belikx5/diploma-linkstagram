@@ -101,7 +101,6 @@ class UserFollowingAPIView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request, user_id):
-        # users = UserProfile.objects.filter(following__following_user__id=user_id)
         users = UserProfile.objects.filter(followers__user_id=user_id)
         return Response(status=200, data=UserBriefSerializer(users, many=True).data)
 
@@ -125,7 +124,6 @@ class UserFollowersAPIView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request, user_id):
-        # users = UserProfile.objects.filter(followers__user_id=user_id)
         users = UserProfile.objects.filter(following__following_user__id=user_id)
         return Response(status=200, data=UserBriefSerializer(users, many=True).data)
 
