@@ -1,5 +1,5 @@
 import './profile.scss';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import UserCard from '../UserCard/UserCard';
 import OwnerPostList from '../../Post/OwnerPostList/OwnerPostList';
@@ -18,15 +18,25 @@ type ProfilePageParams = {
 	id: string | undefined;
 };
 
+const MOBILE_MATCH_MEDIA = '(max-width: 1100px)';
+
 const Profile = ({ isCurrentUser }: ProfileProps) => {
 	const dispatch = useDispatch();
 	const { id: otherUserId } = useParams<ProfilePageParams>();
 	const currentUser = useTypedSelector(state => state.userState.currentUser);
 	const postsByUser = useTypedSelector(state => state.postsState.postsByUser);
+	const [isMobileSize, setIsMobileSize] = useState(
+		window.matchMedia(MOBILE_MATCH_MEDIA).matches
+	);
 
 	const userCardProps = {
 		isProfilePage: true,
 		isCurrentUser,
+	};
+
+	const resizeListener = () => {
+		const mobileScreenSize = window.matchMedia(MOBILE_MATCH_MEDIA).matches;
+		setIsMobileSize(mobileScreenSize);
 	};
 
 	useEffect(() => {
@@ -41,21 +51,27 @@ const Profile = ({ isCurrentUser }: ProfileProps) => {
 		if (isCurrentUser && currentUser) dispatch(fetchPostByUser(currentUser.id));
 	}, [currentUser, isCurrentUser]);
 
+	useEffect(() => {
+		window.addEventListener('resize', resizeListener);
+		return () => {
+			window.removeEventListener('resize', resizeListener);
+		};
+	}, []);
+
 	if (isCurrentUser && !currentUser && !postsByUser.length) {
 		return <Loading />;
 	}
 
-	return (
-		<>
-			<div className='profile mobile'>
-				<UserCard {...userCardProps} />
-				<OwnerPostList posts={postsByUser} />
-			</div>
-			<div className='profile desktop'>
-				<UserCardProfile {...userCardProps} />
-				<OwnerPostList posts={postsByUser} />
-			</div>
-		</>
+	return isMobileSize ? (
+		<div className='profile mobile'>
+			<UserCard {...userCardProps} />
+			<OwnerPostList posts={postsByUser} />
+		</div>
+	) : (
+		<div className='profile desktop'>
+			<UserCardProfile {...userCardProps} />
+			<OwnerPostList posts={postsByUser} />
+		</div>
 	);
 };
 

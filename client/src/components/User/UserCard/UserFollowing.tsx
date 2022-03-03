@@ -56,7 +56,10 @@ const UserFollowing = ({
 			{followingModalOpened.isFollowersModal === isFollowersList &&
 				followingModalOpened.value && (
 					<Modal modalMarginTop={15} openModal={toggleUserFollowingModal}>
-						<UserBriefList users={users} />
+						<UserBriefList
+							users={users}
+							toggleModal={toggleUserFollowingModal}
+						/>
 					</Modal>
 				)}
 			<div

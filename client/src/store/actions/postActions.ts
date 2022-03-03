@@ -10,12 +10,10 @@ import {
 	CREATE_POST_MODAL_OPENED,
 	DELETE_POST,
 	FETCH_ALL_POSTS,
-	FETCH_COMMENTS,
 	FETCH_POSTS_BY_USER,
 	FETCH_POST_BY_ID,
 	Post,
 	PostDispatchTypes,
-	PostToCreate,
 	POST_ACTION_ERROR,
 	POST_DETAILS_MODAL_OPENED,
 	REMOVE_LIKE,
@@ -23,18 +21,6 @@ import {
 	SET_LIKE,
 } from '../actionTypes/postActionTypes';
 import { ThunkActionVoid, ThunkActionWithPromise } from '..';
-
-const getAuthHeaders = () => {
-	const token = localStorage.getItem('token');
-	const config = token
-		? {
-				headers: {
-					authorization: token,
-				},
-		  }
-		: {};
-	return config;
-};
 
 export const fetchAllPosts =
 	() => async (dispatch: Dispatch<PostDispatchTypes>) => {
@@ -54,7 +40,7 @@ export const fetchAllPosts =
 export const fetchPostById =
 	(postId: number) => async (dispatch: Dispatch<PostDispatchTypes>) => {
 		try {
-			const response = await http.get<Post>(`${api.POSTS}/${postId}/`);
+			const response = await http.get<Post>(`${api.POSTS}${postId}/`);
 			dispatch({
 				type: FETCH_POST_BY_ID,
 				payload: {
