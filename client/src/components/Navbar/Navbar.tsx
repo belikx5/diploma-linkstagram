@@ -10,6 +10,7 @@ import i18next from 'i18next';
 import { useTranslation } from 'react-i18next';
 import { useHandleClickOutside } from '../../hooks/useHandleClickOutside';
 import UserIcon from '../User/UserIcon/UserIcon';
+import Search from './Search';
 
 type LanguagesMenuProps = {
 	i18n: any;
@@ -57,6 +58,7 @@ const Navbar = () => {
 		if (pathname === '/')
 			return (
 				<>
+					<Search />
 					<LanguagesMenu i18n={i18n} />
 					<Link to='/profile' className='header-title-user-profile-pic'>
 						<UserIcon
@@ -101,7 +103,7 @@ const Navbar = () => {
 				) : (
 					<>
 						<p onClick={() => history.push('/')} className='header-title'>
-							Linkstagram
+							LinkMe
 						</p>
 						<div className='nav-options-main'>{renderNavOptions()}</div>
 					</>

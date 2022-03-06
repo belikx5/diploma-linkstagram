@@ -1,0 +1,20 @@
+@use '../../../styles/common' as common;
+@use '../../../styles/variables' as vars;
+
+.searchFieldBox {
+	@include common.input-text;
+	border: 1px solid vars.$color-light-grey;
+	display: flex;
+	padding-right: 2px;
+	width: 100%;
+	.searchField {
+		@include common.disable-default-styles;
+		width: 100%;
+	}
+	.searchIcon {
+		width: 30px;
+		height: 30px;
+		@include common.hover-effect;
+		transition: all 0.3s ease-in-out;
+	}
+}
