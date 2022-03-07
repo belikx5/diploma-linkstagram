@@ -4,6 +4,7 @@ import {
 	FETCH_SEARCHED_PROFILES,
 	SearchDispatchTypes,
 	SEARCH_TYPES,
+	SET_SEARCH_LOADING,
 	SET_SEARCH_TYPE,
 	SET_SEARCH_VALUE,
 } from '../actionTypes/searchActionTypes';
@@ -12,6 +13,7 @@ import { ProfileBrief } from '../actionTypes/userActionTypes';
 interface IDefaultState {
 	searchValue: string;
 	searchType: string;
+	searchLoading: boolean;
 	searchedProfiles: ProfileBrief[];
 	searchedPosts: Post[];
 }
@@ -19,6 +21,7 @@ interface IDefaultState {
 const initialState: IDefaultState = {
 	searchValue: '',
 	searchType: SEARCH_TYPES.PROFILES,
+	searchLoading: false,
 	searchedProfiles: [],
 	searchedPosts: [],
 };
@@ -32,6 +35,8 @@ const reducer = (
 			return { ...state, searchValue: action.payload };
 		case SET_SEARCH_TYPE:
 			return { ...state, searchType: action.payload };
+		case SET_SEARCH_LOADING:
+			return { ...state, searchLoading: action.payload };
 		case FETCH_SEARCHED_PROFILES:
 			return { ...state, searchedProfiles: action.payload };
 		case FETCH_SEARCHED_POSTS:

@@ -1,6 +1,8 @@
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets, permissions, generics
 import django_filters
 from django.contrib.auth import get_user_model
+from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -14,6 +16,8 @@ UserModel = get_user_model()
 class UserViewSet(viewsets.ModelViewSet):
     queryset = UserProfile.objects.all()
     serializer_class = UserSerializer
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    search_fields = ['$user__username']
     list_serializer_class = UserBriefSerializer
     create_update_serializer_class = UserCreateUpdateSerializer
 

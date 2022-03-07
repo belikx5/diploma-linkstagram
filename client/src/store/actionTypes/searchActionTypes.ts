@@ -23,8 +23,8 @@ export interface SetSearchType {
 }
 
 export interface SetSearchLoading {
-	type: typeof SET_SEARCH_TYPE;
-	payload: string;
+	type: typeof SET_SEARCH_LOADING;
+	payload: boolean;
 }
 
 export interface FetchSearchedProfiles {
