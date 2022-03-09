@@ -47,7 +47,7 @@ const Navbar = () => {
 	const location = useLocation();
 	const { pathname } = location;
 	const renderNavOptions = () => {
-		if (pathname === '/edit' || pathname === '/create')
+		if (pathname === '/edit-post' || pathname === '/create-post')
 			return (
 				<button
 					onClick={() => dispatch(logout())}
@@ -55,7 +55,7 @@ const Navbar = () => {
 					{t('common.logout')}
 				</button>
 			);
-		if (pathname === '/')
+		if (pathname === '/' || pathname === '/search')
 			return (
 				<>
 					<Search />

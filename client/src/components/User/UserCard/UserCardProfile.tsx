@@ -26,10 +26,10 @@ const UserCard = ({ isProfilePage, isCurrentUser }: UserCardProps) => {
 	const user = isCurrentUser ? currentUser : anotherUserProfile;
 
 	const onEditClick = () => {
-		history.push('/edit');
+		history.push('/edit-post');
 	};
 	const onCreateClick = () => {
-		history.push('/create');
+		history.push('/create-post');
 	};
 	const onSendMessageClick = () => {
 		history.push('/messages');

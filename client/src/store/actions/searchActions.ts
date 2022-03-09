@@ -39,7 +39,7 @@ export const setSearchLoading =
 	};
 
 export const performSearch =
-	(searchValue: string, searchType: string): ThunkActionWithPromise<void> =>
+	(searchValue: string, searchType: string): ThunkActionWithPromise<number> =>
 	async dispatch => {
 		dispatch(setSearchLoading(true));
 		const searchConfig = { endpoint: '', dispatchType: '' };
@@ -58,7 +58,7 @@ export const performSearch =
 				type: searchConfig.dispatchType,
 				payload: resp.data,
 			});
-			return Promise.resolve();
+			return Promise.resolve(resp.data.length);
 		} catch ({ response: { data } }) {
 			dispatch({
 				type: USER_ACTION_ERROR,
@@ -66,7 +66,7 @@ export const performSearch =
 					error: data.error,
 				},
 			});
-			return Promise.reject();
+			return Promise.reject(0);
 		} finally {
 			dispatch(setSearchLoading(false));
 		}

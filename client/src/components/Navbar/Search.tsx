@@ -4,7 +4,6 @@ import { useTypedDispatch } from '../../hooks/useTypedDispatch';
 import { useTypedSelector } from '../../hooks/useTypedSelector';
 import history from '../../services/history';
 import {
-	performSearch,
 	setSearchType,
 	setSearchValue,
 } from '../../store/actions/searchActions';
@@ -31,10 +30,8 @@ const SearchForInterests = () => {
 	);
 
 	const handleSearchClick = useCallback(() => {
-		dispatch(performSearch(searchValue, searchType)).then(res => {
-			history.push(`/search?type=${searchType}`);
-		});
-	}, [dispatch, searchValue, searchType]);
+		history.push(`/search?type=${searchType}&value=${searchValue}`);
+	}, [searchValue, searchType]);
 
 	const handleTypeClick = useCallback(
 		(newVal: SEARCH_TYPES) => {
@@ -58,6 +55,7 @@ const SearchForInterests = () => {
 				className={`search-types ${isSearchFocused && 'visible'}`}>
 				{searchTypesArr.map(type => (
 					<div
+						key={type}
 						onClick={() => handleTypeClick(type)}
 						className={`chips ${type === searchType && 'selected'}`}>
 						{type}

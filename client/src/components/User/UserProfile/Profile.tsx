@@ -65,12 +65,12 @@ const Profile = ({ isCurrentUser }: ProfileProps) => {
 	return isMobileSize ? (
 		<div className='profile mobile'>
 			<UserCard {...userCardProps} />
-			<OwnerPostList posts={postsByUser} />
+			<OwnerPostList posts={postsByUser} isCurrentUser={isCurrentUser} />
 		</div>
 	) : (
 		<div className='profile desktop'>
 			<UserCardProfile {...userCardProps} />
-			<OwnerPostList posts={postsByUser} />
+			<OwnerPostList posts={postsByUser} isCurrentUser={isCurrentUser} />
 		</div>
 	);
 };

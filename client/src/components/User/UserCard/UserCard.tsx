@@ -39,14 +39,14 @@ const UserCard = ({ isProfilePage, isCurrentUser }: UserCardProps) => {
 		if (history.location.pathname === '/') {
 			setModalEditOpen(true);
 		} else {
-			history.push('/edit');
+			history.push('/edit-post');
 		}
 	};
 	const onCreateClick = () => {
 		if (history.location.pathname === '/') {
 			toggleCreateModal(true);
 		} else {
-			history.push('/create');
+			history.push('/create-post');
 		}
 	};
 	const onSendMessageClick = () => {
@@ -92,7 +92,15 @@ const UserCard = ({ isProfilePage, isCurrentUser }: UserCardProps) => {
 					/>
 				</div>
 				<p className='user-card-author-main'>
-					{user?.first_name} {user?.last_name}
+					{user?.username}
+					<br />
+					{(user?.first_name || user?.last_name) && (
+						<>
+							-
+							<br />
+							{user?.first_name} {user?.last_name}
+						</>
+					)}
 				</p>
 				<p className='user-card-author-description'>{user?.bio}</p>
 				{isCurrentUser ? (

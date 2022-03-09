@@ -90,7 +90,7 @@ const EditForm = ({ openModal }: EditFormProps) => {
 	}
 
 	return (
-		<div className={`edit-form  ${pathname === '/edit' ? 'page' : ''}`}>
+		<div className={`edit-form  ${pathname === '/edit-post' ? 'page' : ''}`}>
 			<div className='edit-form-header'>
 				<h1>{t('editProfile.profileInfo')}</h1>
 				<p onClick={() => dispatch(logout())}>{t('common.logout')}</p>

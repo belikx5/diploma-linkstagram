@@ -8,7 +8,7 @@ import {
 	openUserFollowingModal,
 } from '../../../store/actions/userActions';
 import Modal from '../../ui/Modal/Modal';
-import UserBriefList from '../UserBriefList';
+import { UserBriefList } from '../UserBriefList';
 
 type UserFollowingFollowersProps = {
 	isFollowersList: boolean;

@@ -60,7 +60,9 @@ const CreatePostForm = ({ setModalOpen }: CreateFormProps) => {
 
 	return (
 		<div
-			className={`create-post-form  ${pathname === '/create' ? 'page' : ''}`}>
+			className={`create-post-form  ${
+				pathname === '/create-post' ? 'page' : ''
+			}`}>
 			{!previewImages.length ? (
 				<>
 					<input

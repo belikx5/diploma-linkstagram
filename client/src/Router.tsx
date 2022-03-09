@@ -10,6 +10,7 @@ import Signin from './components/Auth/Signin';
 import Signup from './components/Auth/Signup';
 import RequireAuth from './components/RequireAuth';
 import PostDetailsPage from './components/Post/PostDetailsPage/PostDetailsPage';
+import { SearchPage } from './components/SearchPage';
 
 function RouterComponent() {
 	return (
@@ -18,6 +19,9 @@ function RouterComponent() {
 			<Switch>
 				<Route path='/' exact>
 					<IndexPage />
+				</Route>
+				<Route path='/search' exact>
+					<SearchPage />
 				</Route>
 				<Route path='/#:postId'>
 					<IndexPage />
@@ -30,17 +34,21 @@ function RouterComponent() {
 						<Profile isCurrentUser={false} />
 					</RequireAuth>
 				</Route>
-				<Route path='/profile'>
+				<Route path='/profile' exact>
 					<RequireAuth>
 						<Profile isCurrentUser />
 					</RequireAuth>
 				</Route>
-				<Route path='/edit'>
+				<Route path='/edit-post'>
 					<RequireAuth>
 						<EditForm />
 					</RequireAuth>
 				</Route>
-				<Route path='/create' component={CreatePostForm} />
+				<Route path='/create-post'>
+					<RequireAuth>
+						<CreatePostForm />
+					</RequireAuth>
+				</Route>
 				<Route path='/signin'>
 					<Signin />
 				</Route>

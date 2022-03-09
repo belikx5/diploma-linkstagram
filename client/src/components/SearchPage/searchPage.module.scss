@@ -1,0 +1,68 @@
+.emptySearchType {
+	text-align: center;
+	font-size: 20px;
+	margin-top: 20vh;
+}
+.searchPage {
+	display: flex;
+}
+
+.asideUserCard {
+	position: fixed;
+	right: 10vw;
+}
+
+.searchContainerHeader {
+	margin-left: 64px;
+	padding-top: 20px;
+}
+.searchContainer {
+	margin: 0 auto;
+	width: 70vw;
+	display: flex;
+	align-items: center;
+	flex-direction: column;
+	&.profiles {
+		margin: 0;
+		margin-left: 64px;
+		align-items: flex-start;
+	}
+	.userCardItem {
+		width: 300px;
+	}
+}
+@media (max-width: 1050px) {
+	.searchContainer {
+		width: 45vw;
+		margin-left: 64px;
+
+		&.posts {
+			width: 100vw;
+			margin-left: 16px;
+		}
+	}
+	.asideUserCard {
+		&.posts {
+			display: none;
+		}
+	}
+}
+
+@media (max-width: 750px) {
+	.asideUserCard {
+		display: none;
+	}
+}
+
+@media (max-width: 600px) {
+	.searchContainerHeader {
+		margin-left: 16px;
+	}
+	.searchContainer {
+		width: 100vw;
+		margin-left: 16px;
+		&.profiles {
+			margin-left: 16px;
+		}
+	}
+}

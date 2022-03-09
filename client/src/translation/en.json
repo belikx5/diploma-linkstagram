@@ -19,7 +19,8 @@
 		"home": "Home"
 	},
 	"profile": {
-		"noPosts": "You don't have any posts",
+		"noCurrUserPosts": "You don't have any posts",
+		"noPosts": "This user doesn't have any posts",
 		"tryToAdd": "Try to add a new one 👌"
 	},
 	"auth": {
@@ -51,5 +52,11 @@
 		"copied": "Copied to bufer",
 		"share": "Share",
 		"addComment": "Add a comment..."
+	},
+	"search": {
+		"noProfiles": "Couldn't find any profile",
+		"foundProfiles": "Found profiles:",
+		"noPosts": "Couldn't find any post",
+		"foundPosts": "Found posts:"
 	}
 }

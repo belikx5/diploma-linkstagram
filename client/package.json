@@ -15,6 +15,7 @@
     "@uppy/aws-s3": "^1.7.11",
     "@uppy/core": "^1.19.1",
     "axios": "^0.21.1",
+    "classnames": "^2.3.1",
     "firebase": "^8.6.2",
     "i18next": "^20.3.1",
     "moment": "^2.29.1",

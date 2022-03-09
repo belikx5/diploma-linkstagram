@@ -11,17 +11,20 @@ import { useHistory, useLocation } from 'react-router-dom';
 
 type OwnerPostListProps = {
 	posts: Post[];
+	isCurrentUser: boolean;
 };
 
-const OwnerPostList = ({ posts }: OwnerPostListProps) => {
+const OwnerPostList = ({ posts, isCurrentUser }: OwnerPostListProps) => {
 	const [t] = useTranslation('common');
 
 	if (!posts.length) {
-		return (
+		return isCurrentUser ? (
 			<>
-				<h2>{t('profile.noPosts')} </h2>
+				<h2>{t('profile.noCurrUserPosts')} </h2>
 				<h3>{t('profile.tryToAdd')}</h3>
 			</>
+		) : (
+			<h2>{t('profile.noPosts')} </h2>
 		);
 	}
 	return (

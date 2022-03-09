@@ -3,7 +3,6 @@ import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { useLocation } from 'react-router';
 import { useTypedSelector } from '../../hooks/useTypedSelector';
-import { fetchAllUsers } from '../../store/actions/userActions';
 import {
 	fetchAllPosts,
 	openPostDetailsModal,
