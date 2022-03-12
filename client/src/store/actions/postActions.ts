@@ -17,6 +17,7 @@ import {
 	POST_ACTION_ERROR,
 	POST_DETAILS_MODAL_OPENED,
 	REMOVE_LIKE,
+	RESET_CURRENT_POST,
 	SET_IS_POSTS_FETCHED,
 	SET_LIKE,
 } from '../actionTypes/postActionTypes';
@@ -55,6 +56,14 @@ export const fetchPostById =
 				},
 			});
 		}
+	};
+
+export const resetCurrentPost =
+	() => (dispatch: Dispatch<PostDispatchTypes>) => {
+		dispatch({
+			type: RESET_CURRENT_POST,
+			payload: null,
+		});
 	};
 
 export const fetchPostByUser =

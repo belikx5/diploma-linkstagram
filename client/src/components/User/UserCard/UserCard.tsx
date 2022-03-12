@@ -103,6 +103,15 @@ const UserCard = ({ isProfilePage, isCurrentUser }: UserCardProps) => {
 					)}
 				</p>
 				<p className='user-card-author-description'>{user?.bio}</p>
+				{isProfilePage && (
+					<p className='user-card-author-tags'>
+						{user?.tags.map((tag, i) => (
+							<span key={i} className='tag'>
+								{tag}
+							</span>
+						))}
+					</p>
+				)}
 				{isCurrentUser ? (
 					<div className='user-card-actions'>
 						<button

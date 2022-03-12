@@ -77,6 +77,15 @@
 		font-size: variables.$secondary-font-size;
 		margin-top: 0;
 	}
+	.user-card-author-tags {
+		display: flex;
+		margin-top: 0;
+		overflow-x: auto;
+		@include common.custom-scrollbar;
+		.tag {
+			@include common.tag;
+		}
+	}
 	.user-card-actions {
 		@include cardActions();
 	}
@@ -121,18 +130,24 @@
 		}
 		.user-card-left-data {
 			text-align: left;
-			max-width: 304px;
+			max-width: 604px;
 			h3 {
 				margin: 0 0 10px;
 				font-size: 24px;
 			}
 			p {
 				margin: 0;
-				&.user-card-left-data-job {
+				&.user-card-left-data-tags {
+					margin-top: 5px;
+					display: flex;
+					flex-wrap: wrap;
 					color: #000000;
+					span.tag {
+						@include common.tag;
+					}
 				}
 				&.user-card-left-data-descr {
-					margin-top: 20px;
+					margin-top: 10px;
 					font-size: variables.$secondary-font-size;
 					color: variables.$color-dark-grey;
 				}

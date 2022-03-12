@@ -18,13 +18,13 @@ const Comment = ({ data, showAuthor = false }: CommentProps) => {
 				<div className={`comment-data  ${showAuthor ? 'showAuthor' : ''}`}>
 					<p className='comment-data-text'>{data.message}</p>
 					<div className='comment-data-meta'>
+						{showAuthor && (
+							<p className='comment-data-author'>{data.user.username}</p>
+						)}
 						<p>
 							{data.created_at ? formateDate(Date.parse(data.created_at)) : 1}
 						</p>
 					</div>
-					{showAuthor && (
-						<p className='comment-data-author'>{data.user.username}</p>
-					)}
 				</div>
 			</div>
 		</div>

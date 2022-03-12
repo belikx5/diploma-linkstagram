@@ -8,6 +8,7 @@ import { performSearch } from '../../store/actions/searchActions';
 import { SEARCH_TYPES } from '../../store/actionTypes/searchActionTypes';
 import { CircularProgress } from '@material-ui/core';
 import { useTranslation } from 'react-i18next';
+import { UserIconSize } from '../../ts/enums';
 
 type Props = {
 	searchValue: string;
@@ -23,6 +24,10 @@ const SearchedProfiles = ({ searchValue }: Props) => {
 		state => state.searchState.searchLoading
 	);
 	const [isListEmpty, setIsListEmpty] = useState(false);
+	useEffect(() => {
+		if (!profiles.length) setIsListEmpty(true);
+		else setIsListEmpty(false);
+	}, [profiles]);
 	useEffect(() => {
 		dispatch(performSearch(searchValue, SEARCH_TYPES.PROFILES)).then(
 			dataLength => {
@@ -46,8 +51,20 @@ const SearchedProfiles = ({ searchValue }: Props) => {
 							<CircularProgress size={30} />
 						) : (
 							profiles.map(user => (
-								<div className={styles.userCardItem} key={user.id}>
-									<UserBriefCard user={user} />
+								<div
+									className={clx(
+										styles.userCardItem,
+										user.tags.length && styles.withTags
+									)}
+									key={user.id}>
+									<UserBriefCard user={user} iconSize={UserIconSize.Medium} />
+									<div className={styles.tags}>
+										{user.tags.map((tag, i) => (
+											<span key={i} className={styles.tag}>
+												{tag}
+											</span>
+										))}
+									</div>
 								</div>
 							))
 						)}

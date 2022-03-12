@@ -1,9 +1,11 @@
 import React, { useCallback, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import { useHandleClickOutside } from '../../hooks/useHandleClickOutside';
 import { useTypedDispatch } from '../../hooks/useTypedDispatch';
 import { useTypedSelector } from '../../hooks/useTypedSelector';
 import history from '../../services/history';
 import {
+	performSearch,
 	setSearchType,
 	setSearchValue,
 } from '../../store/actions/searchActions';
@@ -14,6 +16,7 @@ const searchTypesArr = [SEARCH_TYPES.PROFILES, SEARCH_TYPES.POSTS];
 
 const SearchForInterests = () => {
 	const dispatch = useTypedDispatch();
+	const { pathname } = useLocation();
 	const searchValue = useTypedSelector(state => state.searchState.searchValue);
 	const searchType = useTypedSelector(state => state.searchState.searchType);
 	const searchLoading = useTypedSelector(
@@ -30,8 +33,10 @@ const SearchForInterests = () => {
 	);
 
 	const handleSearchClick = useCallback(() => {
+		if (pathname === '/search')
+			dispatch(performSearch(searchValue, searchType));
 		history.push(`/search?type=${searchType}&value=${searchValue}`);
-	}, [searchValue, searchType]);
+	}, [pathname, searchValue, searchType]);
 
 	const handleTypeClick = useCallback(
 		(newVal: SEARCH_TYPES) => {

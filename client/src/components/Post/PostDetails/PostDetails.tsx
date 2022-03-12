@@ -1,11 +1,13 @@
 import './postDetails.scss';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { UserIconSize } from '../../../ts/enums';
 import { useTypedSelector } from '../../../hooks/useTypedSelector';
 import {
 	addComment,
+	fetchPostById,
 	removeLike,
+	resetCurrentPost,
 	setLike,
 	setPostActionError,
 } from '../../../store/actions/postActions';
@@ -16,6 +18,7 @@ import { useTranslation } from 'react-i18next';
 import UserIcon from '../../User/UserIcon/UserIcon';
 import Comment from '../PostComment/Comment';
 import Slider from '../../Slider';
+import { CircularProgress } from '@material-ui/core';
 
 type PostDetailsProps = {
 	postData: Post;
@@ -26,17 +29,19 @@ const PostDetails = ({ postData, openModal }: PostDetailsProps) => {
 	const [t] = useTranslation('common');
 	const dispatch = useDispatch();
 	const currentUser = useTypedSelector(state => state.userState.currentUser);
+	const currentPost = useTypedSelector(state => state.postsState.currentPost);
 	const [text, setText] = useState('');
 	const onCommentSend = () => {
-		if (text.trim()) {
-			dispatch(addComment(postData.id, text));
+		if (text.trim() && currentPost) {
+			dispatch(addComment(currentPost.id, text));
 			setText('');
 		} else dispatch(setPostActionError("Comment can't be empty"));
 	};
 	const onLikeClick = () => {
-		postData.is_liked
-			? dispatch(removeLike(postData))
-			: dispatch(setLike(postData.id));
+		if (currentPost)
+			currentPost.is_liked
+				? dispatch(removeLike(currentPost))
+				: dispatch(setLike(currentPost.id));
 	};
 
 	const requireAuthForAction = (action: Function) => {
@@ -45,17 +50,30 @@ const PostDetails = ({ postData, openModal }: PostDetailsProps) => {
 		} else dispatch(setPostActionError('Login to perform this action'));
 	};
 
+	useEffect(() => {
+		dispatch(fetchPostById(postData.id));
+
+		return () => {
+			dispatch(resetCurrentPost());
+		};
+	}, []);
+
+	if (!currentPost) return <CircularProgress size={30} />;
+
 	return (
 		<div className='post-details'>
-			<Slider images={postData.images.map(p => p.image)} isPostDetails={true} />
+			<Slider
+				images={currentPost.images.map(p => p.image)}
+				isPostDetails={true}
+			/>
 			<div className='post-details-data'>
 				<div className='post-details-header'>
 					<div>
 						<UserIcon
-							icon={postData.author.profile_photo}
+							icon={currentPost.author.profile_photo}
 							size={UserIconSize.Small}
 						/>
-						<p>{postData.author.username}</p>
+						<p>{currentPost.author.username}</p>
 					</div>
 					<img
 						className='post-details-header-close'
@@ -65,18 +83,20 @@ const PostDetails = ({ postData, openModal }: PostDetailsProps) => {
 					/>
 				</div>
 				<div className='post-details-comments'>
-					{sortCommentsDesc(postData?.comments)?.map((comment, index) => {
-						return <Comment key={index} data={comment} />;
+					{sortCommentsDesc(currentPost.comments)?.map((comment, index) => {
+						return <Comment key={index} data={comment} showAuthor />;
 					})}
 				</div>
 				<div
 					className='post-details-likes'
 					onClick={() => requireAuthForAction(onLikeClick)}>
 					<img
-						src={`../../assets/like-${postData.is_liked ? 'red' : 'grey'}.svg`}
+						src={`../../assets/like-${
+							currentPost.is_liked ? 'red' : 'grey'
+						}.svg`}
 						alt='is-liked'
 					/>
-					<p className='post-details-total-likes'>{postData.likes_count}</p>
+					<p className='post-details-total-likes'>{currentPost.likes_count}</p>
 				</div>
 				<div className='post-details-actions'>
 					<textarea

@@ -23,6 +23,10 @@ const SearchedPosts = ({ searchValue }: Props) => {
 	const [isListEmpty, setIsListEmpty] = useState(false);
 
 	useEffect(() => {
+		if (!posts.length) setIsListEmpty(true);
+		else setIsListEmpty(false);
+	}, [posts]);
+	useEffect(() => {
 		dispatch(performSearch(searchValue, SEARCH_TYPES.POSTS)).then(
 			dataLength => {
 				dataLength === 0 ? setIsListEmpty(true) : setIsListEmpty(false);
@@ -42,7 +46,9 @@ const SearchedPosts = ({ searchValue }: Props) => {
 						{searchLoading ? (
 							<CircularProgress size={30} />
 						) : (
-							posts.map(post => <Post key={post.id} postData={post} />)
+							posts.map(post => (
+								<Post key={post.id} postData={post} showPostActions={false} />
+							))
 						)}
 					</div>
 				</>

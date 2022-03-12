@@ -2,6 +2,7 @@ import { Profile } from './userActionTypes';
 
 export const FETCH_ALL_POSTS = 'FETCH_ALL_POSTS';
 export const FETCH_POST_BY_ID = 'FETCH_POST_BY_ID';
+export const RESET_CURRENT_POST = 'RESET_CURRENT_POST';
 export const FETCH_POSTS_BY_USER = 'FETCH_POSTS_BY_USER';
 export const SET_IS_POSTS_FETCHED = 'SET_IS_POSTS_FETCHED';
 
@@ -72,6 +73,10 @@ export interface FetchAllPosts {
 export interface FetchPostById {
 	type: typeof FETCH_POST_BY_ID;
 	payload: Post;
+}
+export interface ResetCurrentPost {
+	type: typeof RESET_CURRENT_POST;
+	payload: null;
 }
 
 export interface FetchPostsByUser {
@@ -150,6 +155,7 @@ export interface ClearPostActionError {
 export type PostDispatchTypes =
 	| FetchAllPosts
 	| FetchPostById
+	| ResetCurrentPost
 	| FetchPostsByUser
 	| SetIsPostsFetched
 	| CreatePost

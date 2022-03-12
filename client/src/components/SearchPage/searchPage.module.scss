@@ -1,3 +1,6 @@
+@use '../../styles/common' as common;
+@use '../../styles/variables' as vars;
+
 .emptySearchType {
 	text-align: center;
 	font-size: 20px;
@@ -29,6 +32,29 @@
 	}
 	.userCardItem {
 		width: 300px;
+		position: relative;
+		&.withTags {
+			//if userCad with tags place username and full name to top of this card
+			div {
+				align-items: flex-start !important;
+			}
+		}
+		.tags {
+			position: absolute;
+			bottom: 0;
+			right: 0;
+			display: flex;
+			width: calc(100% - (#{vars.$user-icon-medium} + 10px));
+			overflow-x: auto;
+			@include common.custom-scrollbar;
+			&::-webkit-scrollbar {
+				height: 7px;
+			}
+			.tag {
+				@include common.tag;
+				font-size: 12px;
+			}
+		}
 	}
 }
 @media (max-width: 1050px) {

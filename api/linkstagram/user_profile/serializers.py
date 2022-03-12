@@ -36,7 +36,7 @@ def add_username_to_representation(representation_object, instance):
 class UserBriefMeta:
     class Meta:
         model = UserProfile
-        fields = ['id', 'profile_photo', 'user', ]
+        fields = ['id', 'profile_photo', 'user']
         read_only_fields = ('id',)
 
 
@@ -53,7 +53,7 @@ class UserBriefSerializer(DefaultUserSerializer):
 
     class Meta:
         model = UserProfile
-        fields = ['id', 'profile_photo', 'user', ]
+        fields = ['id', 'profile_photo', 'user', 'tags']
         read_only_fields = ('id',)
 
 

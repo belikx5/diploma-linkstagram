@@ -22,9 +22,10 @@ import Slider from '../../Slider';
 
 type PostProps = {
 	postData: PostType;
+	showPostActions?: boolean;
 };
 
-const Post = ({ postData }: PostProps) => {
+const Post = ({ postData, showPostActions = true }: PostProps) => {
 	const [t] = useTranslation('common');
 	const dispatch = useDispatch();
 	const history = useHistory();
@@ -118,37 +119,39 @@ const Post = ({ postData }: PostProps) => {
 					)}
 				</div>
 				<p className='post-description'>{postData.description}</p>
-				<div className='post-actions'>
-					<div>
-						<div className='post-action' onClick={handleLikeClick}>
-							<img
-								src={`../../assets/like-${
-									postData.is_liked ? 'red' : 'grey'
-								}.svg`}
-								alt='is-liked'
-							/>
-							<p>{postData.likes_count}</p>
+				{showPostActions && (
+					<div className='post-actions'>
+						<div>
+							<div className='post-action' onClick={handleLikeClick}>
+								<img
+									src={`../../assets/like-${
+										postData.is_liked ? 'red' : 'grey'
+									}.svg`}
+									alt='is-liked'
+								/>
+								<p>{postData.likes_count}</p>
+							</div>
+							<div
+								className='post-action comment-action post-details-button desktop'
+								onClick={() =>
+									validateLocationForAction(() => isModalOpened(true))
+								}>
+								<img src='../../assets/comment.svg' alt='comment' />
+								<p>{postData.comments?.length || 0}</p>
+							</div>
+							<div
+								className='post-action comment-action post-details-button mobile'
+								onClick={() => validateLocationForAction(navigateToPostView)}>
+								<img src='../../assets/comment.svg' alt='comment' />
+								<p>{postData.comments?.length || 0}</p>
+							</div>
 						</div>
-						<div
-							className='post-action comment-action post-details-button desktop'
-							onClick={() =>
-								validateLocationForAction(() => isModalOpened(true))
-							}>
-							<img src='../../assets/comment.svg' alt='comment' />
-							<p>{postData.comments?.length || 0}</p>
-						</div>
-						<div
-							className='post-action comment-action post-details-button mobile'
-							onClick={() => validateLocationForAction(navigateToPostView)}>
-							<img src='../../assets/comment.svg' alt='comment' />
-							<p>{postData.comments?.length || 0}</p>
+						<div className='post-action' onClick={handleShareClick}>
+							<p>{t('post.share')}</p>
+							<img src='../../assets/arrow-right.svg' alt='share' />
 						</div>
 					</div>
-					<div className='post-action' onClick={handleShareClick}>
-						<p>{t('post.share')}</p>
-						<img src='../../assets/arrow-right.svg' alt='share' />
-					</div>
-				</div>
+				)}
 			</div>
 		</>
 	);

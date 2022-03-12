@@ -49,6 +49,13 @@ const UserCard = ({ isProfilePage, isCurrentUser }: UserCardProps) => {
 						<h3>{user?.username}</h3>
 						{user?.first_name} {user?.last_name}
 						<p className='user-card-left-data-descr'>{user?.bio}</p>
+						<p className='user-card-left-data-tags'>
+							{user?.tags.map((tag, i) => (
+								<span key={i} className='tag'>
+									{tag}
+								</span>
+							))}
+						</p>
 					</div>
 				</div>
 				<div className='user-card-right'>

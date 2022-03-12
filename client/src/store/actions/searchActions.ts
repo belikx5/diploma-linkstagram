@@ -42,17 +42,18 @@ export const performSearch =
 	(searchValue: string, searchType: string): ThunkActionWithPromise<number> =>
 	async dispatch => {
 		dispatch(setSearchLoading(true));
-		const searchConfig = { endpoint: '', dispatchType: '' };
+		const searchConfig = { endpoint: '', dispatchType: '', ordering: '' };
 		if (searchType === SEARCH_TYPES.PROFILES) {
 			searchConfig.endpoint = api.USERS;
 			searchConfig.dispatchType = FETCH_SEARCHED_PROFILES;
 		} else if (searchType === SEARCH_TYPES.POSTS) {
 			searchConfig.endpoint = api.POSTS;
 			searchConfig.dispatchType = FETCH_SEARCHED_POSTS;
+			searchConfig.ordering = 'ordering=-created_at';
 		}
 		try {
 			const resp = await http.get(
-				`${searchConfig.endpoint}?search=${searchValue}`
+				`${searchConfig.endpoint}?search=${searchValue}&${searchConfig.ordering}`
 			);
 			dispatch({
 				type: searchConfig.dispatchType,

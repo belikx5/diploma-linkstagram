@@ -24,6 +24,7 @@ export type ProfileBrief = {
 	username: string;
 	first_name: string;
 	last_name: string;
+	tags: string[];
 };
 
 export type Follower = {
