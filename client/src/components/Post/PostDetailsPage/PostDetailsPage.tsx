@@ -27,7 +27,7 @@ function PostDetailsPage() {
 			{!currentPost && <Loading />}
 			{currentPost && (
 				<>
-					<Post postData={currentPost} descriptionEditable />
+					<Post postData={currentPost} editable />
 					<CreateCommentForm postId={+postId} currentUser={currentUser} />
 					<div className='post-details-page-comments'>
 						{sortCommentsDesc(currentPost.comments).map((p, i) => {

@@ -8,7 +8,7 @@ import {
 	fetchComments,
 	deletePost,
 	openPostDetailsModal,
-	editPostDescription,
+	editPostValues,
 } from '../../../store/actions/postActions';
 import { useTranslation } from 'react-i18next';
 import { useHistory, useLocation } from 'react-router';
@@ -25,13 +25,13 @@ import { useTypedDispatch } from '../../../hooks/useTypedDispatch';
 type PostProps = {
 	postData: PostType;
 	showPostActions?: boolean;
-	descriptionEditable?: boolean;
+	editable?: boolean;
 };
 
 const Post = ({
 	postData,
 	showPostActions = true,
-	descriptionEditable = false,
+	editable = false,
 }: PostProps) => {
 	const [t] = useTranslation('common');
 	const dispatch = useTypedDispatch();
@@ -47,12 +47,24 @@ const Post = ({
 		[postData, currentUser]
 	);
 	const [description, setDescription] = useState(postData.description);
-	const [descriptionChanged, setDescriptionChanged] = useState(false);
+	const [editableValChanged, setEditableValChanged] = useState(false);
+	const [tagValue, setTagValue] = useState('');
+	const [tags, setTags] = useState<string[]>(postData.tags);
 
-	const onDescriptionEdit = () => {
-		dispatch(editPostDescription(postData.id, description)).then(() =>
-			setDescriptionChanged(false)
+	const onEditSave = () => {
+		dispatch(editPostValues(postData.id, description, tags)).then(() =>
+			setEditableValChanged(false)
 		);
+	};
+	const onNewTagAdd = () => {
+		if (tags.find(t => t === tagValue)) return;
+		setTags([...tags, tagValue]);
+		setTagValue('');
+		setEditableValChanged(true);
+	};
+	const onTagRemove = (tag: string) => {
+		setTags(tags.filter(t => t !== tag));
+		setEditableValChanged(true);
 	};
 
 	const handleLikeClick = () => {
@@ -83,8 +95,8 @@ const Post = ({
 
 	useEffect(() => {
 		description === postData.description
-			? setDescriptionChanged(false)
-			: setDescriptionChanged(true);
+			? setEditableValChanged(false)
+			: setEditableValChanged(true);
 	}, [description, postData]);
 
 	useEffect(() => {
@@ -145,7 +157,7 @@ const Post = ({
 						</div>
 					)}
 				</div>
-				{descriptionEditable ? (
+				{editable ? (
 					<div className='post-description-editable'>
 						<textarea
 							className='post-description-editable-txtarea'
@@ -156,10 +168,10 @@ const Post = ({
 						<button
 							className='post-action-button'
 							disabled={!isCurrUserAuthor}
-							onClick={onDescriptionEdit}
+							onClick={onEditSave}
 							style={{
 								visibility:
-									descriptionChanged && isCurrUserAuthor ? 'visible' : 'hidden',
+									editableValChanged && isCurrUserAuthor ? 'visible' : 'hidden',
 							}}>
 							{t('common.save')}
 						</button>
@@ -167,6 +179,39 @@ const Post = ({
 				) : (
 					<p className='post-description'>{postData.description}</p>
 				)}
+				<div className='post-tags'>
+					{editable && isCurrUserAuthor && (
+						<div className='create-tag'>
+							<img
+								src='/assets/ava-plus.svg'
+								className='tag-action-icon'
+								alt='add'
+								onClick={onNewTagAdd}
+							/>
+							<input
+								value={tagValue}
+								onChange={e => setTagValue(e.target.value)}
+							/>
+						</div>
+					)}
+					{tags.map((tag, i) =>
+						editable && isCurrUserAuthor ? (
+							<div key={tag} className='post-tags-tag'>
+								{tag}
+								<img
+									src='/assets/close.svg'
+									className='tag-action-icon'
+									alt='delete'
+									onClick={() => onTagRemove(tag)}
+								/>
+							</div>
+						) : (
+							<div key={tag} className='post-tags-tag'>
+								{tag}
+							</div>
+						)
+					)}
+				</div>
 				{showPostActions && (
 					<div className='post-actions'>
 						<div>

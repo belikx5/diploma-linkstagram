@@ -1,3 +1,4 @@
+from django.contrib.postgres.fields import ArrayField
 from django.db import models
 
 from user_profile.models import UserProfile
@@ -11,6 +12,7 @@ class Post(models.Model):
     likes_count = models.PositiveIntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    tags = ArrayField(models.CharField(max_length=100, null=True), blank=True, default=list)
 
     def increment_likes(self):
         self.likes_count += 1

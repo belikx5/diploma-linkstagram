@@ -4,7 +4,7 @@ import {
 	Comment,
 	CREATE_POST,
 	CREATE_POST_MODAL_OPENED,
-	EDIT_POST_DESCRIPTION,
+	EDIT_POST_VALUES,
 	DELETE_POST,
 	FETCH_ALL_POSTS,
 	FETCH_COMMENTS,
@@ -71,15 +71,23 @@ const reducer = (
 			return { ...state, createModalOpened: action.payload };
 		case POST_DETAILS_MODAL_OPENED:
 			return { ...state, detailsModalOpened: action.payload };
-		case EDIT_POST_DESCRIPTION:
+		case EDIT_POST_VALUES:
 			return {
 				...state,
 				currentPost: state.currentPost
-					? { ...state.currentPost, description: action.payload.newDescription }
+					? {
+							...state.currentPost,
+							description: action.payload.newDescription,
+							tags: action.payload.tags,
+					  }
 					: null,
 				posts: state.posts.map(p =>
 					p.id === action.payload.postId
-						? { ...p, description: action.payload.newDescription }
+						? {
+								...p,
+								description: action.payload.newDescription,
+								tags: action.payload.tags,
+						  }
 						: p
 				),
 			};

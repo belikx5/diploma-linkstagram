@@ -5,7 +5,7 @@ import { UserIconSize } from '../../../ts/enums';
 import { useTypedSelector } from '../../../hooks/useTypedSelector';
 import {
 	addComment,
-	editPostDescription,
+	editPostValues,
 	fetchPostById,
 	removeLike,
 	resetCurrentPost,
@@ -38,12 +38,25 @@ const PostDetails = ({ postData, openModal }: PostDetailsProps) => {
 	);
 	const [text, setText] = useState('');
 	const [description, setDescription] = useState('');
-	const [descriptionChanged, setDescriptionChanged] = useState(false);
+	const [editableValChanged, setEditableValChanged] = useState(false);
+	const [tagValue, setTagValue] = useState('');
+	const [tags, setTags] = useState<string[]>([]);
 
-	const onDescriptionEdit = () => {
-		dispatch(editPostDescription(postData.id, description)).then(() =>
-			setDescriptionChanged(false)
+	const onEditSave = () => {
+		if (!currentPost) return;
+		dispatch(editPostValues(currentPost.id, description, tags)).then(() =>
+			setEditableValChanged(false)
 		);
+	};
+	const onNewTagAdd = () => {
+		if (tags.find(t => t === tagValue)) return;
+		setTags([...tags, tagValue]);
+		setTagValue('');
+		setEditableValChanged(true);
+	};
+	const onTagRemove = (tag: string) => {
+		setTags(tags.filter(t => t !== tag));
+		setEditableValChanged(true);
 	};
 	const onCommentSend = () => {
 		if (text.trim() && currentPost) {
@@ -65,14 +78,17 @@ const PostDetails = ({ postData, openModal }: PostDetailsProps) => {
 	};
 
 	useEffect(() => {
-		if (currentPost) setDescription(currentPost.description);
+		if (currentPost) {
+			setDescription(currentPost.description);
+			setTags(currentPost.tags);
+		}
 	}, [currentPost]);
 
 	useEffect(() => {
 		if (!currentPost) return;
 		description === currentPost.description
-			? setDescriptionChanged(false)
-			: setDescriptionChanged(true);
+			? setEditableValChanged(false)
+			: setEditableValChanged(true);
 	}, [description, currentPost]);
 
 	useEffect(() => {
@@ -112,6 +128,39 @@ const PostDetails = ({ postData, openModal }: PostDetailsProps) => {
 						return <Comment key={index} data={comment} showAuthor />;
 					})}
 				</div>
+				<div className='post-details-tags'>
+					{isCurrUserAuthor && (
+						<div className='create-tag'>
+							<img
+								src='/assets/ava-plus.svg'
+								className='tag-action-icon'
+								alt='add'
+								onClick={onNewTagAdd}
+							/>
+							<input
+								value={tagValue}
+								onChange={e => setTagValue(e.target.value)}
+							/>
+						</div>
+					)}
+					{tags.map((tag, i) =>
+						isCurrUserAuthor ? (
+							<div key={tag} className='tag'>
+								{tag}
+								<img
+									src='/assets/close.svg'
+									className='tag-action-icon'
+									alt='delete'
+									onClick={() => onTagRemove(tag)}
+								/>
+							</div>
+						) : (
+							<div key={tag} className='tag'>
+								{tag}
+							</div>
+						)
+					)}
+				</div>
 				<div className='post-details-likes'>
 					<img
 						src={`../../assets/like-${
@@ -131,10 +180,10 @@ const PostDetails = ({ postData, openModal }: PostDetailsProps) => {
 						className='post-details-action-button'
 						style={{
 							visibility:
-								descriptionChanged && isCurrUserAuthor ? 'visible' : 'hidden',
+								editableValChanged && isCurrUserAuthor ? 'visible' : 'hidden',
 						}}
 						disabled={!isCurrUserAuthor}
-						onClick={onDescriptionEdit}>
+						onClick={onEditSave}>
 						{t('common.save')}
 					</button>
 				</div>

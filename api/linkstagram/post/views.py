@@ -16,7 +16,8 @@ class PostListViewSet(viewsets.ModelViewSet):
     create_serializer_class = PostCreateSerializer
     list_serializer_class = PostSerializer
     filter_backends = [DjangoFilterBackend, OrderingFilter, SearchFilter]
-    search_fields = ['$author__id', '$author__user__username']
+    search_fields = ['$author__id', '$author__user__username', 'tags']
+    filterset_fields = ['author__id']
     ordering_fields = ['created_at']
 
     def get_serializer_class(self):

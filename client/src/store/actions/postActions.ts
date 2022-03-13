@@ -9,7 +9,7 @@ import {
 	CREATE_POST,
 	CREATE_POST_MODAL_OPENED,
 	DELETE_POST,
-	EDIT_POST_DESCRIPTION,
+	EDIT_POST_VALUES,
 	FETCH_ALL_POSTS,
 	FETCH_POSTS_BY_USER,
 	FETCH_POST_BY_ID,
@@ -71,7 +71,7 @@ export const fetchPostByUser =
 	(userId: number) => async (dispatch: Dispatch<PostDispatchTypes>) => {
 		try {
 			const response = await http.get<Post[]>(
-				`${api.POSTS}?ordering=-created_at&search=${userId}`
+				`${api.POSTS}?ordering=-created_at&author__id=${userId}`
 			);
 			dispatch({ type: FETCH_POSTS_BY_USER, payload: response.data });
 		} catch ({ response: { data } }) {
@@ -129,18 +129,24 @@ export const openPostDetailsModal =
 			},
 		});
 	};
-export const editPostDescription =
-	(postId: number, value: string): ThunkActionWithPromise<void> =>
+export const editPostValues =
+	(
+		postId: number,
+		description: string,
+		tags: string[]
+	): ThunkActionWithPromise<void> =>
 	async dispatch => {
 		try {
 			await http.patch(`${api.POSTS}${postId}/`, {
-				description: value,
+				description,
+				tags,
 			});
 			dispatch({
-				type: EDIT_POST_DESCRIPTION,
+				type: EDIT_POST_VALUES,
 				payload: {
 					postId,
-					newDescription: value,
+					newDescription: description,
+					tags,
 				},
 			});
 		} catch ({ response: { data } }) {

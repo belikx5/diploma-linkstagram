@@ -132,6 +132,22 @@
 	white-space: nowrap;
 }
 
+//place inside of div icon and input
+@mixin create-tag {
+	display: flex;
+	align-items: center;
+	border: 0.5px solid variables.$color-light-grey;
+	border-radius: 5px;
+	margin: 0 3px;
+	input {
+		@include input-text;
+		height: 20px;
+		box-shadow: none;
+		border-radius: 0;
+		width: 50px;
+	}
+}
+
 @mixin noselect {
 	-webkit-touch-callout: none;
 	-webkit-user-select: none;

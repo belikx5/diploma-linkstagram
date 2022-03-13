@@ -9,7 +9,7 @@ export const SET_IS_POSTS_FETCHED = 'SET_IS_POSTS_FETCHED';
 export const CREATE_POST = 'CREATE_POST';
 export const CREATE_POST_MODAL_OPENED = 'CREATE_POST_MODAL_OPENED';
 export const POST_DETAILS_MODAL_OPENED = 'POST_DETAILS_MODAL_OPENED';
-export const EDIT_POST_DESCRIPTION = 'EDIT_POST_DESCRIPTION';
+export const EDIT_POST_VALUES = 'EDIT_POST_VALUES';
 export const DELETE_POST = 'DELETE_POST';
 
 export const SET_LIKE = 'SET_LIKE';
@@ -45,6 +45,7 @@ export type Post = {
 	is_liked: boolean;
 	likes_count: number;
 	images: Image[];
+	tags: string[];
 	comments: Comment[];
 };
 
@@ -108,10 +109,11 @@ export interface PostDetailsModalOpened {
 }
 
 export interface EditPostDescription {
-	type: typeof EDIT_POST_DESCRIPTION;
+	type: typeof EDIT_POST_VALUES;
 	payload: {
 		postId: number;
 		newDescription: string;
+		tags: string[];
 	};
 }
 
