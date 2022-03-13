@@ -9,6 +9,7 @@ import {
 	CREATE_POST,
 	CREATE_POST_MODAL_OPENED,
 	DELETE_POST,
+	EDIT_POST_DESCRIPTION,
 	FETCH_ALL_POSTS,
 	FETCH_POSTS_BY_USER,
 	FETCH_POST_BY_ID,
@@ -128,6 +129,30 @@ export const openPostDetailsModal =
 			},
 		});
 	};
+export const editPostDescription =
+	(postId: number, value: string): ThunkActionWithPromise<void> =>
+	async dispatch => {
+		try {
+			await http.patch(`${api.POSTS}${postId}/`, {
+				description: value,
+			});
+			dispatch({
+				type: EDIT_POST_DESCRIPTION,
+				payload: {
+					postId,
+					newDescription: value,
+				},
+			});
+		} catch ({ response: { data } }) {
+			dispatch({
+				type: POST_ACTION_ERROR,
+				payload: {
+					error: data.error,
+				},
+			});
+		}
+	};
+
 export const deletePost =
 	(postId: number) => async (dispatch: Dispatch<PostDispatchTypes>) => {
 		try {

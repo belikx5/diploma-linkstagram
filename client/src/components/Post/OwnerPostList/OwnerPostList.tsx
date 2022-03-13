@@ -6,8 +6,9 @@ import { sortPostsDesc } from '../../../services/sorting';
 import Modal from '../../ui/Modal/Modal';
 import PostDetails from '../PostDetails/PostDetails';
 import { useDispatch } from 'react-redux';
-import { fetchComments } from '../../../store/actions/postActions';
+import { deletePost, fetchComments } from '../../../store/actions/postActions';
 import { useHistory, useLocation } from 'react-router-dom';
+import DropdownMenu from '../PostDropdown/DropdownMenu';
 
 type OwnerPostListProps = {
 	posts: Post[];
@@ -36,6 +37,34 @@ const OwnerPostList = ({ posts, isCurrentUser }: OwnerPostListProps) => {
 	);
 };
 
+type PostImageProps = {
+	postData: Post;
+	onImageClick: () => void;
+	onDeletePost: () => void;
+};
+
+const PostImage = ({
+	postData,
+	onImageClick,
+	onDeletePost,
+}: PostImageProps) => {
+	const [isHovered, setIsHovered] = useState(false);
+	return (
+		<div
+			className='owner-posts-image-wrapper'
+			onMouseEnter={() => setIsHovered(true)}
+			onMouseLeave={() => setIsHovered(false)}>
+			<img
+				className={`owner-posts-image ${isHovered ? 'hovered' : ''}`}
+				src={postData?.images[0]?.image}
+				onClick={onImageClick}
+				alt='post-owner'
+			/>
+			{isHovered && <DropdownMenu deletePost={onDeletePost} isBright />}
+		</div>
+	);
+};
+
 type ListItemProps = {
 	postData: Post;
 };
@@ -59,15 +88,7 @@ const ListItem = ({ postData }: ListItemProps) => {
 	useEffect(() => {
 		dispatch(fetchComments(postData.id));
 	}, []);
-	const PostImage = () => {
-		return (
-			<img
-				className='owner-posts-image'
-				src={postData?.images[0]?.image}
-				alt='post-owner'
-			/>
-		);
-	};
+
 	return (
 		<>
 			{modalOpened && (
@@ -75,13 +96,19 @@ const ListItem = ({ postData }: ListItemProps) => {
 					<PostDetails {...postDetailsProps} />
 				</Modal>
 			)}
-			<div className='owner-posts-item mobile' onClick={navigateToPostView}>
-				<PostImage />
+			<div className='owner-posts-item mobile'>
+				<PostImage
+					postData={postData}
+					onImageClick={navigateToPostView}
+					onDeletePost={() => dispatch(deletePost(postData.id))}
+				/>
 			</div>
-			<div
-				className='owner-posts-item desktop'
-				onClick={() => setModalOpened(true)}>
-				<PostImage />
+			<div className='owner-posts-item desktop'>
+				<PostImage
+					postData={postData}
+					onImageClick={() => setModalOpened(true)}
+					onDeletePost={() => dispatch(deletePost(postData.id))}
+				/>
 			</div>
 		</>
 	);

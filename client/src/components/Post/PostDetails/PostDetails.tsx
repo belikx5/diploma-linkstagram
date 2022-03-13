@@ -1,10 +1,11 @@
 import './postDetails.scss';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { UserIconSize } from '../../../ts/enums';
 import { useTypedSelector } from '../../../hooks/useTypedSelector';
 import {
 	addComment,
+	editPostDescription,
 	fetchPostById,
 	removeLike,
 	resetCurrentPost,
@@ -19,6 +20,7 @@ import UserIcon from '../../User/UserIcon/UserIcon';
 import Comment from '../PostComment/Comment';
 import Slider from '../../Slider';
 import { CircularProgress } from '@material-ui/core';
+import { useTypedDispatch } from '../../../hooks/useTypedDispatch';
 
 type PostDetailsProps = {
 	postData: Post;
@@ -27,10 +29,22 @@ type PostDetailsProps = {
 
 const PostDetails = ({ postData, openModal }: PostDetailsProps) => {
 	const [t] = useTranslation('common');
-	const dispatch = useDispatch();
+	const dispatch = useTypedDispatch();
 	const currentUser = useTypedSelector(state => state.userState.currentUser);
 	const currentPost = useTypedSelector(state => state.postsState.currentPost);
+	const isCurrUserAuthor = useMemo(
+		() => currentPost?.author?.id === currentUser?.id,
+		[currentPost, currentUser]
+	);
 	const [text, setText] = useState('');
+	const [description, setDescription] = useState('');
+	const [descriptionChanged, setDescriptionChanged] = useState(false);
+
+	const onDescriptionEdit = () => {
+		dispatch(editPostDescription(postData.id, description)).then(() =>
+			setDescriptionChanged(false)
+		);
+	};
 	const onCommentSend = () => {
 		if (text.trim() && currentPost) {
 			dispatch(addComment(currentPost.id, text));
@@ -49,6 +63,17 @@ const PostDetails = ({ postData, openModal }: PostDetailsProps) => {
 			action();
 		} else dispatch(setPostActionError('Login to perform this action'));
 	};
+
+	useEffect(() => {
+		if (currentPost) setDescription(currentPost.description);
+	}, [currentPost]);
+
+	useEffect(() => {
+		if (!currentPost) return;
+		description === currentPost.description
+			? setDescriptionChanged(false)
+			: setDescriptionChanged(true);
+	}, [description, currentPost]);
 
 	useEffect(() => {
 		dispatch(fetchPostById(postData.id));
@@ -87,16 +112,31 @@ const PostDetails = ({ postData, openModal }: PostDetailsProps) => {
 						return <Comment key={index} data={comment} showAuthor />;
 					})}
 				</div>
-				<div
-					className='post-details-likes'
-					onClick={() => requireAuthForAction(onLikeClick)}>
+				<div className='post-details-likes'>
 					<img
 						src={`../../assets/like-${
 							currentPost.is_liked ? 'red' : 'grey'
 						}.svg`}
+						onClick={() => requireAuthForAction(onLikeClick)}
 						alt='is-liked'
 					/>
 					<p className='post-details-total-likes'>{currentPost.likes_count}</p>
+					<textarea
+						className='post-details-description'
+						value={description}
+						disabled={!isCurrUserAuthor}
+						onChange={e => setDescription(e.target.value)}
+					/>
+					<button
+						className='post-details-action-button'
+						style={{
+							visibility:
+								descriptionChanged && isCurrUserAuthor ? 'visible' : 'hidden',
+						}}
+						disabled={!isCurrUserAuthor}
+						onClick={onDescriptionEdit}>
+						{t('common.save')}
+					</button>
 				</div>
 				<div className='post-details-actions'>
 					<textarea

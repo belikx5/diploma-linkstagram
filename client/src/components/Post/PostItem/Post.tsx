@@ -1,5 +1,5 @@
 import './post.scss';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { formateDate } from '../../../services/moment';
 import {
@@ -8,6 +8,7 @@ import {
 	fetchComments,
 	deletePost,
 	openPostDetailsModal,
+	editPostDescription,
 } from '../../../store/actions/postActions';
 import { useTranslation } from 'react-i18next';
 import { useHistory, useLocation } from 'react-router';
@@ -19,15 +20,21 @@ import PostDetails from '../PostDetails/PostDetails';
 import DropdownMenu from '../PostDropdown/DropdownMenu';
 import Modal from '../../ui/Modal/Modal';
 import Slider from '../../Slider';
+import { useTypedDispatch } from '../../../hooks/useTypedDispatch';
 
 type PostProps = {
 	postData: PostType;
 	showPostActions?: boolean;
+	descriptionEditable?: boolean;
 };
 
-const Post = ({ postData, showPostActions = true }: PostProps) => {
+const Post = ({
+	postData,
+	showPostActions = true,
+	descriptionEditable = false,
+}: PostProps) => {
 	const [t] = useTranslation('common');
-	const dispatch = useDispatch();
+	const dispatch = useTypedDispatch();
 	const history = useHistory();
 	const { pathname } = useLocation();
 	const [copiedShown, setCopiedShown] = useState(false);
@@ -35,6 +42,19 @@ const Post = ({ postData, showPostActions = true }: PostProps) => {
 	const detailsModalOpened = useTypedSelector(
 		state => state.postsState.detailsModalOpened
 	);
+	const isCurrUserAuthor = useMemo(
+		() => postData.author.id === currentUser?.id,
+		[postData, currentUser]
+	);
+	const [description, setDescription] = useState(postData.description);
+	const [descriptionChanged, setDescriptionChanged] = useState(false);
+
+	const onDescriptionEdit = () => {
+		dispatch(editPostDescription(postData.id, description)).then(() =>
+			setDescriptionChanged(false)
+		);
+	};
+
 	const handleLikeClick = () => {
 		postData.is_liked
 			? dispatch(removeLike(postData))
@@ -60,6 +80,13 @@ const Post = ({ postData, showPostActions = true }: PostProps) => {
 		openModal: isModalOpened,
 		postData,
 	};
+
+	useEffect(() => {
+		description === postData.description
+			? setDescriptionChanged(false)
+			: setDescriptionChanged(true);
+	}, [description, postData]);
+
 	useEffect(() => {
 		dispatch(fetchComments(postData.id));
 	}, []);
@@ -118,7 +145,28 @@ const Post = ({ postData, showPostActions = true }: PostProps) => {
 						</div>
 					)}
 				</div>
-				<p className='post-description'>{postData.description}</p>
+				{descriptionEditable ? (
+					<div className='post-description-editable'>
+						<textarea
+							className='post-description-editable-txtarea'
+							value={description}
+							disabled={!isCurrUserAuthor}
+							onChange={e => setDescription(e.target.value)}
+						/>
+						<button
+							className='post-action-button'
+							disabled={!isCurrUserAuthor}
+							onClick={onDescriptionEdit}
+							style={{
+								visibility:
+									descriptionChanged && isCurrUserAuthor ? 'visible' : 'hidden',
+							}}>
+							{t('common.save')}
+						</button>
+					</div>
+				) : (
+					<p className='post-description'>{postData.description}</p>
+				)}
 				{showPostActions && (
 					<div className='post-actions'>
 						<div>
