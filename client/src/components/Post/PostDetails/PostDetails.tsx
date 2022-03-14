@@ -21,6 +21,7 @@ import Comment from '../PostComment/Comment';
 import Slider from '../../Slider';
 import { CircularProgress } from '@material-ui/core';
 import { useTypedDispatch } from '../../../hooks/useTypedDispatch';
+import history from '../../../services/history';
 
 type PostDetailsProps = {
 	postData: Post;
@@ -70,7 +71,10 @@ const PostDetails = ({ postData, openModal }: PostDetailsProps) => {
 				? dispatch(removeLike(currentPost))
 				: dispatch(setLike(currentPost.id));
 	};
-
+	const navigateToUserProfile = () => {
+		if (!currentPost) return;
+		history.push(`/profile/${currentPost.author.id}`);
+	};
 	const requireAuthForAction = (action: Function) => {
 		if (currentUser?.username) {
 			action();
@@ -109,7 +113,7 @@ const PostDetails = ({ postData, openModal }: PostDetailsProps) => {
 			/>
 			<div className='post-details-data'>
 				<div className='post-details-header'>
-					<div>
+					<div onClick={navigateToUserProfile}>
 						<UserIcon
 							icon={currentPost.author.profile_photo}
 							size={UserIconSize.Small}

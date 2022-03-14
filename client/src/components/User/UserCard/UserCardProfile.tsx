@@ -71,7 +71,7 @@ const UserCard = ({ isProfilePage, isCurrentUser }: UserCardProps) => {
 							usersCount={user?.following_count}
 						/>
 					</div>
-					{isCurrentUser ? (
+					{isCurrentUser || currentUser?.id === user?.id ? (
 						<div className='user-card-right-actions'>
 							<button
 								onClick={onEditClick}

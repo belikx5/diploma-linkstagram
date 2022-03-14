@@ -4,6 +4,7 @@ import UserIcon from '../../User/UserIcon/UserIcon';
 import { UserIconSize } from '../../../ts/enums';
 import { formateDate } from '../../../services/moment';
 import { Comment as CommentType } from '../../../store/actionTypes/postActionTypes';
+import history from '../../../services/history';
 
 type CommentProps = {
 	data: CommentType;
@@ -11,6 +12,9 @@ type CommentProps = {
 };
 
 const Comment = ({ data, showAuthor = false }: CommentProps) => {
+	const navigateToUserProfile = () => {
+		history.push(`/profile/${data.user.id}`);
+	};
 	return (
 		<div className='comment'>
 			<div>
@@ -19,7 +23,11 @@ const Comment = ({ data, showAuthor = false }: CommentProps) => {
 					<p className='comment-data-text'>{data.message}</p>
 					<div className='comment-data-meta'>
 						{showAuthor && (
-							<p className='comment-data-author'>{data.user.username}</p>
+							<p
+								className='comment-data-author'
+								onClick={navigateToUserProfile}>
+								{data.user.username}
+							</p>
 						)}
 						<p>
 							{data.created_at ? formateDate(Date.parse(data.created_at)) : 1}

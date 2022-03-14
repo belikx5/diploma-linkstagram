@@ -78,6 +78,9 @@ const Post = ({
 	const navigateToPostView = () => {
 		history.push(`/postDetails/${postData.id}`);
 	};
+	const navigateToUserProfile = () => {
+		history.push(`/profile/${postData.author.id}`);
+	};
 	const validateLocationForAction = (action: () => void) => {
 		!pathname.includes('/postDetails') && action();
 	};
@@ -112,7 +115,7 @@ const Post = ({
 			)}
 			<div className='post'>
 				<div className='post-header'>
-					<div>
+					<div onClick={navigateToUserProfile}>
 						{postData.author.username === currentUser?.username ? (
 							<UserIcon
 								icon={currentUser?.profile_photo}
