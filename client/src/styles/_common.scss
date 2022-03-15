@@ -162,3 +162,9 @@
 		cursor: pointer;
 	}
 }
+
+@mixin ellipsis-on-overflow {
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}

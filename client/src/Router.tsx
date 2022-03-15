@@ -11,6 +11,7 @@ import Signup from './components/Auth/Signup';
 import RequireAuth from './components/RequireAuth';
 import PostDetailsPage from './components/Post/PostDetailsPage/PostDetailsPage';
 import { SearchPage } from './components/SearchPage';
+import Chats from './components/ChatsPage';
 
 function RouterComponent() {
 	return (
@@ -47,6 +48,11 @@ function RouterComponent() {
 				<Route path='/create-post'>
 					<RequireAuth>
 						<CreatePostForm />
+					</RequireAuth>
+				</Route>
+				<Route path='/chats'>
+					<RequireAuth>
+						<Chats />
 					</RequireAuth>
 				</Route>
 				<Route path='/signin'>

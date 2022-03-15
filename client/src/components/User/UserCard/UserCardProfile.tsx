@@ -32,7 +32,7 @@ const UserCard = ({ isProfilePage, isCurrentUser }: UserCardProps) => {
 		history.push('/create-post');
 	};
 	const onSendMessageClick = () => {
-		history.push('/messages');
+		history.push('/chats');
 	};
 	const onFollowClick = (uid: number) => dispatch(follow(uid));
 

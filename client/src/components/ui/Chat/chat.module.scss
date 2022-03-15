@@ -1,0 +1,36 @@
+@use '../../../styles/variables' as vars;
+@use '../../../styles/common' as common;
+
+.chatList {
+	margin: 20px auto;
+	max-width: 350px;
+	overflow-y: auto;
+}
+
+.chatItem {
+	display: flex;
+	padding: 5px 2px;
+	margin-bottom: 10px;
+	border-top: 0.5px solid vars.$color-light-grey;
+	border-bottom: 0.5px solid vars.$color-light-grey;
+	cursor: pointer;
+	.data {
+		width: 100%;
+		@include common.noselect;
+	}
+	img {
+		margin-right: 10px;
+	}
+	.username {
+		font-weight: 500;
+		margin-top: 2px;
+		margin-bottom: 8px;
+	}
+	.lastMessage {
+		@include common.ellipsis-on-overflow;
+		width: 100%;
+		margin-top: 0;
+		margin-bottom: 0;
+		font-size: vars.$secondary-font-size;
+	}
+}
