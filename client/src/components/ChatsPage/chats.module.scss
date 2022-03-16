@@ -1,3 +1,101 @@
-.container {
+@use '../../styles/variables' as vars;
+@use '../../styles/common' as common;
+
+.chatsContainer {
+	display: flex;
+	justify-content: flex-start;
+	width: fit-content;
+	margin: 0 auto;
+	height: calc(100vh - #{vars.$navbar-height});
+	aside.chatsList {
+		@include common.custom-scrollbar;
+		overflow-y: auto;
+		width: 350px;
+	}
+}
+
+$header-height: 64px;
+$transparent-bg: rgba(255, 255, 255, 0.4);
+.chat {
+	position: relative;
+	height: 100%;
+	width: 700px;
 	// margin: 0 auto;
+	// border: 0.5px solid #c9cad1;
+	background-image: url('./chat-bg.jpg');
+	background-size: cover;
+	background-repeat: no-repeat;
+	header {
+		display: flex;
+		align-items: center;
+		height: $header-height;
+		padding-left: 64px;
+		-webkit-box-shadow: 0px 7px 10px -10px rgba(0, 0, 0, 0.9);
+		box-shadow: 0px 7px 10px -10px rgba(0, 0, 0, 0.9);
+		background-color: $transparent-bg;
+		img {
+			display: none;
+		}
+		h4.username,
+		img {
+			cursor: pointer;
+		}
+		h4.username {
+			font-weight: 500;
+			font-style: italic;
+			font-size: 18px;
+		}
+		h4.noUser {
+			font-size: 20px;
+		}
+	}
+	.messagesContainer {
+		display: flex;
+		flex-direction: column;
+		height: calc(100% - (2 * #{$header-height}));
+	}
+	.messageInput {
+		height: $header-height;
+		background-color: $transparent-bg;
+		-webkit-box-shadow: 0px -5px 10px -10px rgba(0, 0, 0, 0.9);
+		box-shadow: 0px -5px 10px -10px rgba(0, 0, 0, 0.9);
+	}
+}
+
+@media (max-width: 1000px) {
+	.chatsContainer aside.chatsList {
+		width: 270px;
+	}
+	.chat {
+		width: calc(100vw - 270px);
+	}
+}
+
+@media (max-width: 720px) {
+	.chatsContainer aside.chatsList {
+		display: none;
+	}
+	.chat {
+		width: 100vw;
+		header img {
+			margin-right: 10px;
+			display: inline;
+		}
+	}
+}
+
+@media (max-width: 600px) {
+	.chatsContainer {
+		margin-top: vars.$navbar-height-mobile;
+		height: calc(100vh - #{vars.$navbar-height-mobile});
+		aside.chatsList {
+			display: none;
+		}
+	}
+	.chat {
+		height: calc(100vh - #{vars.$navbar-height-mobile});
+		header {
+			padding-left: 16px;
+		}
+	}
 }

@@ -2,8 +2,8 @@
 @use '../../../styles/common' as common;
 
 .chatList {
-	margin: 20px auto;
 	max-width: 350px;
+	min-width: 250px;
 	overflow-y: auto;
 }
 

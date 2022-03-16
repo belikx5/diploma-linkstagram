@@ -11,7 +11,7 @@ import Signup from './components/Auth/Signup';
 import RequireAuth from './components/RequireAuth';
 import PostDetailsPage from './components/Post/PostDetailsPage/PostDetailsPage';
 import { SearchPage } from './components/SearchPage';
-import Chats from './components/ChatsPage';
+import { Chats } from './components/ChatsPage';
 
 function RouterComponent() {
 	return (
