@@ -2,9 +2,11 @@ from rest_framework import serializers
 
 from chat.models import Message, Chat
 from user_profile.serializers import UserBriefSerializer
+from django.db.models import Q
 
 
 class MessageCreateUpdateSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Message
         fields = '__all__'
@@ -26,10 +28,26 @@ class ChatCreateSerializer(serializers.ModelSerializer):
         fields = ['participants']
 
 
-class ChatSerializer(serializers.ModelSerializer):
+class ChatBriefSerializer(serializers.ModelSerializer):
+    """list chat serializer"""
     participants = UserBriefSerializer(many=True)
 
     class Meta:
         model = Chat
         fields = '__all__'
         read_only_fields = ('id',)
+
+    def to_representation(self, instance):
+        obj = super().to_representation(instance)
+        curr_user = self.context['request'].user
+        if hasattr(curr_user, 'userprofile'):
+            user_id = curr_user.userprofile.id
+            obj['companion'] = [user for user in obj['participants'] if user['id'] != user_id][0]
+        else:
+            obj['companion'] = obj['participants'][0]
+        return obj
+
+
+class ChatSerializer(ChatBriefSerializer):
+    """chat details serializer"""
+    messages = MessageSerializer(many=True)

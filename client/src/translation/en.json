@@ -3,7 +3,8 @@
 		"logout": "Logout",
 		"cancel": "Cancel",
 		"post": "Post",
-		"save": "Save"
+		"save": "Save",
+		"send": "Send"
 	},
 	"userCard": {
 		"followers": "Followers",

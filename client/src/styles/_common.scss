@@ -168,3 +168,13 @@
 	white-space: nowrap;
 	text-overflow: ellipsis;
 }
+
+@mixin button-like-text {
+	@include disable-default-styles;
+	@include hover-effect;
+	min-width: 35px;
+	width: fit-content;
+	padding: 0;
+	color: variables.$blue-color;
+	font-weight: variables.$main-font-weight;
+}

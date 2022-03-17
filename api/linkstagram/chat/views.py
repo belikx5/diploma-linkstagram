@@ -1,11 +1,13 @@
 from rest_framework import viewsets, permissions
 
 from chat.models import Chat, Message
-from chat.serializers import ChatSerializer, ChatCreateSerializer, MessageSerializer, MessageCreateUpdateSerializer
+from chat.serializers import ChatSerializer, ChatCreateSerializer, MessageSerializer, MessageCreateUpdateSerializer, \
+    ChatBriefSerializer
 
 
 class ChatViewSet(viewsets.ModelViewSet):
     queryset = Chat.objects.all()
+    list_serializer_class = ChatBriefSerializer
     serializer_class = ChatSerializer
     create_serializer_class = ChatCreateSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]  # TODO: change to IsAuthenticated only
@@ -15,6 +17,8 @@ class ChatViewSet(viewsets.ModelViewSet):
         if self.action == 'create' and hasattr(self, 'create_serializer_class'):
             return self.create_serializer_class
         elif self.action == 'list':
+            return self.list_serializer_class
+        elif self. action == 'retrieve':
             return self.serializer_class
         return super().get_serializer_class()
 
