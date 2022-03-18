@@ -59,5 +59,9 @@
 		"foundProfiles": "Found profiles:",
 		"noPosts": "Couldn't find any post",
 		"foundPosts": "Found posts:"
+	},
+	"chat": {
+		"noChats": "You don't have any chats.",
+		"findPeople": "Find people and chat with them!"
 	}
 }

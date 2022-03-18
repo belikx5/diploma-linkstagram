@@ -1,24 +1,37 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styles from './chat.module.scss';
-import { useTypedSelector } from '../../../hooks/useTypedSelector';
 import ChatItem from './ChatItem';
+import { ChatBrief } from '../../../store/actionTypes/chatActionsTypes';
+import { useTranslation } from 'react-i18next';
+import { Profile } from '../../../store/actionTypes/userActionTypes';
 
-const chats = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+type Props = {
+	chats: ChatBrief[];
+	selectedChat: ChatBrief | null;
+	user: Profile | null;
+	onChatSelect: (chat: ChatBrief) => void;
+};
 
-const ChatList = () => {
-	const user = useTypedSelector(state => state.userState.currentUser);
-	const [selectedChat, setSelectedChat] = useState(1);
+const ChatList = ({ chats, selectedChat, user, onChatSelect }: Props) => {
+	const [t] = useTranslation('common');
+
 	if (!user) return null;
 	return (
 		<div className={styles.chatList}>
-			{chats.map(el => (
+			{chats.map(chat => (
 				<ChatItem
-					key={el}
-					isSelected={selectedChat === el}
-					onItemClick={() => setSelectedChat(el)}
-					user={user}
+					key={chat.id}
+					isSelected={selectedChat?.id === chat.id}
+					onItemClick={() => onChatSelect(chat)}
+					user={chat.companion}
 				/>
 			))}
+			{!chats.length && (
+				<h3 className={styles.chatListEmpty}>
+					{t('chat.noChats')}
+					<br /> {t('chat.findPeople')}
+				</h3>
+			)}
 		</div>
 	);
 };

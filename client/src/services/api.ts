@@ -12,6 +12,8 @@ const api = {
 	COMMENTS: `${SERVER_URL}/api/comments/`,
 	LIKES: `${SERVER_URL}/api/likes/`,
 	LIKES_DELETE: `${SERVER_URL}/api/likes-delete/`,
+	CHATS: `${SERVER_URL}/api/chats/`,
+	MESSAGES: `${SERVER_URL}/api/messages/`,
 };
 
 export default api;
