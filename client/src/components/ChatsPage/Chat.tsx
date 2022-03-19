@@ -1,10 +1,14 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useTypedDispatch } from '../../hooks/useTypedDispatch';
 import { useTypedSelector } from '../../hooks/useTypedSelector';
+import history from '../../services/history';
 import {
 	fetchChatMessages,
 	resetChatMessages,
 	selectChat,
+	sendMessage,
+	startFetchMsgJob,
+	stopFetchMsgJob,
 } from '../../store/actions/chatActions';
 import { ChatBrief } from '../../store/actionTypes/chatActionsTypes';
 import Message from '../ui/Chat/Message';
@@ -17,20 +21,47 @@ type Props = {
 
 const Chat = ({ selectedChat }: Props) => {
 	const dispatch = useTypedDispatch();
+	const endMsgRef = useRef<HTMLDivElement | null>(null);
 	const messages = useTypedSelector(state => state.chatState.messages);
+	const fetchMessageJob = useTypedSelector(
+		state => state.chatState.fetchMessageJob
+	);
 	const currentUser = useTypedSelector(state => state.userState.currentUser);
-	const handleSendMsg = (msg: string) => {
-		console.log(msg);
-	};
+
+	const handleNavigateToUserprofile = useCallback(() => {
+		history.push('/profile/' + selectedChat?.companion.id);
+	}, [selectedChat]);
+
+	const handleSendMsg = useCallback(
+		(msg: string) => {
+			if (!selectedChat) return;
+			dispatch(sendMessage(selectedChat.id, msg));
+		},
+		[dispatch, selectedChat]
+	);
 
 	useEffect(() => {
-		if (selectedChat) dispatch(fetchChatMessages(selectedChat.id));
-	}, [selectedChat]);
+		if (selectedChat && !fetchMessageJob) {
+			const interval = setInterval(() => {
+				dispatch(fetchChatMessages(selectedChat.id));
+			}, 1500);
+			dispatch(startFetchMsgJob(interval));
+		}
+	}, [selectedChat, fetchMessageJob]);
+
+	useEffect(() => {
+		if (endMsgRef && endMsgRef.current)
+			endMsgRef.current.scrollIntoView({
+				block: 'nearest',
+				behavior: 'smooth',
+			});
+	}, [messages.length, endMsgRef]);
 
 	useEffect(() => {
 		return () => {
 			dispatch(selectChat(null));
 			dispatch(resetChatMessages());
+			dispatch(stopFetchMsgJob());
 		};
 	}, []);
 
@@ -43,7 +74,7 @@ const Chat = ({ selectedChat }: Props) => {
 				{!selectedChat.companion ? (
 					<h4 className={styles.noUser}>Choose follower to start chatting</h4>
 				) : (
-					<h4 className={styles.username}>
+					<h4 onClick={handleNavigateToUserprofile} className={styles.username}>
 						{selectedChat.companion.username}{' '}
 						{(selectedChat.companion.first_name ||
 							selectedChat.companion.last_name) && (
@@ -63,6 +94,7 @@ const Chat = ({ selectedChat }: Props) => {
 						text={msg.content}
 					/>
 				))}
+				<div ref={endMsgRef} />
 			</div>
 			<div className={styles.messageInput}>
 				<MessageInput onMessageSend={handleSendMsg} />

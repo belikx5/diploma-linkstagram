@@ -5,10 +5,17 @@ import Chat from './Chat';
 import { useTypedSelector } from '../../hooks/useTypedSelector';
 import { useTypedDispatch } from '../../hooks/useTypedDispatch';
 import { ChatBrief } from '../../store/actionTypes/chatActionsTypes';
-import { fetchChats, selectChat } from '../../store/actions/chatActions';
+import {
+	fetchChats,
+	resetChatMessages,
+	selectChat,
+	stopFetchMsgJob,
+} from '../../store/actions/chatActions';
+import { useLocation } from 'react-router-dom';
 
 const Chats = () => {
 	const dispatch = useTypedDispatch();
+	const { search } = useLocation();
 	const user = useTypedSelector(state => state.userState.currentUser);
 	const chats = useTypedSelector(state => state.chatState.chats);
 	const selectedChat = useTypedSelector(state => state.chatState.selectedChat);
@@ -16,11 +23,16 @@ const Chats = () => {
 	const handleChatSelect = useCallback(
 		(chat: ChatBrief) => {
 			dispatch(selectChat(chat));
+			dispatch(resetChatMessages());
+			dispatch(stopFetchMsgJob());
 		},
 		[dispatch]
 	);
 	useEffect(() => {
-		dispatch(fetchChats());
+		const searchedUid = new URLSearchParams(search);
+		const uid = searchedUid.get('u') ?? '';
+		const parsedUID = !isNaN(+uid) ? +uid : undefined;
+		dispatch(fetchChats(parsedUID));
 	}, []);
 	return (
 		<div className={styles.chatsContainer}>

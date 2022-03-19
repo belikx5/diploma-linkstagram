@@ -10,6 +10,9 @@ import {
 	FETCH_CHAT_MESSAGES_LOADING,
 	SELECT_CHAT,
 	RESET_CHAT_MESSAGES,
+	SEND_MESSAGE,
+	START_FETCH_MSG_JOB,
+	STOP_FETCH_MSG_JOB,
 } from '../actionTypes/chatActionsTypes';
 
 interface IDefaultState {
@@ -19,6 +22,7 @@ interface IDefaultState {
 	currentChat: Chat | null;
 	chatsLoading: boolean;
 	chatMessagesLoading: boolean;
+	fetchMessageJob: NodeJS.Timeout | null;
 }
 
 const initialState: IDefaultState = {
@@ -28,6 +32,7 @@ const initialState: IDefaultState = {
 	currentChat: null,
 	chatsLoading: false,
 	chatMessagesLoading: false,
+	fetchMessageJob: null,
 };
 
 const reducer = (
@@ -49,6 +54,15 @@ const reducer = (
 			return { ...state, messages: action.payload };
 		case FETCH_CHAT_MESSAGES_LOADING:
 			return { ...state, chatMessagesLoading: action.payload };
+		case SEND_MESSAGE:
+			return {
+				...state,
+				messages: [...state.messages, action.payload.message],
+			};
+		case START_FETCH_MSG_JOB:
+			return { ...state, fetchMessageJob: action.payload };
+		case STOP_FETCH_MSG_JOB:
+			return { ...state, fetchMessageJob: action.payload };
 		default:
 			return state;
 	}

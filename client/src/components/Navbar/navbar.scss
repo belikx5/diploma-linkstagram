@@ -28,6 +28,9 @@
 			font-style: italic;
 			@include common.hover-effect;
 		}
+		.header-title-chats {
+			margin-right: 10px;
+		}
 		.header-title-user-profile-pic {
 			@include common.hover-effect;
 		}

@@ -55,10 +55,17 @@ const Navbar = () => {
 					{t('common.logout')}
 				</button>
 			);
-		if (pathname === '/' || pathname === '/search')
+		if (
+			pathname === '/' ||
+			pathname === '/search' ||
+			pathname.includes('/chat')
+		)
 			return (
 				<>
 					<Search />
+					<Link to='/chats' className='header-title-chats'>
+						<img src='/assets/chats.svg' alt='chats' />
+					</Link>
 					<LanguagesMenu i18n={i18n} />
 					<Link to='/profile' className='header-title-user-profile-pic'>
 						<UserIcon

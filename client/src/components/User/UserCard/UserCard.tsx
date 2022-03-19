@@ -50,7 +50,7 @@ const UserCard = ({ isProfilePage, isCurrentUser }: UserCardProps) => {
 		}
 	};
 	const onSendMessageClick = () => {
-		history.push('/chats');
+		history.push('/chats?u=' + anotherUserProfile?.id);
 	};
 	const onFollowClick = (uid: number) => dispatch(follow(uid));
 

@@ -9,6 +9,10 @@ export const FETCH_CHAT_MESSAGES_LOADING = 'FETCH_CHAT_MESSAGES_LOADING';
 export const FETCH_CHATS = 'FETCH_CHATS';
 export const FETCH_CHATS_LOADING = 'FETCH_CHATS_LOADING';
 
+export const SEND_MESSAGE = 'SEND_MESSAGE';
+export const START_FETCH_MSG_JOB = 'START_FETCH_MSG_JOB';
+export const STOP_FETCH_MSG_JOB = 'STOP_FETCH_MSG_JOB';
+
 export const CHAT_ACTION_ERROR = 'CHAT_ACTION_ERROR';
 export const CLEAR_CHAT_ACTION_ERROR = 'CLEAR_CHAT_ACTION_ERROR';
 
@@ -68,6 +72,24 @@ export interface ChatActionError {
 	};
 }
 
+export interface SendMessage {
+	type: typeof SEND_MESSAGE;
+	payload: {
+		chatId: number;
+		message: Message;
+	};
+}
+
+export interface StartFetchMsgJob {
+	type: typeof START_FETCH_MSG_JOB;
+	payload: NodeJS.Timeout;
+}
+
+export interface StopFetchMsgJob {
+	type: typeof STOP_FETCH_MSG_JOB;
+	payload: null;
+}
+
 export interface ClearChatActionError {
 	type: typeof CLEAR_CHAT_ACTION_ERROR;
 }
@@ -80,5 +102,8 @@ export type ChatDispatchTypes =
 	| ResetChatMessages
 	| FetchChatMessagesLoading
 	| FetchChatsLoading
+	| SendMessage
+	| StartFetchMsgJob
+	| StopFetchMsgJob
 	| ChatActionError
 	| ClearChatActionError;
