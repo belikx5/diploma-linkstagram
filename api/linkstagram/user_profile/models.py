@@ -32,6 +32,10 @@ class UserProfile(models.Model):
         self.following_count -= 1
         self.save()
 
+    def mark_as_dead_profile(self, value: bool):
+        self.is_dead_profile = value
+        self.save()
+
     def __str__(self):
         return self.user.username
 

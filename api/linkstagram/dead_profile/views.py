@@ -21,3 +21,13 @@ class DeadProfileViewSet(viewsets.ModelViewSet):
         elif self.action == 'list':
             return self.serializer_class
         return super().get_serializer_class()
+
+    def perform_create(self, serializer):
+        user = serializer.validated_data.get('user')
+        trusted_users = serializer.validated_data.get('trusted_users')
+        serializer.save(user=user, trusted_users=trusted_users)
+        user.mark_as_dead_profile(True)
+
+    def perform_destroy(self, instance):
+        instance.user.mark_as_dead_profile(False)
+        instance.delete()
