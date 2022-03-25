@@ -7,10 +7,12 @@ import {
 	fetchCurrentUser,
 	editUser,
 	logout,
+	fetchUserFollowing,
 } from '../../../store/actions/userActions';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router';
 import { useTypedDispatch } from '../../../hooks/useTypedDispatch';
+import DeadProfileForm from './DeadProfileForm';
 
 type EditFormProps = {
 	openModal?: Function;
@@ -21,11 +23,14 @@ const EditForm = ({ openModal }: EditFormProps) => {
 	const dispatch = useTypedDispatch();
 	const { pathname } = useLocation();
 	const currentUser = useTypedSelector(state => state.userState.currentUser);
+	const followings = useTypedSelector(state => state.userState.following);
 	const [name, setName] = useState('');
 	const [file, setFile] = useState<any>(null);
 	const [previewFile, setPreviewFile] = useState('');
 	const [surname, setSurname] = useState('');
 	const [description, setDescription] = useState('');
+	const [isDead, setIsDead] = useState(false);
+	const [trustedUsers, setTrustedUsers] = useState<number[]>([]);
 	const [fileLoading, setFileLoading] = useState(false);
 	const onSaveClicked = async () => {
 		setFileLoading(true);
@@ -82,8 +87,14 @@ const EditForm = ({ openModal }: EditFormProps) => {
 			setDescription(currentUser.bio || '');
 			setName(currentUser.first_name || '');
 			setSurname(currentUser.last_name || '');
+			setIsDead(currentUser.is_dead_profile);
+			// setTrustedUsers(currentUser.trusted_users);
 		}
 	}, [currentUser]);
+
+	useEffect(() => {
+		currentUser && dispatch(fetchUserFollowing(currentUser.id, true));
+	}, []);
 
 	if (!currentUser) {
 		return <Loading />;
@@ -169,6 +180,12 @@ const EditForm = ({ openModal }: EditFormProps) => {
 					onChange={e => setDescription(e.target.value)}
 				/>
 			</div>
+			<DeadProfileForm
+				isChecked={false}
+				users={followings}
+				onCheckToggle={setIsDead}
+				onUsersSelect={setTrustedUsers}
+			/>
 			<div className='edit-form-action-item'>
 				<button
 					disabled={isDisabled()}
