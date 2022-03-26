@@ -45,6 +45,7 @@
 		}
 		.edit-form-text-input {
 			@include common.input-text;
+			width: 100%;
 		}
 		.edit-form-textarea {
 			@include common.input-textarea;
@@ -140,6 +141,7 @@
 		justify-content: space-between;
 		label {
 			@include common.noselect;
+			margin-left: 5px;
 		}
 		.is-dead-checkbox {
 			flex-direction: row-reverse;
