@@ -1,3 +1,4 @@
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets, permissions
 
 from dead_profile.models import DeadProfile
@@ -9,6 +10,8 @@ class DeadProfileViewSet(viewsets.ModelViewSet):
     serializer_class = DeadProfileSerializer
     create_serializer_class = DeadProfileCreateSerializer
     update_serializer_class = DeadProfileUpdateSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['user__id']
     # permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def get_serializer_class(self):

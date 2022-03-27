@@ -20,7 +20,11 @@ class DeadProfileSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         obj = super().to_representation(instance)
         dead_user_id = obj['user']['id']
-        posts = PostSerializer(Post.objects.filter(author__id=dead_user_id).exclude(memory_created_by_user=None), many=True).data
+        posts = PostSerializer(
+            Post.objects.filter(author__id=dead_user_id).exclude(memory_created_by_user=None),
+            many=True,
+            context={'request': self.context['request']}
+        ).data
         obj['posts'] = posts
         return obj
 
