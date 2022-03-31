@@ -73,9 +73,9 @@ const EditForm = ({ openModal }: EditFormProps) => {
       dispatch(editUser(formData))
         .then(() => {
           if (openModal) {
-            // openModal(false);
+            openModal(false);
           } else {
-            // history.push("/profile");
+            history.push("/profile");
           }
         })
         .finally(() => {

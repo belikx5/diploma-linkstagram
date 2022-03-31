@@ -63,5 +63,11 @@
 	"chat": {
 		"noChats": "You don't have any chats.",
 		"findPeople": "Find people and chat with them!"
+	},
+	"dead": {
+		"markAsDead": "Mark as dead",
+		"trustedUsers": "Trusted users",
+		"deceasedSectionInfo": "This page belongs to dead user. Here you can create a new Memory related to page owner, communicate with frends, relatives and other trusted users of deceased.",
+		"createMemory": "Create memory"
 	}
 }

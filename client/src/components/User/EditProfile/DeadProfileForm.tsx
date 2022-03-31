@@ -1,6 +1,7 @@
 import "./editForm.scss";
 import React, { useCallback, useEffect } from "react";
 import Select from "@material-ui/core/Select";
+import { useTranslation } from "react-i18next";
 import {
   Profile,
   ProfileBrief,
@@ -18,6 +19,7 @@ type Props = {
 
 const DeadProfileForm = ({ user, onCheckToggle, onUsersSelect }: Props) => {
   const dispatch = useTypedDispatch();
+  const [t] = useTranslation("common");
   const deadProfile = useTypedSelector(
     (state) => state.deadProfileState.deadProfile
   );
@@ -73,7 +75,7 @@ const DeadProfileForm = ({ user, onCheckToggle, onUsersSelect }: Props) => {
   return (
     <div className='dead-profile-form'>
       <div className='edit-form-item is-dead-checkbox'>
-        <label htmlFor='isDead'>Mark as dead</label>
+        <label htmlFor='isDead'>{t("dead.markAsDead")}</label>
         <input
           checked={checked}
           onChange={handleCheckboxClick}
@@ -83,7 +85,7 @@ const DeadProfileForm = ({ user, onCheckToggle, onUsersSelect }: Props) => {
       </div>
       {checked && (
         <div className='edit-form-item'>
-          <label>Trusted users</label>
+          <label>{t("dead.trustedUsers")}</label>
           <Select
             multiple
             native

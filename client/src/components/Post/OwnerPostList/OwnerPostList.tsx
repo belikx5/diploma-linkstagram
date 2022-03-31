@@ -1,5 +1,5 @@
 import "./ownerPostList.scss";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Post } from "../../../store/actionTypes/postActionTypes";
 import { useTranslation } from "react-i18next";
 import { sortPostsDesc } from "../../../services/sorting";
@@ -14,11 +14,19 @@ import { useTypedDispatch } from "../../../hooks/useTypedDispatch";
 import { fetchDeadProfile } from "../../../store/actions/deadProfileActions";
 import UserIcon from "../../User/UserIcon/UserIcon";
 import { UserIconSize } from "../../../ts/enums";
+import Tooltip from "@material-ui/core/Tooltip";
+import Fade from "@material-ui/core/Fade";
 
 type OwnerPostListProps = {
   posts: Post[];
   isCurrentUser: boolean;
 };
+
+const styles = () => ({
+  tooltip: {
+    pointerEvents: "none",
+  },
+});
 
 const OwnerPostList = ({ posts, isCurrentUser }: OwnerPostListProps) => {
   const dispatch = useTypedDispatch();
@@ -29,6 +37,15 @@ const OwnerPostList = ({ posts, isCurrentUser }: OwnerPostListProps) => {
   );
   const deadProfile = useTypedSelector(
     (state) => state.deadProfileState.deadProfile
+  );
+
+  const trustedUsers = useMemo(
+    () => (deadProfile ? deadProfile.trusted_users : []),
+    [deadProfile]
+  );
+  const isTrustedUsersNotEmpty = useMemo(
+    () => !!trustedUsers.length,
+    [trustedUsers]
   );
 
   useEffect(() => {
@@ -56,19 +73,33 @@ const OwnerPostList = ({ posts, isCurrentUser }: OwnerPostListProps) => {
 
   return (
     <div>
-      <div>
-        <h3>
-          This page belongs to dead user. Here you can create a new Memory
-          related to page owner, communicate with frends, relatives and other
-          trusted users of deceased.
-        </h3>
-        <div>
-          {deadProfile?.trusted_users.map((tu) => (
-            <UserIcon icon={tu.profile_photo} size={UserIconSize.Medium} />
-          ))}
+      <section className='deceased-section'>
+        <div className='info-action-block'>
+          <h3 className='info'>{t("dead.deceasedSectionInfo")}</h3>
+          <button>{t("dead.createMemory")}</button>
         </div>
-        <button>Create Memory</button>
-      </div>
+        {isTrustedUsersNotEmpty && (
+          <>
+            <h3 className='trusted-users-title'>{t("dead.trustedUsers")}</h3>
+            <div className='trusted-users'>
+              {deadProfile?.trusted_users.map((tu) => (
+                <Tooltip
+                  key={tu.id}
+                  title={tu.username}
+                  arrow
+                  TransitionComponent={Fade}>
+                  <div className='user-item'>
+                    <UserIcon
+                      icon={tu.profile_photo}
+                      size={UserIconSize.Medium}
+                    />
+                  </div>
+                </Tooltip>
+              ))}
+            </div>
+          </>
+        )}
+      </section>
       <div className='owner-posts'>
         {sortPostsDesc(posts).map((post, index) => {
           return <ListItem key={index} postData={post} />;

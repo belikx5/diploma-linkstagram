@@ -30,6 +30,41 @@
 	}
 }
 
+.deceased-section {
+	.info-action-block {
+		display: flex;
+		align-items: center;
+		.info {
+			margin: 30px 5px 25px;
+			font-weight: 400;
+			font-size: 1em;
+		}
+		button {
+			@include common.button;
+			min-width: 120px;
+			width: 142px;
+			height: fit-content;
+			box-sizing: border-box;
+		}
+	}
+	.trusted-users-title {
+		margin: 0 0 5px ;
+	}
+	.trusted-users {
+		display: flex;
+		flex-wrap: nowrap;
+		overflow-x: auto;
+		@include common.custom-scrollbar;
+		.user-item {
+			cursor: pointer;
+			margin-left: 10px;
+			&:first-child {
+				margin-left: 0;
+			}
+		}
+	}
+}
+
 @media only screen and (max-width: 950px) {
 	.owner-posts-item.desktop {
 		display: none;
