@@ -43,6 +43,9 @@
 					margin-right: 16px;
 				}
 			}
+			.memory-info {
+				opacity: 0.5;
+			}
 			.post-details-header-close {
 				@include common.hover-effect;
 			}

@@ -36,6 +36,7 @@ def add_is_liked_to_representation(curr_user_id, representation_obj, likes):
 
 class PostSerializer(serializers.ModelSerializer):
     author = UserBriefSerializer()
+    memory_created_by_user = UserBriefSerializer()
     images = PostImageSerializer(many=True)
     comments = PostCommentSerializer(many=True)
 
@@ -72,10 +73,18 @@ class PostCreateSerializer(serializers.ModelSerializer):
         return obj
 
     def is_valid(self, raise_exception=False):
-        user_id = self.context['request'].auth.user.id
-        profile = UserProfile.objects.get(user__id=user_id)
+        user = self.context['request'].auth.user
+        if user and not hasattr(user, 'userprofile'):
+            raise serializers.ValidationError("You don't have a Profile, try to re-login")
+        profile = user.userprofile
         data = dict(self.get_initial())
-        data['author'] = profile.id
+        if 'memory_created_by_user' in data:
+            memory_author_id = int(data['memory_created_by_user'])
+            memory_author = profile.trusted_user_access.filter(id=memory_author_id).first()
+            if not memory_author and profile.id != memory_author_id:
+                raise serializers.ValidationError("Only trusted users can create memories")
+        if 'author' not in data:
+            data['author'] = profile.id
         self.initial_data = OrderedDict(data)
         return super().is_valid(raise_exception)
 

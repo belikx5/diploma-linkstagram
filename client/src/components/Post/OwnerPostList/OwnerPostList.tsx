@@ -1,5 +1,5 @@
 import "./ownerPostList.scss";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Post } from "../../../store/actionTypes/postActionTypes";
 import { useTranslation } from "react-i18next";
 import { sortPostsDesc } from "../../../services/sorting";
@@ -16,17 +16,13 @@ import UserIcon from "../../User/UserIcon/UserIcon";
 import { UserIconSize } from "../../../ts/enums";
 import Tooltip from "@material-ui/core/Tooltip";
 import Fade from "@material-ui/core/Fade";
+import history from "../../../services/history";
+import { Profile } from "../../../store/actionTypes/userActionTypes";
 
 type OwnerPostListProps = {
   posts: Post[];
   isCurrentUser: boolean;
 };
-
-const styles = () => ({
-  tooltip: {
-    pointerEvents: "none",
-  },
-});
 
 const OwnerPostList = ({ posts, isCurrentUser }: OwnerPostListProps) => {
   const dispatch = useTypedDispatch();
@@ -34,6 +30,9 @@ const OwnerPostList = ({ posts, isCurrentUser }: OwnerPostListProps) => {
   const user = useTypedSelector(
     (state) =>
       state.userState[isCurrentUser ? "currentUser" : "anotherUserProfile"]
+  );
+  const currentAuthUser = useTypedSelector(
+    (state) => state.userState.currentUser
   );
   const deadProfile = useTypedSelector(
     (state) => state.deadProfileState.deadProfile
@@ -47,26 +46,44 @@ const OwnerPostList = ({ posts, isCurrentUser }: OwnerPostListProps) => {
     () => !!trustedUsers.length,
     [trustedUsers]
   );
+  const handleCreateMemory = useCallback(() => {
+    history.push("/create-memory");
+  }, []);
+
+  const handleNavigateToTrusted = useCallback((uid: number) => {
+    history.push("/profile/" + uid);
+  }, []);
+
+  const noPostsComponent = useCallback(
+    () =>
+      isCurrentUser ? (
+        <>
+          <h2 className='empty-info'>{t("profile.noCurrUserPosts")} </h2>
+          <h3 className='empty-info'>{t("profile.tryToAdd")}</h3>
+        </>
+      ) : (
+        <h2 className='empty-info'>{t("profile.noPosts")} </h2>
+      ),
+    [isCurrentUser]
+  );
 
   useEffect(() => {
     if (user && user.is_dead_profile) dispatch(fetchDeadProfile(user.id));
-  }, []);
+  }, [user]);
 
-  if (!posts.length) {
-    return isCurrentUser ? (
-      <>
-        <h2>{t("profile.noCurrUserPosts")} </h2>
-        <h3>{t("profile.tryToAdd")}</h3>
-      </>
-    ) : (
-      <h2>{t("profile.noPosts")} </h2>
-    );
-  }
   if (user && !user.is_dead_profile)
-    return (
+    return !posts.length ? (
+      noPostsComponent()
+    ) : (
       <div className='owner-posts'>
         {sortPostsDesc(posts).map((post, index) => {
-          return <ListItem key={index} postData={post} />;
+          return (
+            <ListItem
+              currentUser={currentAuthUser}
+              key={index}
+              postData={post}
+            />
+          );
         })}
       </div>
     );
@@ -76,7 +93,7 @@ const OwnerPostList = ({ posts, isCurrentUser }: OwnerPostListProps) => {
       <section className='deceased-section'>
         <div className='info-action-block'>
           <h3 className='info'>{t("dead.deceasedSectionInfo")}</h3>
-          <button>{t("dead.createMemory")}</button>
+          <button onClick={handleCreateMemory}>{t("dead.createMemory")}</button>
         </div>
         {isTrustedUsersNotEmpty && (
           <>
@@ -88,7 +105,9 @@ const OwnerPostList = ({ posts, isCurrentUser }: OwnerPostListProps) => {
                   title={tu.username}
                   arrow
                   TransitionComponent={Fade}>
-                  <div className='user-item'>
+                  <div
+                    className='user-item'
+                    onClick={() => handleNavigateToTrusted(tu.id)}>
                     <UserIcon
                       icon={tu.profile_photo}
                       size={UserIconSize.Medium}
@@ -100,11 +119,21 @@ const OwnerPostList = ({ posts, isCurrentUser }: OwnerPostListProps) => {
           </>
         )}
       </section>
-      <div className='owner-posts'>
-        {sortPostsDesc(posts).map((post, index) => {
-          return <ListItem key={index} postData={post} />;
-        })}
-      </div>
+      {!posts.length ? (
+        noPostsComponent()
+      ) : (
+        <div className='owner-posts'>
+          {sortPostsDesc(posts).map((post, index) => {
+            return (
+              <ListItem
+                currentUser={currentAuthUser}
+                key={index}
+                postData={post}
+              />
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 };
@@ -113,14 +142,24 @@ type PostImageProps = {
   postData: Post;
   onImageClick: () => void;
   onDeletePost: () => void;
+  currentUser: Profile | null;
 };
 
 const PostImage = ({
   postData,
   onImageClick,
   onDeletePost,
+  currentUser,
 }: PostImageProps) => {
   const [isHovered, setIsHovered] = useState(false);
+  const showDropdownMenu = useMemo(
+    () =>
+      isHovered &&
+      currentUser &&
+      (currentUser.id === postData.author.id ||
+        currentUser.id === postData.memory_created_by_user?.id),
+    [currentUser, postData, isHovered]
+  );
   return (
     <div
       className='owner-posts-image-wrapper'
@@ -132,16 +171,17 @@ const PostImage = ({
         onClick={onImageClick}
         alt='post-owner'
       />
-      {isHovered && <DropdownMenu deletePost={onDeletePost} isBright />}
+      {showDropdownMenu && <DropdownMenu deletePost={onDeletePost} isBright />}
     </div>
   );
 };
 
 type ListItemProps = {
   postData: Post;
+  currentUser: Profile | null;
 };
 
-const ListItem = ({ postData }: ListItemProps) => {
+const ListItem = ({ postData, currentUser }: ListItemProps) => {
   const [modalOpened, setModalOpened] = useState(false);
   const dispatch = useDispatch();
   const history = useHistory();
@@ -170,6 +210,7 @@ const ListItem = ({ postData }: ListItemProps) => {
       )}
       <div className='owner-posts-item mobile'>
         <PostImage
+          currentUser={currentUser}
           postData={postData}
           onImageClick={navigateToPostView}
           onDeletePost={() => dispatch(deletePost(postData.id))}
@@ -177,6 +218,7 @@ const ListItem = ({ postData }: ListItemProps) => {
       </div>
       <div className='owner-posts-item desktop'>
         <PostImage
+          currentUser={currentUser}
           postData={postData}
           onImageClick={() => setModalOpened(true)}
           onDeletePost={() => dispatch(deletePost(postData.id))}

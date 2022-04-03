@@ -22,7 +22,10 @@
 				}
 				p:last-child {
 					font-size: variables.$secondary-font-size;
-					opacity: 0.25;
+					opacity: 0.55;
+				}
+				.memory-info {
+					opacity: 0.5
 				}
 			}
 		}

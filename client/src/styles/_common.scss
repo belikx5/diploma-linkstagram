@@ -124,6 +124,8 @@
 }
 
 @mixin tag {
+	height: 25px;
+	box-sizing: border-box;
 	padding: 1px 5px;
 	margin-right: 5px;
 	margin-bottom: 2px;
