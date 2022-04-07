@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.filters import OrderingFilter, SearchFilter
 
-from post.models import Post, PostLike, PostImage, PostComment
+from post.models import Post, PostLike, PostImage, PostComment, PostVideo
 from post.serializers import PostSerializer, PostLikeSerializer, PostLikeCreateSerializer, PostCreateSerializer, \
     PostCommentSerializer, PostCommentCreateSerializer
 
@@ -39,9 +39,13 @@ class PostListViewSet(viewsets.ModelViewSet):
         instance = serializer.save()
         instance.save()
         images = serializer.context['request'].FILES.getlist('images')
+        videos = serializer.context['request'].FILES.getlist('videos')
         for image in list(images):
-            m2 = PostImage(post_id=instance.id, image=image)
-            m2.save()
+            image_instance = PostImage(post_id=instance.id, image=image)
+            image_instance.save()
+        for video in list(videos):
+            video_instance = PostVideo(post_id=instance.id, video=video)
+            video_instance.save()
 
     def perform_create(self, serializer):
         self._perform_create_update(serializer)

@@ -1,4 +1,5 @@
 from django.contrib.postgres.fields import ArrayField
+from django.core.validators import FileExtensionValidator
 from django.db import models
 
 from user_profile.models import UserProfile
@@ -30,6 +31,14 @@ class PostImage(models.Model):
     image = models.ImageField(upload_to='images/')
     post = models.ForeignKey(Post, default=None,
                              on_delete=models.CASCADE, related_name='images')
+
+
+class PostVideo(models.Model):
+    video = models.FileField(upload_to='videos/', null=True,
+                             validators=[
+                                 FileExtensionValidator(allowed_extensions=['MOV', 'avi', 'mp4', 'webm', 'mkv'])])
+    post = models.ForeignKey(Post, default=None,
+                             on_delete=models.CASCADE, related_name='videos')
 
 
 class PostLike(models.Model):

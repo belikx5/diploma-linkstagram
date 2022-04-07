@@ -3,7 +3,7 @@ from collections import OrderedDict
 
 from rest_framework import serializers
 
-from post.models import Post, PostLike, PostImage, PostComment
+from post.models import Post, PostLike, PostImage, PostComment, PostVideo
 from user_profile.models import UserProfile
 from user_profile.serializers import UserSerializer, UserBriefSerializer
 
@@ -11,6 +11,12 @@ from user_profile.serializers import UserSerializer, UserBriefSerializer
 class PostImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = PostImage
+        fields = '__all__'
+
+
+class PostVideoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PostVideo
         fields = '__all__'
 
 
@@ -38,6 +44,7 @@ class PostSerializer(serializers.ModelSerializer):
     author = UserBriefSerializer()
     memory_created_by_user = UserBriefSerializer()
     images = PostImageSerializer(many=True)
+    videos = PostVideoSerializer(many=True)
     comments = PostCommentSerializer(many=True)
 
     class Meta:
@@ -64,12 +71,14 @@ class PostCreateSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         context = {"request": self.context['request']}
         images = instance.images
+        videos = instance.videos
         author = instance.author
         obj = super().to_representation(instance)
         obj['is_liked'] = False
         obj['comments'] = []
         obj['author'] = UserBriefSerializer(author, context=context).data
         obj['images'] = PostImageSerializer(instance=images, many=True, context=context).data
+        obj['videos'] = PostVideoSerializer(instance=videos, many=True, context=context).data
         return obj
 
     def is_valid(self, raise_exception=False):

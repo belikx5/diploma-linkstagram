@@ -47,7 +47,8 @@ const CreatePostForm = ({
       setFileLoading(true);
       formData.append("description", description);
       files.forEach((file) => {
-        formData.append("images", file);
+        if (file.type.includes("video")) formData.append("videos", file);
+        else formData.append("images", file);
       });
       dispatch(isMemory ? createMemory(formData) : createPost(formData))
         .then(() => {
@@ -78,7 +79,7 @@ const CreatePostForm = ({
             type='file'
             required
             multiple
-            accept='image/*'
+            accept='image/*, video/*'
             onChange={onFileChange}
           />
           <label htmlFor='file' className='file-loader-label'>
@@ -92,7 +93,12 @@ const CreatePostForm = ({
           </label>
         </>
       ) : (
-        <Slider images={previewImages} />
+        <Slider
+          currentPost={{
+            images: previewImages.map((img, ind) => ({ id: ind, image: img })),
+            videos: [],
+          }}
+        />
       )}
       <div className='create-form-item'>
         <label htmlFor='description' className='create-post-form-label'>

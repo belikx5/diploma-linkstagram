@@ -107,10 +107,7 @@ const PostDetails = ({ postData, openModal }: PostDetailsProps) => {
 
   return (
     <div className='post-details'>
-      <Slider
-        images={currentPost.images.map((p) => p.image)}
-        isPostDetails={true}
-      />
+      <Slider currentPost={currentPost} isPostDetails={true} />
       <div className='post-details-data'>
         <div className='post-details-header'>
           <div onClick={navigateToUserProfile}>

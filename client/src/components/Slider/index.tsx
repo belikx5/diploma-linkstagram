@@ -1,23 +1,40 @@
 import "./slider.scss";
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import SliderControls from "./SliderControls";
 
+import ReactPlayer from "react-player";
+import { Image, Video } from "../../store/actionTypes/postActionTypes";
+
 type SliderProps = {
-  images: string[];
+  currentPost: { images: Image[]; videos: Video[] };
   isPostDetails?: boolean;
-  onImageClick?: () => void;
 };
 
-function Slider({ images, onImageClick, isPostDetails = false }: SliderProps) {
+function Slider({ currentPost, isPostDetails = false }: SliderProps) {
   const [activeIndex, setActiveIndex] = useState(0);
+  const media = useMemo(
+    () => [
+      ...currentPost.images.map((i) => ({
+        ...i,
+        media: i.image,
+        isImage: true,
+      })),
+      ...currentPost.videos.map((v) => ({
+        ...v,
+        media: v.video,
+        isImage: false,
+      })),
+    ],
+    [currentPost]
+  );
   const next = () => {
     setActiveIndex((current) => {
-      return current === images.length - 1 ? 0 : current + 1;
+      return current === media.length - 1 ? 0 : current + 1;
     });
   };
   const prev = () => {
     setActiveIndex((current) => {
-      return current === 0 ? images.length - 1 : current - 1;
+      return current === 0 ? media.length - 1 : current - 1;
     });
   };
   const goto = (num: number) => {
@@ -26,15 +43,23 @@ function Slider({ images, onImageClick, isPostDetails = false }: SliderProps) {
 
   return (
     <div className={`slider ${isPostDetails ? "postDetails" : ""}`}>
-      <img
-        src={images[activeIndex]}
-        alt={images[activeIndex]}
-        onClick={() => console.log("here")}
-      />
+      {media[activeIndex].isImage ? (
+        <img
+          src={media[activeIndex].media}
+          alt={media[activeIndex].media}
+          onClick={() => console.log("here")}
+        />
+      ) : (
+        <ReactPlayer
+          url={media[activeIndex].media}
+          width='100%'
+          height='100%'
+          controls
+        />
+      )}
       <SliderControls
-        dotsCount={images.length}
+        dotsCount={media.length}
         activeDot={activeIndex}
-        onImageClick={onImageClick}
         onGotoClick={goto}
         onNextClick={next}
         onPrevClick={prev}

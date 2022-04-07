@@ -25,6 +25,10 @@ export type Image = {
   id: number;
   image: string;
 };
+export type Video = {
+  id: number;
+  video: string;
+};
 export type PhotoAttribute = {
   image: {
     id: string;
@@ -46,6 +50,7 @@ export type Post = {
   is_liked: boolean;
   likes_count: number;
   images: Image[];
+  videos: Video[];
   tags: string[];
   comments: Comment[];
 };

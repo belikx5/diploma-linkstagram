@@ -37,7 +37,7 @@
 		"alreadyHaveAcc": "Вже маєте аккаунт?"
 	},
 	"createPost": {
-		"upload": "Оберіть та завантажте фото",
+		"upload": "Оберіть та завантажте фото чи відео",
 		"description": "Опис"
 	},
 	"editProfile": {

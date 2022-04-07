@@ -149,18 +149,10 @@ const Post = ({
         </div>
         <div className='post-image-block'>
           <div className='post-details-button desktop'>
-            <Slider
-              images={postData.images.map((el) => el.image)}
-              onImageClick={() =>
-                validateLocationForAction(() => isModalOpened(true))
-              }
-            />
+            <Slider currentPost={postData} />
           </div>
           <div className='post-details-button mobile'>
-            <Slider
-              images={postData.images.map((el) => el.image)}
-              onImageClick={() => validateLocationForAction(navigateToPostView)}
-            />
+            <Slider currentPost={postData} />
           </div>
           {copiedShown && (
             <div className='post-copied-bufer'>

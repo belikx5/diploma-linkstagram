@@ -37,7 +37,7 @@
 		"alreadyHaveAcc": "Already have an account?"
 	},
 	"createPost": {
-		"upload": "Upload any photos from your library",
+		"upload": "Upload any photos or videos from your library",
 		"description": "Description"
 	},
 	"editProfile": {

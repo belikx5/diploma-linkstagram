@@ -35,6 +35,7 @@
 }
 
 .deceased-section {
+	position: relative;
 	.info-action-block {
 		display: flex;
 		align-items: center;
@@ -59,6 +60,19 @@
 		flex-wrap: nowrap;
 		overflow-x: auto;
 		@include common.custom-scrollbar;
+		&::after {
+			position: fixed;
+			right: 80px;
+			z-index: -1;
+			content: url('./deceased/bgFlower2.png');
+		}
+		&::before {
+			position: fixed;
+			z-index: -1;
+			bottom: 40px;
+			left: 50px;
+			content: url('./deceased/bgFlower1.svg');			
+		}
 		.user-item {
 			cursor: pointer;
 			margin-left: 10px;
