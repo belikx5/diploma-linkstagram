@@ -1,14 +1,17 @@
 @use '../../styles/variables' as variables;
 @use '../../styles/common' as common;
 
-.stories {
+.recs {
 	@include common.noselect;
 	position: relative;
 	top: variables.$main-content-margin-top;
 	width: 580px;
-	height: 78px;
-	margin-bottom: 80px;
-	.stories-container {
+	height: 75px;
+	margin-bottom: 100px;
+	h3 {
+		margin: 0 auto 10px;
+	}
+	.recs-container {
 		@include common.custom-scrollbar;
 		height: 100%;
 		display: flex;
@@ -35,17 +38,12 @@
 		z-index: 0;
 	}
 
-	.story {
+	.rec {
 		@include common.linear-border(16px);
 		margin-right: 20px;
+		cursor: pointer;
 		img {
 			border: none;
-		}
-	}
-	.empty-story {
-		height: 50px;
-		p {
-			width: 30px;
 		}
 	}
 }

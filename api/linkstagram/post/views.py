@@ -11,7 +11,7 @@ from post.serializers import PostSerializer, PostLikeSerializer, PostLikeCreateS
 
 
 class PostListViewSet(viewsets.ModelViewSet):
-    queryset = Post.objects.all()
+    # queryset = Post.objects.all()
     serializer_class = PostSerializer
     create_serializer_class = PostCreateSerializer
     list_serializer_class = PostSerializer
@@ -19,6 +19,14 @@ class PostListViewSet(viewsets.ModelViewSet):
     search_fields = ['$author__id', '$author__user__username', 'tags']
     filterset_fields = ['author__id']
     ordering_fields = ['created_at']
+
+    def get_queryset(self):
+        isSearch = self.request.query_params.get('search', None)
+        if isSearch:
+            # user can't search for memories
+            return Post.objects.filter(memory_created_by_user=None)
+        return Post.objects.all()
+
 
     def get_serializer_class(self):
         if self.action in ('create', 'update', 'destroy', 'partial_update'):

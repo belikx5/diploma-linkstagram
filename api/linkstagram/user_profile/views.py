@@ -1,3 +1,4 @@
+import random
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets, permissions, generics
 import django_filters
@@ -129,5 +130,12 @@ class UserFollowersAPIView(APIView):
 
     def get(self, request, user_id):
         users = UserProfile.objects.filter(following__following_user__id=user_id)
-        return Response(status=200, data=UserBriefSerializer(users, many=True).data)
+        return Response(status=200, data=UserBriefSerializer(users, context={"request": request}, many=True).data)
 
+
+class RandomUserRecommendations(APIView):
+
+    def get(self, request):
+        users = list(UserProfile.objects.all())
+        random_users = random.sample(users, 10 if len(users) > 10 else len(users))
+        return Response(status=200, data=UserBriefSerializer(random_users, context={"request": request}, many=True).data)

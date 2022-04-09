@@ -26,7 +26,7 @@ from chat.views import ChatViewSet, MessageViewSet
 from dead_profile.views import DeadProfileViewSet
 from post.views import PostListViewSet, PostLikeViewSet, PostCommentViewSet, PostLikeDeleteAPIView
 from user_profile.views import UserViewSet, UserFollowingViewSet, CurrentUserView, UserFollowingAPIView, \
-    UserFollowersAPIView, UserFollowingDeleteAPIView
+    UserFollowersAPIView, UserFollowingDeleteAPIView, RandomUserRecommendations
 
 router = routers.DefaultRouter()
 router.register(r'posts', PostListViewSet, basename="postView")
@@ -48,6 +48,7 @@ urlpatterns = [
     path(r'api/users/following/<int:user_id>', UserFollowingAPIView.as_view()),
     path(r'api/users/following-delete/<int:user_id>/<int:user_following_id>', UserFollowingDeleteAPIView.as_view()),
     path(r'api/users/followers/<int:user_id>', UserFollowersAPIView.as_view()),
+    path(r'api/users/random', RandomUserRecommendations.as_view()),
 
     path(r'api/likes-delete/<str:post_id>/<str:user_id>/', PostLikeDeleteAPIView.as_view(), name="likeDeleteView"),
 
