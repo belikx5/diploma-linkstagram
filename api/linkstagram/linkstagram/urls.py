@@ -18,10 +18,11 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, re_path
 from rest_framework import routers
 from rest_framework.authtoken.views import obtain_auth_token
 
+from chat.consumers import ChatConsumer
 from chat.views import ChatViewSet, MessageViewSet
 from dead_profile.views import DeadProfileViewSet
 from post.views import PostListViewSet, PostLikeViewSet, PostCommentViewSet, PostLikeDeleteAPIView
@@ -51,7 +52,10 @@ urlpatterns = [
     path(r'api/users/random', RandomUserRecommendations.as_view()),
 
     path(r'api/likes-delete/<str:post_id>/<str:user_id>/', PostLikeDeleteAPIView.as_view(), name="likeDeleteView"),
+]
 
+websocket_urlpatterns = [
+    re_path(r'ws/(?P<chat_id>\w+)/$', ChatConsumer.as_asgi()),
 ]
 
 if settings.DEBUG:

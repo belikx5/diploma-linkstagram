@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'corsheaders',
-
+    'channels',
     'post',
     'user_profile',
     'dead_profile',
@@ -78,7 +78,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'linkstagram.wsgi.application'
-
+ASGI_APPLICATION = "linkstagram.asgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
@@ -158,3 +158,17 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Media files (user-uploaded files)
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 MEDIA_URL = '/media/'
+
+# Django Channels
+CHANNEL_LAYERS = {
+    "default": {
+        # below for prod version, requires channels_redis module
+        # "BACKEND": "channels_redis.core.RedisChannelLayer",
+        # "CONFIG": {
+        #     "hosts": [("127.0.0.1", 6379)],
+        # },
+
+        # for local dev should enough this:
+        "BACKEND": "channels.layers.InMemoryChannelLayer"
+    },
+}
