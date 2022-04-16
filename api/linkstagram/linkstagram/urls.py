@@ -55,7 +55,7 @@ urlpatterns = [
 ]
 
 websocket_urlpatterns = [
-    re_path(r'ws/(?P<chat_id>\w+)/$', ChatConsumer.as_asgi()),
+    re_path(r'ws/chat/(?P<chat_id>\w+)/$', ChatConsumer.as_asgi()),
 ]
 
 if settings.DEBUG:

@@ -6,10 +6,10 @@ import history from "../../services/history";
 import {
   fetchChatMessages,
   resetChatMessages,
+  resetChatWebSocket,
   selectChat,
   sendMessage,
-  startFetchMsgJob,
-  stopFetchMsgJob,
+  setChatWebSocket,
 } from "../../store/actions/chatActions";
 import { ChatBrief } from "../../store/actionTypes/chatActionsTypes";
 import Message from "../ui/Chat/Message";
@@ -43,10 +43,8 @@ const Chat = ({ selectedChat }: Props) => {
 
   useEffect(() => {
     if (selectedChat && !fetchMessageJob) {
-      const interval = setInterval(() => {
-        dispatch(fetchChatMessages(selectedChat.id));
-      }, 1500);
-      dispatch(startFetchMsgJob(interval));
+      dispatch(setChatWebSocket(selectedChat.id));
+      dispatch(fetchChatMessages(selectedChat.id));
     }
   }, [selectedChat, fetchMessageJob]);
 
@@ -62,7 +60,7 @@ const Chat = ({ selectedChat }: Props) => {
     return () => {
       dispatch(selectChat(null));
       dispatch(resetChatMessages());
-      dispatch(stopFetchMsgJob());
+      dispatch(resetChatWebSocket());
     };
   }, []);
 

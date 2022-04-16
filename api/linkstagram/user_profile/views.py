@@ -1,8 +1,10 @@
 import random
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import viewsets, permissions, generics
-import django_filters
+from django.db.models import Q
 from django.contrib.auth import get_user_model
+import django_filters
+
+from rest_framework import viewsets, permissions, generics
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -107,7 +109,7 @@ class UserFollowingAPIView(APIView):
 
     def get(self, request, user_id):
         users = UserProfile.objects.filter(followers__user_id=user_id)
-        return Response(status=200, data=UserBriefSerializer(users, many=True).data)
+        return Response(status=200, data=UserBriefSerializer(users, context={"request": request}, many=True).data)
 
 
 class UserFollowingDeleteAPIView(APIView):
@@ -136,6 +138,11 @@ class UserFollowersAPIView(APIView):
 class RandomUserRecommendations(APIView):
 
     def get(self, request):
-        users = list(UserProfile.objects.all())
+        user = request.auth.user if request.auth else None
+        if user and hasattr(user, 'userprofile'):
+            u_profile_id = user.userprofile.id
+            users = list(UserProfile.objects.filter(~Q(id=u_profile_id)))
+        else:
+            users = list(UserProfile.objects.all())
         random_users = random.sample(users, 10 if len(users) > 10 else len(users))
         return Response(status=200, data=UserBriefSerializer(random_users, context={"request": request}, many=True).data)

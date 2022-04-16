@@ -47,7 +47,7 @@ export type Profile = {
   profile_photo: string;
   is_dead_profile: boolean;
   is_group_of_interest: boolean;
-  tags: string[];
+  tags: string[] | null;
   followers: Follower[];
   following: Follower[];
   is_following: boolean;
