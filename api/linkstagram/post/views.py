@@ -11,7 +11,7 @@ from post.serializers import PostSerializer, PostLikeSerializer, PostLikeCreateS
 
 
 class PostListViewSet(viewsets.ModelViewSet):
-    # queryset = Post.objects.all()
+    queryset = Post.objects.all()
     serializer_class = PostSerializer
     create_serializer_class = PostCreateSerializer
     list_serializer_class = PostSerializer
@@ -21,20 +21,23 @@ class PostListViewSet(viewsets.ModelViewSet):
     ordering_fields = ['created_at']
 
     def get_queryset(self):
-        is_search = self.request.query_params.get('search', None)
-        # user can't search for memories
-        if is_search:
-            return Post.objects.filter(memory_created_by_user=None)
-        dict_len = len(self.request.query_params)
-        # if showing general post list, there are 2 options:
-        # show user's feed or show random posts
-        if dict_len == 0:
-            user = self.request.auth.user if self.request.auth else None
-            if user and hasattr(user, 'userprofile'):
-                curr_user = self.request.auth.user.userprofile
-                posts = Post.objects.filter(author__followers__user_id=curr_user.id)
-                return posts if len(posts) > 0 else Post.objects.all()
-        return Post.objects.all()
+        if self.action == 'list':
+            is_search = self.request.query_params.get('search', None)
+            # user can't search for memories
+            if is_search:
+                return Post.objects.filter(memory_created_by_user=None)
+            dict_len = len(self.request.query_params)
+            # if showing general post list, there are 2 options:
+            # show user's feed or show random posts
+            if dict_len == 0:
+                user = self.request.auth.user if self.request.auth else None
+                if user and hasattr(user, 'userprofile'):
+                    curr_user = self.request.auth.user.userprofile
+                    posts = Post.objects.filter(author__followers__user_id=curr_user.id)
+                    return posts if len(posts) > 0 else Post.objects.all()
+            return Post.objects.all()
+        else:
+            return super().get_queryset()
 
     def get_serializer_class(self):
         if self.action in ('create', 'update', 'destroy', 'partial_update'):
