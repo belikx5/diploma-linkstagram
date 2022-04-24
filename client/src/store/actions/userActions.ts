@@ -78,14 +78,8 @@ export const signin =
         });
         history.push("/");
       }
-    } catch ({ response: { data } }) {
-      dispatch({
-        type: AUTH_ERROR,
-        payload: {
-          error: data["error"],
-          fieldError: data["field-error"],
-        },
-      });
+    } catch (err) {
+      console.log(err);
     }
   };
 export const signup =
@@ -105,14 +99,8 @@ export const signup =
         })
       );
       history.push("/signin");
-    } catch ({ response: { data } }) {
-      dispatch({
-        type: AUTH_ERROR,
-        payload: {
-          error: data["error"],
-          fieldError: data["field-error"],
-        },
-      });
+    } catch (err) {
+      console.log(err);
     }
   };
 
@@ -126,11 +114,11 @@ export const fetchCurrentUser =
           payload: { ...userResponse.data },
         });
       }
-    } catch ({ response: { data } }) {
+    } catch {
       dispatch({
         type: USER_ACTION_ERROR,
         payload: {
-          error: data.error,
+          error: "Can't fetch current user",
         },
       });
     }
@@ -171,11 +159,11 @@ export const fetchUserById =
           payload: user,
         });
       }
-    } catch ({ response: { data } }) {
+    } catch {
       dispatch({
         type: USER_ACTION_ERROR,
         payload: {
-          error: data.error,
+          error: "Can't fetch user",
         },
       });
     }
@@ -192,14 +180,15 @@ export const editUser =
       );
       dispatch({ type: EDIT_USER, payload: response?.data });
       return Promise.resolve("Profile've been updated successfully");
-    } catch ({ response: { data } }) {
+    } catch {
+      const err = "Some error occured while updating user profile";
       dispatch({
         type: USER_ACTION_ERROR,
         payload: {
-          error: data.error,
+          error: err,
         },
       });
-      return Promise.reject(data.error);
+      return Promise.reject(err);
     }
   };
 
@@ -228,14 +217,14 @@ export const fetchUserFollowing =
         payload: response.data,
       });
       return Promise.resolve();
-    } catch ({ response: { data } }) {
+    } catch {
       dispatch({
         type: USER_ACTION_ERROR,
         payload: {
-          error: data.error,
+          error: "Error occured while fetching followings",
         },
       });
-      return Promise.reject(data.error);
+      return Promise.reject("Error while fetching followings");
     }
   };
 
@@ -252,14 +241,14 @@ export const fetchUserFollowers =
         payload: response.data,
       });
       return Promise.resolve();
-    } catch ({ response: { data } }) {
+    } catch {
       dispatch({
         type: USER_ACTION_ERROR,
         payload: {
-          error: data.error,
+          error: "Error occured while fetching followers",
         },
       });
-      return Promise.reject(data.error);
+      return Promise.reject("Error while fetching followers");
     }
   };
 
@@ -290,11 +279,11 @@ export const follow =
         },
       });
       return Promise.resolve();
-    } catch ({ response: { data } }) {
+    } catch {
       dispatch({
         type: USER_ACTION_ERROR,
         payload: {
-          error: data.error,
+          error: "Oops, action failed",
         },
       });
       return Promise.reject();
@@ -318,11 +307,11 @@ export const unfollow =
         },
       });
       return Promise.resolve();
-    } catch ({ response: { data } }) {
+    } catch {
       dispatch({
         type: USER_ACTION_ERROR,
         payload: {
-          error: data.error,
+          error: "Oops, action failed",
         },
       });
       return Promise.reject();

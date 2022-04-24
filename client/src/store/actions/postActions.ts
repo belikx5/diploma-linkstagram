@@ -29,11 +29,11 @@ export const fetchAllPosts =
     try {
       const response = await http.get<Post[]>(api.POSTS);
       dispatch({ type: FETCH_ALL_POSTS, payload: response.data });
-    } catch ({ response: { data } }) {
+    } catch {
       dispatch({
         type: POST_ACTION_ERROR,
         payload: {
-          error: data.error,
+          error: "Can't fetch posts",
         },
       });
     }
@@ -49,11 +49,11 @@ export const fetchPostById =
           ...response.data,
         },
       });
-    } catch ({ response: { data } }) {
+    } catch {
       dispatch({
         type: POST_ACTION_ERROR,
         payload: {
-          error: data.error,
+          error: "Can't fetch the post",
         },
       });
     }
@@ -74,8 +74,8 @@ export const fetchPostByUser =
         `${api.POSTS}?ordering=-created_at&author__id=${userId}`
       );
       dispatch({ type: FETCH_POSTS_BY_USER, payload: response.data });
-    } catch ({ response: { data } }) {
-      console.log(data);
+    } catch (err) {
+      console.log(err);
     }
   };
 export const setIsPostsFetched =
@@ -103,13 +103,6 @@ export const createPost =
       dispatch({ type: CREATE_POST_MODAL_OPENED, payload: false });
       return Promise.resolve();
     } catch (err) {
-      // const { response: { data } } = err;
-      // dispatch({
-      // 	type: POST_ACTION_ERROR,
-      // 	payload: {
-      // 		error: data.error,
-      // 	},
-      // });
       return Promise.reject();
     }
   };
@@ -179,11 +172,11 @@ export const editPostValues =
           tags,
         },
       });
-    } catch ({ response: { data } }) {
+    } catch {
       dispatch({
         type: POST_ACTION_ERROR,
         payload: {
-          error: data.error,
+          error: "Can't perform post edit",
         },
       });
     }
@@ -194,11 +187,11 @@ export const deletePost =
     try {
       await http.delete(`${api.POSTS}${postId}/`);
       dispatch({ type: DELETE_POST, payload: { postId } });
-    } catch ({ response: { data } }) {
+    } catch {
       dispatch({
         type: POST_ACTION_ERROR,
         payload: {
-          error: data.error,
+          error: "Can't perform post delete",
         },
       });
     }
@@ -219,11 +212,11 @@ export const setLike =
           postId,
         },
       });
-    } catch ({ response: { data } }) {
+    } catch {
       dispatch({
         type: POST_ACTION_ERROR,
         payload: {
-          error: data.error,
+          error: "Can't perform post like",
         },
       });
     }
@@ -241,11 +234,11 @@ export const removeLike =
           postId: post.id,
         },
       });
-    } catch ({ response: { data } }) {
+    } catch {
       dispatch({
         type: POST_ACTION_ERROR,
         payload: {
-          error: data.error,
+          error: "Can't perform post unlike",
         },
       });
     }
@@ -262,11 +255,11 @@ export const fetchComments =
       // 		postId: postId,
       // 	},
       // });
-    } catch ({ response: { data } }) {
+    } catch {
       dispatch({
         type: POST_ACTION_ERROR,
         payload: {
-          error: data.error,
+          error: "Can't perform fetch comments",
         },
       });
     }
@@ -292,11 +285,11 @@ export const addComment =
           },
         },
       });
-    } catch ({ response }) {
+    } catch {
       dispatch({
         type: POST_ACTION_ERROR,
         payload: {
-          error: response.data?.error,
+          error: "Can't perform comment add",
         },
       });
     }
