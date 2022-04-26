@@ -2,6 +2,7 @@ import "./recommendations.scss";
 import React, { useCallback, useEffect } from "react";
 import { CircularProgress, Tooltip } from "@material-ui/core";
 import Fade from "@material-ui/core/Fade";
+import { useTranslation } from "react-i18next";
 import UserIcon from "../User/UserIcon/UserIcon";
 import { UserIconSize } from "../../ts/enums";
 import { useTypedDispatch } from "../../hooks/useTypedDispatch";
@@ -10,6 +11,7 @@ import { fetchRecommendations } from "../../store/actions/userActions";
 import history from "../../services/history";
 
 const Recommendations = () => {
+  const [t] = useTranslation("common");
   const dispatch = useTypedDispatch();
   const recommendations = useTypedSelector(
     (state) => state.userState.recommendations
@@ -26,7 +28,9 @@ const Recommendations = () => {
   }, []);
   return (
     <div className='recs'>
-      {recommendations.length > 0 && <h3>Recommended users</h3>}
+      {recommendations.length > 0 && (
+        <h3>{t("recommendations.recommendedUsers")}</h3>
+      )}
       {recommendationsLoading ? (
         <CircularProgress size={30} />
       ) : (

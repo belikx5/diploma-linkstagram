@@ -54,7 +54,7 @@ const SearchedProfiles = ({ searchValue }: Props) => {
                 <div
                   className={clx(
                     styles.userCardItem,
-                    user.tags.length && styles.withTags
+                    user.tags?.length && styles.withTags
                   )}
                   key={user.id}>
                   <UserBriefCard user={user} iconSize={UserIconSize.Medium} />

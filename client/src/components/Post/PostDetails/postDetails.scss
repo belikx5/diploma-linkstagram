@@ -1,139 +1,149 @@
-@use '../../../styles/variables' as variables;
-@use '../../../styles/common' as common;
+@use "../../../styles/variables" as variables;
+@use "../../../styles/common" as common;
 
 @mixin horizontal-padding {
-	padding: 0 32px;
+  padding: 0 32px;
 }
 
 @mixin border-bottom {
-	border-bottom: 0.5px solid variables.$color-light-grey;
+  border-bottom: 0.5px solid variables.$color-light-grey;
 }
 
 .post-details {
-	width: auto;
-	display: flex;
-	background-color: #fff;
-	width: fit-content;
-	border-radius: variables.$border-radius-32;
-	.post-details-image {
-		height: auto;
-		width: auto;
-		max-height: 620px;
-		max-width: 500px;
-		border-top-left-radius: variables.$border-radius-32;
-		border-bottom-left-radius: variables.$border-radius-32;
-	}
-	.post-details-data {
-		display: flex;
-		flex-direction: column;
-		width: 450px;
-		padding-top: 5px;
+  width: auto;
+  display: flex;
+  background-color: #fff;
+  width: fit-content;
+  border-radius: variables.$border-radius-32;
+  .post-details-image {
+    height: auto;
+    width: auto;
+    max-height: 620px;
+    max-width: 500px;
+    border-top-left-radius: variables.$border-radius-32;
+    border-bottom-left-radius: variables.$border-radius-32;
+  }
+  .post-details-data {
+    display: flex;
+    flex-direction: column;
+    width: 450px;
+    padding-top: 5px;
 
-		.post-details-header {
-			display: flex;
-			justify-content: space-between;
-			align-items: center;
-			@include horizontal-padding;
-			@include border-bottom;
-			div:first-child {
-				display: flex;
-				align-items: center;
-				@include common.hover-effect;
-				img {
-					margin-right: 16px;
-				}
-			}
-			.memory-info {
-				opacity: 0.5;
-			}
-			.post-details-header-close {
-				@include common.hover-effect;
-			}
-		}
-		.post-details-comments {
-			@include horizontal-padding;
-			@include border-bottom;
-			@include common.custom-scrollbar;
-			height: 380px;
-			overflow-y: scroll;
-		}
-		.post-details-likes {
-			@include horizontal-padding;
-			@include border-bottom;
-			display: flex;
-			align-items: center;
-			height: 64px;
-			img {
-				margin-right: 8px;
-			}
-		}
-		.post-details-description {
-			@include common.input-textarea;
-			padding-top: 3px;
-			height: auto;
-			width: 100%;
-			margin-left: 10px;
-			box-shadow: none;
-			border-left: 0.5px solid variables.$color-light-grey;
-			border-top-left-radius: 0;
-			border-bottom-left-radius: 0;
-		}
-		.post-details-tags {
-			display: flex;
-			width: 100%;
-			margin-top: 5px;
-			padding-bottom: 5px;
-			border-bottom: 0.5px solid variables.$color-light-grey;
-			overflow-x: auto;
-			@include common.custom-scrollbar;
-			&::-webkit-scrollbar {
-				height: 7px;
-			}
-			.tag {
-				@include common.tag;
-				display: flex;
-				align-items: center;
-			}
-			.tag-action-icon {
-				height: 16px;
-				width: 16px;
-				margin-left: 3px;
-				@include common.hover-effect;
-			}
-			.create-tag {
-				@include common.create-tag;
-			}
-		}
-		.post-details-actions {
-			@include horizontal-padding;
-			display: flex;
-			height: 70px;
-			.post-details-input-field {
-				@include common.disable-default-styles;
-				@include common.custom-scrollbar;
-				flex: 1;
-				resize: none;
-				padding-top: 25px;
-				overflow-y: scroll;
-			}
-		}
-		.post-details-action-button {
-			@include common.disable-default-styles;
-			@include common.hover-effect;
-			min-width: 35px;
-			width: fit-content;
-			padding: 0;
-			color: variables.$blue-color;
-			font-weight: variables.$main-font-weight;
-		}
-	}
+    .post-details-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      @include horizontal-padding;
+      @include border-bottom;
+      div:first-child {
+        display: flex;
+        align-items: center;
+        @include common.hover-effect;
+        img {
+          margin-right: 16px;
+        }
+      }
+      .memory-info {
+        opacity: 0.5;
+      }
+      .post-details-header-close {
+        @include common.hover-effect;
+      }
+    }
+    .post-details-comments {
+      @include horizontal-padding;
+      @include border-bottom;
+      @include common.custom-scrollbar;
+      height: 380px;
+      overflow-y: scroll;
+    }
+    .post-details-likes {
+      @include horizontal-padding;
+      @include border-bottom;
+      display: flex;
+      align-items: center;
+      height: 64px;
+      img {
+        margin-right: 8px;
+      }
+    }
+    .post-details-description {
+      @include common.input-textarea;
+      padding-top: 3px;
+      height: auto;
+      width: 100%;
+      margin-left: 10px;
+      box-shadow: none;
+      border-left: 0.5px solid variables.$color-light-grey;
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+      &:hover {
+        position: absolute;
+        z-index: 100;
+        height: 300px;
+        width: 320px;
+        overflow-y: auto;
+        word-wrap: break-word;
+        border-radius: variables.$border-radius-12;
+        border: 0.5px solid variables.$color-light-grey;
+      }
+    }
+    .post-details-tags {
+      display: flex;
+      width: 100%;
+      margin-top: 5px;
+      padding-bottom: 5px;
+      border-bottom: 0.5px solid variables.$color-light-grey;
+      overflow-x: auto;
+      @include common.custom-scrollbar;
+      &::-webkit-scrollbar {
+        height: 7px;
+      }
+      .tag {
+        @include common.tag;
+        display: flex;
+        align-items: center;
+      }
+      .tag-action-icon {
+        height: 16px;
+        width: 16px;
+        margin-left: 3px;
+        @include common.hover-effect;
+      }
+      .create-tag {
+        @include common.create-tag;
+      }
+    }
+    .post-details-actions {
+      @include horizontal-padding;
+      display: flex;
+      height: 70px;
+      .post-details-input-field {
+        @include common.disable-default-styles;
+        @include common.custom-scrollbar;
+        flex: 1;
+        resize: none;
+        padding-top: 25px;
+        overflow-y: scroll;
+      }
+    }
+    .post-details-action-button {
+      @include common.disable-default-styles;
+      @include common.hover-effect;
+      min-width: 35px;
+      width: fit-content;
+      padding: 0;
+      color: variables.$blue-color;
+      font-weight: variables.$main-font-weight;
+    }
+  }
 }
 
 @media (max-width: 600px) {
-	.post-details {
-		width: 100vw;
-		.post-details-image {
-			display: none;
-		}
-	}
+  .post-details {
+    width: 100vw;
+    .post-details-image {
+      display: none;
+    }
+  }
 }

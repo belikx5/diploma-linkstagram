@@ -69,5 +69,8 @@
 		"trustedUsers": "Trusted users",
 		"deceasedSectionInfo": "This page belongs to dead user. Here you can create a new Memory related to page owner, communicate with frends, relatives and other trusted users of deceased.",
 		"createMemory": "Create memory"
+	},
+	"recommendations": {
+		"recommendedUsers": "Recommended users"
 	}
 }
