@@ -1,77 +1,78 @@
-@use '../../../styles/variables' as vars;
-@use '../../../styles/common' as common;
+@use "../../../styles/variables" as vars;
+@use "../../../styles/common" as common;
 
 .chatList {
-	max-width: 350px;
-	min-width: 250px;
-	overflow-y: auto;
+  max-width: 350px;
+  min-width: 250px;
+  overflow-y: auto;
 }
 .chatListEmpty {
-	text-align: center;
-	margin-top: 25vh;
+  text-align: center;
+  margin-top: 25vh;
 }
 
 .chatItem {
-	display: flex;
-	padding: 5px 2px;
-	margin-bottom: 10px;
-	border-top: 0.5px solid vars.$color-light-grey;
-	border-bottom: 0.5px solid vars.$color-light-grey;
-	cursor: pointer;
-	&.selected {
-		border-color: vars.$blue-color;
-	}
-	.data {
-		width: 100%;
-		@include common.noselect;
-	}
-	img {
-		margin-right: 10px;
-	}
-	.username {
-		font-weight: 500;
-		margin-top: 2px;
-		margin-bottom: 8px;
-	}
-	.lastMessage {
-		@include common.ellipsis-on-overflow;
-		width: 100%;
-		margin-top: 0;
-		margin-bottom: 0;
-		font-size: vars.$secondary-font-size;
-	}
+  display: flex;
+  padding: 5px 2px;
+  margin-bottom: 10px;
+  border-top: 0.5px solid vars.$color-light-grey;
+  border-bottom: 0.5px solid vars.$color-light-grey;
+  cursor: pointer;
+  &.selected {
+    border-color: vars.$blue-color;
+  }
+  .data {
+    width: 100%;
+    @include common.noselect;
+  }
+  img {
+    margin-right: 10px;
+  }
+  .username {
+    font-weight: 500;
+    margin-top: 2px;
+    margin-bottom: 8px;
+  }
+  .lastMessage {
+    @include common.ellipsis-on-overflow;
+    width: 100%;
+    margin-top: 0;
+    margin-bottom: 0;
+    font-size: vars.$secondary-font-size;
+    color: vars.$color-dark-grey;
+  }
 }
 
 .messageInputContainer {
-	display: flex;
-	outline: none;
-	border: none;
-	box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.5);
-	.messageInput {
-		@include common.input-textarea;
-		height: 62px;
-		width: 100%;
-		padding-top: 0;
-	}
-	.sendButton {
-		@include common.button-like-text;
-		padding: 0 10px;
-		margin: 0 5px;
-	}
+  display: flex;
+  outline: none;
+  border: none;
+  box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.5);
+  .messageInput {
+    @include common.input-textarea;
+    height: 62px;
+    width: 100%;
+    padding-top: 0;
+  }
+  .sendButton {
+    @include common.button-like-text;
+    padding: 0 10px;
+    margin: 0 5px;
+  }
 }
 
 .message {
-	align-self: flex-start;
-	padding: 5px 10px;
-	margin: 5px 15px;
-	width: fit-content;
-	min-width: 35px;
-	max-width: 50%;
-	word-break: break-all;
-	background-color: vars.$main-bacground-color;
-	border-radius: vars.$border-radius-8;
-	&.isMyMessage {
-		align-self: flex-end;
-		background-color: #dddddd;
-	}
+  align-self: flex-start;
+  padding: 5px 10px;
+  margin: 5px 15px;
+  width: fit-content;
+  min-width: 35px;
+  max-width: 50%;
+  word-break: break-all;
+  background-color: vars.$main-bacground-color;
+  border-radius: vars.$border-radius-8;
+  &.isMyMessage {
+    align-self: flex-end;
+    background-color: #dddddd;
+  }
 }

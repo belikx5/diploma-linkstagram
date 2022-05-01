@@ -22,6 +22,7 @@ export const CLEAR_CHAT_ACTION_ERROR = "CLEAR_CHAT_ACTION_ERROR";
 export type ChatBrief = {
   id: number;
   companion: ProfileBrief;
+  last_message: string | null;
   participants: ProfileBrief[];
 };
 

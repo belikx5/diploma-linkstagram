@@ -45,6 +45,8 @@ class ChatBriefSerializer(serializers.ModelSerializer):
             obj['companion'] = [user for user in obj['participants'] if user['id'] != user_id][0]
         else:
             obj['companion'] = obj['participants'][0]
+        chat_messages = Message.objects.filter(chat_id=obj['id'])
+        obj['last_message'] = chat_messages.last().content if len(chat_messages) > 0 else None
         return obj
 
 
