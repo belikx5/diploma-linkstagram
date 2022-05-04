@@ -141,7 +141,7 @@ class RandomUserRecommendations(APIView):
         user = request.auth.user if request.auth else None
         if user and hasattr(user, 'userprofile'):
             u_profile_id = user.userprofile.id
-            users = list(UserProfile.objects.filter(~Q(id=u_profile_id)))
+            users = list(UserProfile.objects.filter(~Q(id=u_profile_id) & ~Q(followers__user_id=u_profile_id)))
         else:
             users = list(UserProfile.objects.all())
         random_users = random.sample(users, 10 if len(users) > 10 else len(users))
