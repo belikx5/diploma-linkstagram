@@ -25,7 +25,8 @@ class MessageSerializer(serializers.ModelSerializer):
 class ChatCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Chat
-        fields = ['participants']
+        fields = ['participants', 'id']
+        read_only_fields = ('id',)
 
 
 class ChatBriefSerializer(serializers.ModelSerializer):

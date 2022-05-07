@@ -42,7 +42,7 @@ const Chat = ({ selectedChat }: Props) => {
   );
 
   useEffect(() => {
-    if (selectedChat && !fetchMessageJob) {
+    if (selectedChat && selectedChat.id && !fetchMessageJob) {
       dispatch(setChatWebSocket(selectedChat.id));
       dispatch(fetchChatMessages(selectedChat.id));
     }
