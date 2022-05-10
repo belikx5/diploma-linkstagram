@@ -6,8 +6,6 @@ from user_profile.models import UserProfile
 class Chat(models.Model):
     participants = models.ManyToManyField(UserProfile, related_name='chats')
 
-    # def last_10_messages(self):
-    #     return self.messages.objects.order_by('-created_at').all()[:10]
     def __str__(self):
         return f'{self.pk}'
 
