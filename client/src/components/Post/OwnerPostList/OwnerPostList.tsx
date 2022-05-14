@@ -160,6 +160,12 @@ const PostImage = ({
         currentUser.id === postData.memory_created_by_user?.id),
     [currentUser, postData, isHovered]
   );
+  const mediaFile = useMemo(() => {
+    return postData.images.length > 0
+      ? postData.images[0].image
+      : postData.videos[0]?.video;
+  }, [postData]);
+
   return (
     <div
       className='owner-posts-image-wrapper'
@@ -167,7 +173,7 @@ const PostImage = ({
       onMouseLeave={() => setIsHovered(false)}>
       <img
         className={`owner-posts-image ${isHovered ? "hovered" : ""}`}
-        src={postData?.images[0]?.image}
+        src={mediaFile}
         onClick={onImageClick}
         alt='post-owner'
       />

@@ -1,7 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 
-from chat.models import Chat, Message
 from dead_profile.models import DeadProfile
 from user_profile.models import UserProfile
 

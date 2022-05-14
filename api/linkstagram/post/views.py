@@ -1,4 +1,5 @@
 from django_filters.rest_framework import DjangoFilterBackend
+from django.db.models import Q
 from rest_framework import viewsets, permissions
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -33,7 +34,7 @@ class PostListViewSet(viewsets.ModelViewSet):
                 user = self.request.auth.user if self.request.auth else None
                 if user and hasattr(user, 'userprofile'):
                     curr_user = self.request.auth.user.userprofile
-                    posts = Post.objects.filter(author__followers__user_id=curr_user.id)
+                    posts = Post.objects.filter(Q(author__followers__user_id=curr_user.id) & Q(author_id=curr_user.id))
                     return posts if len(posts) > 0 else Post.objects.all()
             return Post.objects.all()
         else:

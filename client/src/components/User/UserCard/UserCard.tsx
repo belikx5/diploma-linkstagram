@@ -148,7 +148,7 @@ const UserCard = ({ isProfilePage, isCurrentUser }: UserCardProps) => {
         {!isProfilePage && (
           <div className='user-card-terms'>
             <p>{t("userCard.smallText")}</p>
-            <p>&#169; 2020 Linkstagram</p>
+            <p>&#169; 2022 LinkMe</p>
           </div>
         )}
       </div>
