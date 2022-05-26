@@ -111,13 +111,14 @@ export const createMemory =
   async (dispatch, getState) => {
     const author = getState().userState.anotherUserProfile,
       currentUser = getState().userState.currentUser;
-    if (!currentUser || !currentUser.is_dead_profile) return;
+    if (!currentUser || !author || !author.is_dead_profile) return;
     try {
       post.append("memory_created_by_user", currentUser.id.toString());
       post.append(
         "author",
         author ? author.id.toString() : currentUser.id.toString()
       );
+      console.log({ post });
       const response = await http.post<Post>(api.POSTS, post);
       const newPost = {
         ...response.data,

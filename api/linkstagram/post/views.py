@@ -1,3 +1,4 @@
+from itertools import chain
 from django_filters.rest_framework import DjangoFilterBackend
 from django.db.models import Q
 from rest_framework import viewsets, permissions
@@ -17,7 +18,7 @@ class PostListViewSet(viewsets.ModelViewSet):
     create_serializer_class = PostCreateSerializer
     list_serializer_class = PostSerializer
     filter_backends = [DjangoFilterBackend, OrderingFilter, SearchFilter]
-    search_fields = ['$author__id', '$author__user__username', 'tags']
+    search_fields = ['$author__id', '$author__user__username', 'tags', 'description']
     filterset_fields = ['author__id']
     ordering_fields = ['created_at']
 
@@ -34,7 +35,7 @@ class PostListViewSet(viewsets.ModelViewSet):
                 user = self.request.auth.user if self.request.auth else None
                 if user and hasattr(user, 'userprofile'):
                     curr_user = self.request.auth.user.userprofile
-                    posts = Post.objects.filter(Q(author__followers__user_id=curr_user.id) & Q(author_id=curr_user.id))
+                    posts = Post.objects.filter(Q(author__followers__user_id=curr_user.id) | Q(author__id=curr_user.id)).distinct()
                     return posts if len(posts) > 0 else Post.objects.all()
             return Post.objects.all()
         else:

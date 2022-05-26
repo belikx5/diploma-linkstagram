@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useLocation } from "react-router-dom";
 import { useHandleClickOutside } from "../../hooks/useHandleClickOutside";
 import { useQuery } from "../../hooks/useQuery";
@@ -16,6 +17,7 @@ import SearchBar from "../ui/SearchBar";
 const searchTypesArr = [SEARCH_TYPES.PROFILES, SEARCH_TYPES.POSTS];
 
 const SearchForInterests = () => {
+  const [t] = useTranslation("common");
   const dispatch = useTypedDispatch();
   const { pathname } = useLocation();
   const query = useQuery();
@@ -76,7 +78,7 @@ const SearchForInterests = () => {
         value={searchValue}
         onChange={handleSearchValueChange}
         onSearchClick={handleSearchClick}
-        placeholder='Search...'
+        placeholder={t("searchField.placeholder")}
         onFocusChange={setIsSearchFocused}
         loading={searchLoading}
       />

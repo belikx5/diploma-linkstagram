@@ -1,76 +1,79 @@
 {
-	"common": {
-		"logout": "Logout",
-		"cancel": "Cancel",
-		"post": "Post",
-		"save": "Save",
-		"send": "Send"
-	},
-	"userCard": {
-		"followers": "Followers",
-		"following": "Following",
-		"edit": "Edit profile",
-		"new": "New post",
-		"sendMessage": "Message",
-		"follow": "Follow",
-		"unfollow": "Unfollow",
-		"smallText": "About Help Privacy Terms Locations Language"
-	},
-	"navbar": {
-		"home": "Home"
-	},
-	"profile": {
-		"noCurrUserPosts": "You don't have any posts",
-		"noPosts": "This user doesn't have any posts",
-		"tryToAdd": "Try to add a new one 👌"
-	},
-	"auth": {
-		"login": "Log in",
-		"email": "Email",
-		"password": "Password",
-		"noAccount": "Don't have an account?",
-		"createAccount": "Create an account",
-		"signup": "Sign up",
-		"username": "Username",
-		"name": "Name",
-		"surname": "Surname",
-		"alreadyHaveAcc": "Already have an account?"
-	},
-	"createPost": {
-		"upload": "Upload any photos or videos from your library",
-		"description": "Description"
-	},
-	"editProfile": {
-		"profileInfo": "Profile information",
-		"avatar": "Avatar",
-		"choosePhoto": "Choose new photo",
-		"fName": "First Name",
-		"sName": "Second Name",
-		"job": "Job Title",
-		"description": "Description"
-	},
-	"post": {
-		"copied": "Copied to bufer",
-		"share": "Share",
-		"addComment": "Add a comment..."
-	},
-	"search": {
-		"noProfiles": "Couldn't find any profile",
-		"foundProfiles": "Found profiles:",
-		"noPosts": "Couldn't find any post",
-		"foundPosts": "Found posts:"
-	},
-	"chat": {
-		"noChats": "You don't have any chats.",
-		"findPeople": "Find people and chat with them!"
-	},
-	"dead": {
-		"markAsDead": "Mark as dead",
-		"trustedUsers": "Trusted users",
-		"deceasedSectionInfo": "This page belongs to dead user. Here you can create a new Memory related to page owner, communicate with frends, relatives and other trusted users of deceased.",
-		"createMemory": "Create memory"
-	},
-	"recommendations": {
-		"recommendedUsers": "Recommended users"
-	}
+  "common": {
+    "logout": "Logout",
+    "cancel": "Cancel",
+    "post": "Post",
+    "save": "Save",
+    "send": "Send"
+  },
+  "userCard": {
+    "followers": "Followers",
+    "following": "Following",
+    "edit": "Edit profile",
+    "new": "New post",
+    "sendMessage": "Message",
+    "follow": "Follow",
+    "unfollow": "Unfollow",
+    "smallText": "About Help Privacy Terms Locations Language"
+  },
+  "navbar": {
+    "home": "Home"
+  },
+  "profile": {
+    "noCurrUserPosts": "You don't have any posts",
+    "noPosts": "This user doesn't have any posts",
+    "tryToAdd": "Try to add a new one 👌"
+  },
+  "auth": {
+    "login": "Log in",
+    "email": "Email",
+    "password": "Password",
+    "noAccount": "Don't have an account?",
+    "createAccount": "Create an account",
+    "signup": "Sign up",
+    "username": "Username",
+    "name": "Name",
+    "surname": "Surname",
+    "alreadyHaveAcc": "Already have an account?"
+  },
+  "createPost": {
+    "upload": "Upload any photos or videos from your library",
+    "description": "Description"
+  },
+  "editProfile": {
+    "profileInfo": "Profile information",
+    "avatar": "Avatar",
+    "choosePhoto": "Choose new photo",
+    "fName": "First Name",
+    "sName": "Second Name",
+    "job": "Job Title",
+    "description": "Description"
+  },
+  "post": {
+    "copied": "Copied to bufer",
+    "share": "Share",
+    "addComment": "Add a comment..."
+  },
+  "search": {
+    "noProfiles": "Couldn't find any profile",
+    "foundProfiles": "Found profiles:",
+    "noPosts": "Couldn't find any post",
+    "foundPosts": "Found posts:"
+  },
+  "chat": {
+    "noChats": "You don't have any chats.",
+    "findPeople": "Find people and chat with them!"
+  },
+  "dead": {
+    "markAsDead": "Mark as dead",
+    "trustedUsers": "Trusted users",
+    "deceasedSectionInfo": "This page belongs to dead user. Here you can create a new Memory related to page owner, communicate with frends, relatives and other trusted users of deceased.",
+    "createMemory": "Create memory"
+  },
+  "recommendations": {
+    "recommendedUsers": "Recommended users"
+  },
+  "searchField": {
+    "placeholder": "Search..."
+  }
 }

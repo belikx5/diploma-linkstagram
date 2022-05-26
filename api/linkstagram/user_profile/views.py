@@ -20,7 +20,7 @@ class UserViewSet(viewsets.ModelViewSet):
     queryset = UserProfile.objects.all()
     serializer_class = UserSerializer
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
-    search_fields = ['$user__username', 'tags']
+    search_fields = ['$user__username', 'tags', 'bio']
     list_serializer_class = UserBriefSerializer
     create_update_serializer_class = UserCreateUpdateSerializer
 
