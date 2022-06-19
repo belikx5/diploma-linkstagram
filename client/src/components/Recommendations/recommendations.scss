@@ -14,6 +14,7 @@
 	.recs-container {
 		@include common.custom-scrollbar;
 		height: 100%;
+		width: 100%;
 		display: flex;
 		overflow-x: scroll;
 		padding-top: 5px;
@@ -29,11 +30,7 @@
 		top: 0;
 		right: 0;
 		background: transparent;
-		background-image: linear-gradient(
-			to right,
-			transparent,
-			rgb(255, 255, 255)
-		);
+		background-image: linear-gradient(to right, transparent, rgb(255, 255, 255));
 		opacity: 0.8;
 		z-index: 0;
 	}
@@ -49,6 +46,10 @@
 }
 
 @media (max-width: 600px) {
+	.recs {
+		padding: 0 10px;
+		width: calc(100vw - 20px);
+	}
 	.stories {
 		width: 94vw;
 		padding: 0 10px;
