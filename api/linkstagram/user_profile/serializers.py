@@ -169,13 +169,3 @@ class UserCreateUpdateSerializer(DefaultUserSerializer):
             data['user'] = user.id
             self.initial_data = OrderedDict(data)
         return super().is_valid(raise_exception)
-
-
-# class UserWithPostsSerializer(DefaultUserSerializer):
-#     posts = PostSerializer(many=True)
-#     user = UserBriefSerializer()
-#
-#     class Meta:
-#         model = UserProfile
-#         fields = ['id', 'user', 'profile_photo', 'posts']
-#         read_only_fields = ('id',)
